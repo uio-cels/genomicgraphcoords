@@ -166,9 +166,9 @@ class VisualizeHtml():
                                 background-color: white;
                                 height: 20px; margin-top: 5px;'>
                         <p style='font-size: 0.8em;'>
-                            <span style='background-color: green; width: 30px; height: 12px; display: inline-block'></span> <font color='#777777'>Main path (GRCh38)</font><br>
-                            <span style='background-color: darkred; width: 30px; height: 12px; display: inline-block'></span> <font color='#777777'>Merged </font><br>
-                            <span style='background-color: black; width: 30px; height: 12px; display: inline-block'></span> <font color='#777777'>Alternative loci</font>
+                            <span style='background-color: green; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Main path (GRCh38)</font><br>
+                            <span style='background-color: darkred; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Merged </font><br>
+                            <span style='background-color: black; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Alternative loci</font>
                         </p>
                     </div>
         """
@@ -186,7 +186,7 @@ class VisualizeHtml():
         for gene in intervals:
             self.html += """
             <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
-             <font color='#777777'>%s</font><br>
+             <font color='black'>%s</font><br>
             """ % (self.gene_colors[self.gene_counter - i + 1], "Gene: " + gene.name + " (" + gene.gene_name + ")")
             i += 1
 
