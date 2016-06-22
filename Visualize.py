@@ -130,7 +130,7 @@ class VisualizeHtml():
         self.offset_counter = 0
         self.lowest_offset = 0
         self.vis_id = id
-        self.intervals = intervals #list(reversed(intervals))
+        self.intervals = [intervals[1], intervals[0]] #intervals #list(reversed(intervals))
 
         self.width = width
         self.maxOffset = maxOffset
