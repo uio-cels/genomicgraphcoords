@@ -114,6 +114,7 @@ def get_alignments(filename, offset=0):
     alignments = []
 
     f = open(filename, "r")
+    print "Get alignments"
     for line in f.readlines():
         parts = line.split()
         chrId1 = parts[0].split(":")[1]
