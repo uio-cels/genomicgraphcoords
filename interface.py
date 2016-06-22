@@ -161,12 +161,12 @@ elif method == "align_region2":
     -D hg38 -e "SELECT * FROM altLocations where name LIKE '%s' LIMIT 1;"</i>
     """ % region_info["name"]
 
-    print """<li>The sequence of the this alternative locus <i>%s</i> was fetched using
+    print """<li>The sequence of the the alternative locus <i>%s</i> was fetched using
     togows.org api, by calling: <a href='%s' target='_blank'>%s</a></li>""" \
         % (region_info["name"], globals.togows_alt_url, globals.togows_alt_url)
 
-    print """<li>The sequence of the main path on GRCh38 corresponding to alternative locus <i>%s</i> was fetched using
-    togows.org api, by calling: <a href='%s' target='_blank'>%s</a></li>""" \
+    print """<li>The sequence of the main path on GRCh38 corresponding to alternative locus was fetched using
+    the togows.org api, by calling: <a href='%s' target='_blank'>%s</a></li>""" \
         % (region_info["name"], globals.togows_main_url, globals.togows_main_url)
 
     from blast import BLAST_COMMAND
