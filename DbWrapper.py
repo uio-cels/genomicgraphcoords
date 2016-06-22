@@ -153,6 +153,9 @@ class DbWrapper:
 
         return res
 
+    def get_gene(self, gene_id):
+        query = r"SELECT * FROM knownGene where name='%s"
+
     def _md5(self, string):
         import hashlib
         m = hashlib.md5()

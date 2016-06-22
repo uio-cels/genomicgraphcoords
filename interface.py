@@ -120,6 +120,18 @@ elif method == "align_region2":
     if len(gene_segments) > 3:
         gene_segments = gene_segments[0:3]
 
+
+    gene_segments2 = []
+    for gene in gene_segments:
+        name = gene.name
+        g = db.get_gene(name)
+        l = LinearInterval("hg38", g["chrom"], g["chromStart"], g["chromEnd"])
+        s = Interval()
+        s.create_from_block_list(graph.blocks[g["chrom"], int(g["chromStart"]), int(g["chromEnd"])])
+        gene_segments2.append(s)
+
+    genes = db.
+
     v = VisualizeHtml(graph, area_start, area_end, 0, description, 800, gene_segments)
 
     #print "<p>There are %d example genes in this area</p>" % len(gene_segments)
