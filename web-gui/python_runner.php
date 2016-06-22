@@ -23,6 +23,7 @@ if(isset($_GET["method"])){
 
 	//print_r($params);
 	if(isset($_GET["params"])){
+			if(!validate_string($_GET["params"])) exit("Error #2");
 			$arguments = str_replace(",", " ", $_GET["params"]);
 	}
 	else{
@@ -31,7 +32,7 @@ if(isset($_GET["method"])){
 	$arguments = htmlspecialchars($arguments);
 
 	//echo "<p>Arguments: " . $arguments . "</p>";
-	$command = "python /home/ivarandknut/checkout_genomic_intervals/reproduce/interface.py $method $arguments";
+	$command = "python /home/ivarandknut/checkout_genomic_intervals/interface.py $method $arguments";
 
 	$process = proc_open($command, $descriptorspec, $pipes, dirname(__FILE__), null);
 
@@ -46,7 +47,6 @@ if(isset($_GET["method"])){
 	}
 	$out = array("stdout" => $stdout, "stderr" => $stderr);
 
-	//exit(print_r($out, true));
 	exit(json_encode($out));
 }
 
