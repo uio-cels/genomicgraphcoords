@@ -187,7 +187,7 @@ class VisualizeHtml():
             self.html += """
             <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
              <font color='#777777'>%s</font><br>
-            """ % (self.gene_colors[self.gene_counter - i], "Gene: " + gene.name + " (" + gene.gene_name + ")")
+            """ % (self.gene_colors[self.gene_counter - i + 1], "Gene: " + gene.name + " (" + gene.gene_name + ")")
             i += 1
 
 
