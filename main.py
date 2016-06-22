@@ -60,9 +60,9 @@ def create_align_graph(region_name, min_length):
     align_file = get_alignments(region_name, alt_info)
 
     alignments = get_filtered_alignments(align_file, alt_info["chromStart"])
-
+    print "Alignments :" + alignments
     if len(alignments) == 0:
-        raise Exception("There were no alignments between the alternative locus and consensus path in the the given region. Try another region.")
+        raise Exception("There ...   were no alignments between the alternative locus and consensus path in the the given region. Try another region.")
 
     if DEBUG: print "ALIGNMENTS"
     for a in alignments:
