@@ -165,7 +165,7 @@ elif method == "align_region2":
     togows.org api, by calling: <a href='%s' target='_blank'>%s</a></li>""" \
         % (region_info["name"], globals.togows_alt_url, globals.togows_alt_url)
 
-    print """<li>The sequence of the main path on GRCh38 corresponding to alternative locus was fetched using
+    print """<li>The sequence of the main path on GRCh38 corresponding to the alternative locus (%s) was fetched using
     the togows.org api, by calling: <a href='%s' target='_blank'>%s</a></li>""" \
         % (region_info["name"], globals.togows_main_url, globals.togows_main_url)
 
