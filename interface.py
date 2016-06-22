@@ -132,7 +132,7 @@ elif method == "align_region2":
 
     genes = db.
     """
-    
+
     v = VisualizeHtml(graph, area_start, area_end, 0, description, 800, gene_segments)
 
     #print "<p>There are %d example genes in this area</p>" % len(gene_segments)
