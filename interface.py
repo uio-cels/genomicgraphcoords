@@ -34,7 +34,7 @@ elif method == "align_region":
     area_start = 90000150
     area_end = 90450000
     #graph = graph.get_subgraph(LinearInterval("hg38", "chr11", 900000, 1200000), "chr11_KI270927v1_alt")
-    graph = graph.get_subgraph(LinearInterval("hg38", "chr2", area_start, area_end), "chr2_KI270894v1_alt")
+    #graph = graph.get_subgraph(LinearInterval("hg38", "chr2", area_start, area_end), "chr2_KI270894v1_alt")
 
     """
     print "BLOCKS: "
