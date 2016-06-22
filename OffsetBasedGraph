@@ -1,0 +1,365 @@
+from SequenceGraph import SequenceGraph
+
+
+class LinearReference(object):
+    def __init__(self, genome_id, chromosome, start, end, strand):
+        self.genome_id = genome_id
+        self.chromosome = chromosome
+        self.start = int(start)
+        self.end = int(end)
+        self.strand = strand
+
+    def length(self):
+        return self.end-self.start
+
+    def contains(self, other):
+        if not (self.genome_id == other.genome_id):
+            return False
+        if not self.chromosome == other.chromosome:
+            return False
+        if self.start > other.start or self.end < other.end:
+            return False
+        return True
+
+    def intersects(self, other):
+        if not (self.genome_id == other.genome_id):
+            return False
+        if not self.chromosome == other.chromosome:
+            return False
+        if (self.start > other.start) == (self.end > other.end):
+            return False
+        return True
+
+    def __repr__(self):
+        return "Lin seg in species %s, %s [%d, %d] %s" % \
+               (self.genome_id, self.chromosome,
+                self.start, self.end, self.strand)
+
+    def label(self):
+        return "%s" % (self.chromosome)
+
+    def __str__(self):
+        return self.label()
+
+
+class Block(object):
+
+    def __init__(self, id, metadata):
+        self.id = id
+        self.metadata = metadata
+        self.linear_references = metadata
+
+    def get_length(self):
+        return max([lr.end-lr.start for lr in self.linear_references.values()])
+
+    def contains(self, lin_ref):
+        return any([my_ref.contains(lin_ref) for my_ref
+                    in self.linear_references.values()])
+
+    def length(self):
+        return max([lr.length() for lr in self.linear_references.values()])
+
+    def is_empty(self):
+        if not self.linear_references:
+            return True
+        if (all([lr.start == lr.end for lr
+                 in self.linear_references.values()])):
+            return True
+        return False
+
+    def __str__(self):
+        return ";".join([str(lin_ref) for lin_ref
+                         in self.linear_references.values()])
+
+
+class ChainGraph(SequenceGraph):
+
+    def __str__(self):
+        elements = [str(block.id) + ": " + str(block)
+                    for block in self.blocks.values()]
+        for key, val in self.block_edges.iteritems():
+            elements.append("%s: %s" % (str(key), str(val)))
+        return "\n".join(elements)
+
+    def __init__(self, name):
+        self.blocks = {}
+        self.block_edges = {}
+        self.cur_id = 0
+        self.cur_id_counter = {}  # Number of times a base id of block
+                                  # has been used
+
+    def get_vertices(self):
+        vertices = []
+        for b_id, block in self.blocks.iteritems():
+            vertices.extend([self.vertex(b_id, i)
+                             for i in xrange(block.get_length)])
+        return self.vertices
+
+    def get_block(self, lin_ref):
+        filtered = filter(
+            lambda block: block.contains(lin_ref),
+            self.blocks.values()
+            )
+        if not filtered:
+            return None
+        return filtered[0]
+
+    def merge_lin_refs(self,  org_lin_ref, new_lin_ref):
+        org_block = self.get_block(org_lin_ref)
+        if org_block is None:
+            return
+
+        pre_ref, post_ref = self.split_block(org_block, org_lin_ref)
+        in_edges = self.get_previous_blocks(org_block.id)
+        out_edges = []
+        if org_block.id in self.block_edges:
+            out_edges = self.block_edges[org_block.id]
+
+        lin_refs = [pre_ref, post_ref, new_lin_ref, org_lin_ref]
+        blocks = [self._add_block({"hg38": lr}) for lr in lin_refs]
+
+        pre_block = blocks[0]
+        post_block = blocks[1]
+        new_block = blocks[2]
+        org_block_1 = blocks[3]
+        if pre_block.is_empty():
+            for p_block in in_edges:
+                self.add_block_edge(p_block, org_block_1.id)
+                self.add_block_edge(p_block, new_block.id)
+            del self.blocks[pre_block.id]
+        else:
+            for p_block in in_edges:
+                self.add_block_edge(p_block, pre_block.id)
+            self.add_block_edge(pre_block.id,  new_block.id)
+            self.add_block_edge(pre_block.id,  org_block_1.id)
+
+        if post_block.is_empty():
+            self.block_edges[org_block_1.id] = out_edges[:]
+            self.block_edges[new_block.id] = out_edges[:]
+            del self.blocks[post_block.id]
+        else:
+            self.add_block_edge(new_block.id, post_block.id)
+            self.add_block_edge(org_block_1.id, post_block.id)
+            self.block_edges[post_block.id] = out_edges[:]
+
+        # Remove org_block
+        if org_block.id in self.block_edges:
+            del self.block_edges[org_block.id]
+        del self.blocks[org_block.id]
+
+        for p_block in in_edges:
+            self.block_edges[p_block].remove(org_block.id)
+
+    def split_block(self, block, lin_ref):
+        """
+        Splits a block at the given linear reference. Returns two linear
+        references, one before and one after lin_ref
+        """
+        current_lin_refs = filter(
+            lambda lr: lr.genome_id == lin_ref.genome_id,
+            block.linear_references.values())
+        assert len(current_lin_refs) == 1
+        current_lin_ref = current_lin_refs[0]
+        splitted = []
+        splitted.append(
+            LinearReference(lin_ref.genome_id,
+                            lin_ref.chromosome,
+                            current_lin_ref.start,
+                            lin_ref.start,
+                            lin_ref.strand)
+        )
+        splitted.append(
+            LinearReference(
+                lin_ref.genome_id,
+                lin_ref.chromosome,
+                lin_ref.end,
+                current_lin_ref.end,
+                lin_ref.strand)
+        )
+        return splitted
+
+    def merge_linear_segments(self, lin_seg_1, lin_seg_2):
+        block1 = self.get_block(lin_seg_1)
+        block2 = self.get_block(lin_seg_2)
+        if (block1 is None or block2 is None):
+            return
+        mid_block = self._add_block({lin_seg_1.genome_id: lin_seg_1,
+                                     lin_seg_2.genome_id: lin_seg_2})
+
+        pre1, post1 = self.split_block(block1, lin_seg_1)
+        pre2, post2 = self.split_block(block2, lin_seg_2)
+        pre_block1 = Block(block1.id, {pre1.genome_id: pre1})
+        pre_block2 = Block(block2.id, {pre2.genome_id: pre2})
+
+
+
+        self.blocks[pre_block1.id] = pre_block1
+        self.blocks[pre_block2.id] = pre_block2
+        post_block1 = self._add_block({post1.genome_id: post1})
+        post_block2 = self._add_block({post2.genome_id: post2})
+        if block1.id in self.block_edges:
+            self.block_edges[post_block1.id] = self.block_edges[block1.id][:]
+
+        if block2.id in self.block_edges:
+            self.block_edges[post_block2.id] = self.block_edges[block2.id][:]
+
+        self.block_edges[pre_block1.id] = []
+        self.block_edges[pre_block2.id] = []
+
+        self.add_block_edge(pre_block1.id, mid_block.id)
+        self.add_block_edge(pre_block2.id, mid_block.id)
+        self.add_block_edge(mid_block.id, post_block1.id)
+        self.add_block_edge(mid_block.id, post_block2.id)
+
+    def vertex(self, block_id, i):
+        return (block_id, i)
+
+    def add_block_edge(self, block_id, next_block_id):
+        if block_id not in self.blocks:
+            raise Exception("Edge id (%s) not in blocks: %s"
+                            % (block_id, self.blocks))
+
+        if block_id not in self.block_edges:
+            self.block_edges[block_id] = [next_block_id]
+            return
+
+        self.block_edges[block_id].append(next_block_id)
+
+    def get_edges(self):
+        edges = []
+        for b_id, block in self.blocks.iteritems():
+            edges.extend(
+                [(self.vertex(b_id, i), self.vertex(b_id, i+1))
+                 for i in xrange(block.get_length()-1)])
+        for b_id, neigbour_ids in self.block_edges:
+            edges.extend(
+                [(self.vertex(b_id, self.blocks[b_id].get_length()-1),
+                  self.vertex(n_id, 0)) for n_id in neigbour_ids])
+        return edges
+
+    def unwrap_vertex(self, vertex):
+        return vertex[0], vertex[1]
+
+    def get_next_vertices(self, id):
+        b_id, i = self.unwrap_vertex(id)
+        if i < self.blocks[b_id].get_length()-1:
+            return [self.vertex(b_id, i+1)]
+        return [self.vertex(n_id, 0) for n_id in self.block_edges[b_id]]
+
+    def get_previous_vertices(self, id):
+        b_id, i = self.unwrap_vertex(id)
+        if (i > 0):
+            return [self.vertex(b_id, i-1)]
+
+        previous_blocks = [p_id for p_id in self.blocks
+                           if b_id in self.block_edges[p_id]]
+
+        return [self.vertex(p_id, self.blocks[p_id].get_length()-1)
+                for p_id in previous_blocks]
+
+    def get_previous_blocks(self, block_id):
+        previous_blocks = []
+        for p_block, edges in self.block_edges.iteritems():
+            if block_id in edges:
+                previous_blocks.append(p_block)
+        return previous_blocks
+
+    def merge_from_chain_file(self, filename, genome1_id, genome2_id):
+        segs = self._chain_file_to_linear_segments(filename, genome1_id, genome2_id)
+        for seg1, seg2, in segs:
+            self.merge_linear_segments(seg1, seg2)
+
+    def _chain_file_to_linear_segments(self, filename, genome1_id, genome2_id):
+        """
+        Returns tuples of linear segments from a chain file
+        """
+        segs = []
+        f = open(filename)
+        current_block = None
+        current_id = 0
+        i = 0
+        for line in f.readlines():
+            data = line.split()[1:]
+            r_chromosome = data[1]
+            r_strand = data[3]
+            r_start = data[4]
+            r_end = data[5]
+            q_chromosome = data[6]
+            q_strand = data[8]
+            q_start = data[9]
+            q_end = data[10]
+
+            # Add block
+            seg1 = LinearReference(genome1_id, r_chromosome, r_start, r_end, r_strand)
+            seg2 = LinearReference(genome2_id, q_chromosome, q_start, q_end, q_strand)
+
+            segs.append((seg1, seg2))
+
+            if i > 100:
+                break
+            i += 1
+
+        return segs
+
+    def add_species(self, genome_id, fn_chrom_sizes):
+        """
+        Adds blocks, one for each chromosome specified in the file
+        """
+        f = open(fn_chrom_sizes)
+        for line in f.readlines():
+            d = line.split()
+            if "_" not in d[0]:
+                meta = {}
+                length = int(d[1])
+                meta[genome_id] = LinearReference(genome_id, d[0], 0, length, "+")
+                self._add_block(meta)
+                #self.blocks[d[0]] = Block(d[0], meta)
+
+    def add_chromosome(self, genome_id, chromosome, chromosome_size):
+        """
+        Adds a whole chromosome as a linear block
+        """
+        linear_references = {}
+        linear_references[genome_id] = LinearReference(genome_id, chromosome, 0, chromosome_size, "+")
+        self._add_block(linear_references)
+
+    def _generate_id_from_linear_references(self, lrs):
+
+        suggestion = ""
+        sorted_genome_ids = sorted([lr for lr in lrs])
+        for genome_id in sorted_genome_ids:
+            suggestion += genome_id + "." + lrs[genome_id].chromosome + "-"
+
+        base_id = suggestion
+
+        if suggestion in self.cur_id_counter:
+            suggestion += str(self.cur_id_counter[base_id] + 1)
+            self.cur_id_counter[base_id] += 1
+        else:
+            suggestion += "0"
+            self.cur_id_counter[base_id] = 0
+
+        return suggestion
+
+    def _add_block(self, linear_references):
+        """
+        Adds block for one genome
+        linear_referes is a dict, having keys that are genome id and values
+        that are LinearReference objects
+        """
+        id = self._generate_id_from_linear_references(linear_references)
+        block = Block(id, linear_references)
+        self.blocks[id] = block
+        return block
+
+    def get_vertex(self, id):
+        return self.vertices[id]
+
+    def get_linear_block(self, id):
+        b_id, i = self.unwrap_vertex(id)
+        return self.vertex(b_id, 0)
+
+    def get_next_linear_blocks(self, id):
+        b_id, i = self.unwrap_vertex(id)
+        nb_ids = self.block_edges[b_id]
+        return [self.vertex(nb_id, 0) for nb_id in nb_ids]
