@@ -2,3 +2,6 @@
 data/tmp
 *.swp
 .idea
+*#
+#*
+.#*
