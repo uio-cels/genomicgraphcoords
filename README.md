@@ -12,9 +12,9 @@ class Interval represents intervals on graph based reference genomes, as describ
 class RegionPath represents region paths in the graph, as described in the article
 
  To run from commandline:
-> python interface.py alt_loci_ID
+> python interface.py chrN_GENBANKSEQACCS_alt
 Example:
-> python interface.py KI80099.1
+> python interface.py chr7_KI270808v1_alt
 
 
 ...
