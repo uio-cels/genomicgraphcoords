@@ -36,7 +36,34 @@ elif method == "get_all_regions":
     print html_out
 
 
-elif method == "align_region2":
+elif method == "align_region":
+    """
+    Aligns a given region, and visualizes using matplotlib.
+    """
+    db = DbWrapper()
+    region = sys.argv[2]
+    region_info = db.alt_loci_info(region)
+
+    try:
+        graph, orig_graph, gene_segments = create_align_graph(region, 0)
+    except Exception as e:
+        print str(e) # "<div class='alert alert-warning'>" + str(e) + "</div>"
+        exit()
+
+    area_start = region_info["chromStart"] - 50000
+    area_end = region_info["chromEnd"] + 50000
+    chrom = region_info["chrom"]
+    graph = graph.get_subgraph(LinearInterval("hg38", chrom, area_start, area_end), region)
+
+    description = "Visualization of graph created around <i>" + graph.pretty_alt_loci_name(region) + "</i>"
+    if len(gene_segments) > 3:
+        gene_segments = gene_segments[0:3]
+
+    v = Visualize(graph)
+    v.show()
+
+
+elif method == "align_region2" or method == "align_region_html":
     """
     Aligns a given region, and calls the Visualize class to print visualization
     of the results as html.
