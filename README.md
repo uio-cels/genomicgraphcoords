@@ -17,11 +17,11 @@ class RegionPath represents region paths in the graph, as described in the artic
 
  To run from commandline:
  
-> python interface.py chrN_GENBANKSEQACCS_alt
+> python interface.py align_region chrN_GENBANKSEQACCS_alt
 
 Example:
 
-> python interface.py chr7_KI270808v1_alt
+> python interface.py align_region chr7_KI270808v1_alt
 
 
 
