@@ -1,3 +1,6 @@
+"""
+Various methods for converting linear coordinates to a graph
+"""
 from Interval import Interval, IntervalCollection
 from config import *
 
@@ -20,10 +23,11 @@ def create_block_index(graph):
 
 
 def linear_segment_to_graph(graph, graph_block_index, chr_id, start, end):
-    if DEBUG: print "Linear segment to graph %s, %d, %d" % (chr_id, start, end)
     """
     Takes a linear segment on hg38 and returns a ChainSegment object
     """
+    if DEBUG: print "Linear segment to graph %s, %d, %d" % (chr_id, start, end)
+
     block_list = []
     start_pos = 0
     end_pos = 0

@@ -12,7 +12,7 @@ class Gene:
 
 class DbWrapper:
     """
-    Abstraction layer for collecting genomic data from the UCSC datase
+    Abstraction layer for collecting genomic data from the UCSC database.
     """
 
     def __init__(self):
@@ -35,9 +35,6 @@ class DbWrapper:
                 id =  "chr" + d[1] + "_" + id
                 self.alt_loci_names[id] = d[0] + "." + d[-1][-1:]
 
-        #print "MAPPING "
-        #print self.alt_loci_names
-
     def alt_loci_pretty_name(self, name):
         if name in self.alt_loci_names:
             return self.alt_loci_names[name]
@@ -51,8 +48,12 @@ class DbWrapper:
     def fetch_all(self, query):
         """
         Returns all fetched rows from the given query as a list.
+        :param query: The mysql query string
+        :return: Returns a list of dicts (one list element per row)
         """
-        # Check if query is cached
+
+        # Check if query is cached in a text file. Saves UCSC for unecessary
+        # databse calls.
         cached_file = DATA_PATH + "cached_query_" + self._md5(query)
         if os.path.isfile(cached_file):
             f = open(cached_file, 'rb')
@@ -65,7 +66,7 @@ class DbWrapper:
         rows = cursor.fetchall()
         cursor.close()
 
-        # Cache the result to file (to avoid many queries to uscs)
+        # Cache the result to file
         afile = open(cached_file, 'wb')
         pickle.dump(rows, afile)
         afile.close()
@@ -73,6 +74,10 @@ class DbWrapper:
         return rows
 
     def get_alt_loci_infos(self):
+        """
+        Gets all the alternative loci
+        :return: A list of dicts (all alternative loci)
+        """
         alt_loci = []
 
         res = self.fetch_all(
@@ -88,8 +93,10 @@ class DbWrapper:
                 if alt1["chrom"] != alt2["chrom"]:
                     continue
 
-                if alt1["chromStart"] < alt2["chromEnd"] and alt1["chromEnd"] > alt2["chromStart"] or \
-                    alt2["chromStart"] < alt1["chromEnd"] and alt2["chromEnd"] > alt1["chromStart"]:
+                if alt1["chromStart"] < alt2["chromEnd"] and \
+                            alt1["chromEnd"] > alt2["chromStart"] or \
+                            alt2["chromStart"] < alt1["chromEnd"] and \
+                            alt2["chromEnd"] > alt1["chromStart"]:
                     is_overlapping = True
                     break
 
@@ -128,14 +135,6 @@ class DbWrapper:
             self.get_chrom_lengths()
             return self.chrom_lengths[chromosome_id]
 
-        """
-        res = self.fetch_all("SELEcT size FROM chromInfo where chrom='%s'" % chromosome_id)
-        if len(res) == 0:
-            raise Exception("No results from chromInfo on chromosome %s" % chromosome_id)
-
-        return res[0]["size"]
-        """
-
     def alt_loci_names(self):
         res = self.fetch_all(
             r"SELECT chrom FROM altLocations where chrom LIKE '%\_%'")
@@ -150,13 +149,13 @@ class DbWrapper:
         """
         query = r"SELECT k.*, r.geneSymbol as gname FROM knownGene k, kgXref r where r.kgID = k.name AND k.chrom LIKE '%s' and k.txStart < %d and k.txEnd > %d" % (chrom_id, position, position)
         res = self.fetch_all(query)
-
         return res
 
     def get_gene(self, gene_id):
         query = r"SELECT * FROM knownGene where name='%s"
 
     def _md5(self, string):
+        # Used to store cached queries, by hashing the query string
         import hashlib
         m = hashlib.md5()
         m.update(string)

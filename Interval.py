@@ -1,8 +1,17 @@
 import numpy as np
 
 class Interval(object):
+    """
+    Class for genomic interval on a graph-based reference genome
+
+    """
 
     def __init__(self, rg):
+        """
+        Inits an empty interval
+        :param rg: The reference graph this interval is on. Typically
+        an OffsetBasedGraph object.
+        """
         self.reference_graph = rg
         self.block_list = None
         self.start_block = None
@@ -14,6 +23,13 @@ class Interval(object):
         self.gene_name = ""
 
     def create_from_block_list(self, block_list, start_pos, end_pos):
+        """
+        Builds the interval from a list of region path identifiers, and a start
+        and end position.
+        :param block_list: List of region path identifiers
+        :param start_pos:
+        :param end_pos:
+        """
         self.block_list = block_list
         self.start_block = block_list[0]
         self.end_block = block_list[-1]
@@ -45,6 +61,11 @@ class Interval(object):
         return block in self.block_list
 
     def __eq__(self, other):
+        """
+        :param other: An other interval
+        :return: Returns true if this interval is the same as the other,
+        meaning it contains the exact same base pairs.
+        """
         if self.start_pos != other.start_pos:
             return False
         if self.end_pos != other.end_pos:

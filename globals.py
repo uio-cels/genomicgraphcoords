@@ -1,5 +1,6 @@
 """
-Collects analysis details, such as API runs throughtout the analysis
+Some unimportant variables for storing analysis details,
+such as API runs throughtout the analysis
 """
 
 togows_alt_url = ""

@@ -1,5 +1,7 @@
 """
-Methods for interacting with the different scripts.
+Methods for interacting with the different scripts. This file is called
+via the web-server api, and prints html that is presented as results in the
+tool.
 """
 import subprocess
 import sys
@@ -13,54 +15,12 @@ method = sys.argv[1]
 
 if method == "test":
     print "Test is working .. "
-    print os.path.dirname(os.path.realpath(__file__))
-    print DATA_PATH
 
-    dir = "/var/www/web/data/tmp/"
-    blast = 'blastn -outfmt "6 qseqid sseqid qstart qend sstart send length score bitscore evalue" -query %schr11:937258-1150312.fasta -subject %schr11_KI270927v1_alt:1-218613.fasta -perc_identity 95.00 ' % (dir, dir)
-    p = subprocess.Popen(blast, shell=True,
-                         cwd=os.path.dirname(os.path.realpath(__file__)),
-                         stdout=subprocess.PIPE)
-    p.wait()
-    result = p.communicate()[0]
-    print blast
-
-    print result
-
-elif method == "align_region":
-
-    #graph = create_align_graph("chr11_KI270927v1_alt", 0)
-    graph = create_align_graph("chr2_KI270894v1_alt", 0)
-    area_start = 90000150
-    area_end = 90450000
-    #graph = graph.get_subgraph(LinearInterval("hg38", "chr11", 900000, 1200000), "chr11_KI270927v1_alt")
-    #graph = graph.get_subgraph(LinearInterval("hg38", "chr2", area_start, area_end), "chr2_KI270894v1_alt")
-
-    """
-    print "BLOCKS: "
-    for b in graph.blocks:
-        print "BLock " + str(b) + " : " + str(graph.blocks[b])
-
-
-
-    print "EDGES: "
-    for k, v in graph.block_edges.iteritems():
-        print k,"---", v
-
-    for edge in graph.block_edges:
-        assert(len(graph.block_edges[edge]) <= 2)
-    """
-
-    """
-    v = Visualize(graph)
-    v.visualize_intervals(segments)
-    v.show()
-    """
-    v = VisualizeHtml(graph, area_start, area_end)
-    print str(v)
 
 elif method == "get_all_regions":
-    html_out = "<select name='region' class='form-control' style='width: 320px;'>"
+    # Prints all regions as an html select field
+    html_out = """<select name='region'
+               class='form-control' style='width: 320px;'>"""
     db = DbWrapper()
     regions = db.get_alt_loci_infos()
     graph = OffsetBasedGraph("dummy-graph") # Only to access some methods
@@ -68,24 +28,23 @@ elif method == "get_all_regions":
     for region in regions:
         if region["chromEnd"] - region["chromStart"] < 400000:
             html_out += "<option value='%s'>%s (%s:%d-%d)</option>" % \
-                        (region["name"], graph.pretty_alt_loci_name(region["name"]), region["chrom"], \
+                        (region["name"],
+                         graph.pretty_alt_loci_name(region["name"]),
+                         region["chrom"], \
                          region["chromStart"], region["chromEnd"])
     html_out += "</select>"
-
     print html_out
 
 
 elif method == "align_region2":
     """
-    Align region given by input parameter
+    Aligns a given region, and calls the Visualize class to print visualization
+    of the results as html.
     """
     db = DbWrapper()
     region = sys.argv[2]
-
     region_info = db.alt_loci_info(region)
 
-
-    #graph = create_align_graph("chr11_KI270927v1_alt", 0)
     try:
         graph, orig_graph, gene_segments = create_align_graph(region, 0)
     except Exception as e:
@@ -95,27 +54,8 @@ elif method == "align_region2":
     area_start = region_info["chromStart"] - 50000
     area_end = region_info["chromEnd"] + 50000
     chrom = region_info["chrom"]
-    #graph = graph.get_subgraph(LinearInterval("hg38", "chr11", 900000, 1200000), "chr11_KI270927v1_alt")
     graph = graph.get_subgraph(LinearInterval("hg38", chrom, area_start, area_end), region)
 
-    """
-    print "BLOCKS: "
-    for b in graph.blocks:
-        print "BLock " + str(b) + " : " + str(graph.blocks[b])
-
-    print "EDGES: "
-    for k, v in graph.block_edges.iteritems():
-        print k,"---", v
-
-    for edge in graph.block_edges:
-        assert(len(graph.block_edges[edge]) <= 2)
-    """
-
-    """
-    v = Visualize(graph)
-    v.visualize_intervals(segments)
-    v.show()
-    """
     description = "Visualization of graph created around <i>" + graph.pretty_alt_loci_name(region) + "</i>"
     if len(gene_segments) > 3:
         gene_segments = gene_segments[0:3]
@@ -134,19 +74,17 @@ elif method == "align_region2":
     """
 
     v = VisualizeHtml(graph, area_start, area_end, 0, description, 800, gene_segments)
-
-    #print "<p>There are %d example genes in this area</p>" % len(gene_segments)
-    #v.visualize_intervals(gene_segments[0:1])
-
     print str(v)
     print "<br><br>"
 
-    total_width = v.width_used
+    total_width = v.width_used  #  Send the width used by the first visualizer
+                                #  to the next
 
     subgraph_orig = orig_graph.get_subgraph(LinearInterval("hg38", chrom, area_start, area_end), region)
     v2 = VisualizeHtml(subgraph_orig, area_start, area_end, 1, "Original GRCh38 graph", total_width + 60)
     print str(v2)
 
+    # Print analysis details
     import globals
     print "<br><hr><br><h3>Details</h3>"
     print """
@@ -189,8 +127,4 @@ elif method == "align_region2":
     we mean genes that had start position before a visualized edge
     and end position after a visualized edge in the graph.</li>
     """
-
-
-
-
     print "</ol>"

@@ -1,4 +1,7 @@
 class LinearInterval(object):
+    """
+    Class for a linear interval (region path)
+    """
     def __init__(self, genome_id, chromosome, start, end, strand="+"):
         self.genome_id = genome_id
         self.chromosome = chromosome
@@ -29,11 +32,6 @@ class LinearInterval(object):
             return True
 
         return False
-        """
-        if (self.start > other.start) == (self.end > other.end):
-            return False
-        return True
-        """
 
     def __repr__(self):
         return "Lin seg in species %s, %s [%d, %d] %s" % \

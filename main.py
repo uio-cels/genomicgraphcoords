@@ -1,3 +1,6 @@
+"""
+A collections of small scripts used to do various tasks by calling the classes.
+"""
 from blast import blast_align, get_filtered_alignments
 from TogowsWrapper import save_sequence_to_fasta
 from OffsetBasedGraph import OffsetBasedGraph

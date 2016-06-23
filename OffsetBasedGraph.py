@@ -6,7 +6,10 @@ from DbWrapper import DbWrapper
 
 
 class OffsetBasedGraph():
-
+    """
+    A simple graph structure, based on an offset-based coordinate system.
+    Only region-paths are stored, not single bases.
+    """
     def __str__(self):
         elements = [str(block.id) + ": " + str(block)
                     for block in self.blocks.values()]

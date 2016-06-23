@@ -8,7 +8,7 @@ BLAST_COMMAND = 'blastn -outfmt "6 qseqid sseqid qstart qend sstart send length 
 
 class Alignment:
     """
-    Simple class that represents one alignment
+    Simple class that represents one alignment between two sequences
     """
     def __init__(self, chr1, chr2, start1, end1, start2, end2, score):
         self.chr1 = chr1
