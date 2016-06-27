@@ -254,9 +254,11 @@ class VisualizeHtml():
 
     def _plot_interval_in_block(self, start, end, level, interval_obj):
         #level += 0.3 + 0.3 * (self.color_counter - 4)
-        #print "=self.html += "<div class='interval interval_%d'" % self.gene_counter
-
+        #print "=
         top = level + 1 + 7 * self.gene_counter
+        
+        self.html += "<div class='interval interval_%d'" % self.gene_counter
+
         self.html += " style='z-index: 10; position: absolute;"
         self.html += "left: %.2fpx;" % start
         self.html += "width: %.2fpx;" % (end - start)
