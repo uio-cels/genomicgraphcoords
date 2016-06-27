@@ -246,7 +246,7 @@ class VisualizeHtml():
 
         self.html += "<div class='exon exon_%d'" % self.gene_counter
         self.html += " style='z-index: 12; position: absolute;"
-        self.html += "left: %.2fpx;" % start
+        self.html += "left: %.2fpx;" % start - 10
         self.html += "width: %.2fpx;" % (20)
         self.html += "top: %.2fpx;" % (top)
         self.html += "height: %dpx;" % (7)
