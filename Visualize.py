@@ -220,7 +220,7 @@ class VisualizeHtml():
                     end = start + interval.end_pos * self.width_ratio
 
                 if interval.is_start_exon or interval.is_end_exon:
-                    print "==============EXON %s============" interval.gene_name
+                    print "==============EXON %s============" interval.name
                     break
                     self._plot_exon(start, end, plot_info[1], interval)
                 else:
