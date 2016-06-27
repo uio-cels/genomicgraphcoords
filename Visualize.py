@@ -242,11 +242,14 @@ class VisualizeHtml():
         if interval_obj.is_end_exon:
             image = "exon_end"
 
+
+        top = level + 1 + 7 * self.gene_counter
+
         self.html += "<div class='exon exon_%d'" % self.gene_counter
         self.html += " style='z-index: 12; position: absolute;"
         self.html += "left: %.2fpx;" % start
         self.html += "width: %.2fpx;" % (20)
-        self.html += "top: %.2fpx;" % (self.genes_plotted_heights[interval_obj.gene_name])
+        self.html += "top: %.2fpx;" % (top)
         self.html += "height: %dpx;" % (7)
         self.html += "background-color: white;"
         self.html += "' "
