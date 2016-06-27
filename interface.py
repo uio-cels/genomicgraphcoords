@@ -4,7 +4,7 @@ via the web-server api, and prints html that is presented as results in the
 tool.
 
 run example:
-$ python interface.py align_region2 chr13_KI270843v1_alt
+$ python interface.py align_region2 chr7_KI270808v1_alt
 
 """
 import subprocess
@@ -76,11 +76,11 @@ elif method == "align_region2" or method == "align_region_html":
     region = sys.argv[2]
     region_info = db.alt_loci_info(region)
 
-    try:
-        graph, orig_graph, gene_segments = create_align_graph(region, 0)
-    except Exception as e:
-        print "<div class='alert alert-warning'>" + str(e) + "</div>"
-        exit()
+    #try:
+    graph, orig_graph, gene_segments = create_align_graph(region, 0)
+    #except Exception as e:
+    #    print "<div class='alert alert-warning'>" + str(e) + "</div>"
+    #    exit()
 
     area_start = region_info["chromStart"] - 50000
     area_end = region_info["chromEnd"] + 50000
