@@ -166,9 +166,9 @@ class VisualizeHtml():
                                 background-color: white;
                                 height: 20px; margin-top: 5px;'>
                         <p style='font-size: 0.8em;'>
-                            <span style='background-color: green; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Main path (GRCh38)</font><br>
+                            <span style='background-color: black; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Main path (GRCh38)</font><br>
                             <span style='background-color: darkred; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Merged </font><br>
-                            <span style='background-color: black; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Alternative loci</font>
+                            <span style='background-color: darkblue; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Alternative loci</font>
                         </p>
                     </div>
         """
