@@ -228,8 +228,8 @@ class VisualizeHtml():
                     print " === %s == " % interval.name
                     self._plot_interval_in_block(start, end, plot_info[1], interval)
 
-            self.color_counter += 1
-            self.gene_counter += 1
+                    self.color_counter += 1
+                    self.gene_counter += 1
 
     def _interval_js_css(self):
         self.html += """
