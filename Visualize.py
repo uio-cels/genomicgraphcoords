@@ -239,9 +239,9 @@ class VisualizeHtml():
 
     def _plot_exon(self, start, end, level, interval_obj):
         image = "exon_start"
-        if interval_obj.is_exon_end:
+        if interval_obj.is_end_exon:
             image = "exon_end"
-            
+
         self.html += "<div class='exon exon_%d'" % self.gene_counter
         self.html += " style='z-index: 12; position: absolute;"
         self.html += "left: %.2fpx;" % start
@@ -255,7 +255,7 @@ class VisualizeHtml():
         self.html += "data-gene-name='%s'" % interval_obj.name
         self.html += "data-gene-name2='%s'" % interval_obj.gene_name
         self.html += "data-graph-id='%d'>" % self.vis_id
-        self.html += "<img src='%d.png'>" % image
+        self.html += "<img src='%s.png'>" % image
         self.html += "</div>"
 
     def _plot_interval_in_block(self, start, end, level, interval_obj):
