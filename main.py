@@ -109,22 +109,22 @@ def create_align_graph(region_name, min_length):
             if ex == "":
                 continue
             l = LinearInterval("hg39", gene["chrom"], int(ex), int(ex) + 1, "+")
-            l.is_start_exon = True
             segment = linear_segment_to_graph(graph, block_graph, gene["chrom"],
                                               int(ex), int(ex) + 1);
             segment.name = "Start exon for " + gene["name"]
             segment.gene_name = gene["name"]
+            segment.is_start_exon = True
             exon_starts.append(segment)
 
         for ex in gene["exonEnds"].split(","):
             if ex == "":
                 continue
             l = LinearInterval("hg39", gene["chrom"], int(ex), int(ex) + 1, "+")
-            l.is_end_exon = True
             segment = linear_segment_to_graph(graph, block_graph, gene["chrom"],
                                               int(ex), int(ex) + 1);
             segment.name = "End exon for " + gene["name"]
             segment.gene_name = gene["name"]
+            segment.is_end_exon = True
             exon_ends.append(segment)
 
 

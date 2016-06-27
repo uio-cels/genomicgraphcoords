@@ -256,7 +256,7 @@ class VisualizeHtml():
         #level += 0.3 + 0.3 * (self.color_counter - 4)
         #print "=
         top = level + 1 + 7 * self.gene_counter
-        
+
         self.html += "<div class='interval interval_%d'" % self.gene_counter
 
         self.html += " style='z-index: 10; position: absolute;"
