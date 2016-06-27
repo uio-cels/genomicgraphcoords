@@ -249,7 +249,7 @@ class VisualizeHtml():
         self.html += "left: %.2fpx;" % (start - 10)
         self.html += "width: %.2fpx;" % (10)
         self.html += "top: %.2fpx;" % (top)
-        self.html += "height: %dpx; border: none;" % (7)
+        self.html += "height: %dpx;" % (7)
         self.html += "background-color: transparent;"
         self.html += "' "
         self.html += "data-interval-id='%d'" % self.gene_counter
