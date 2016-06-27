@@ -243,10 +243,10 @@ class VisualizeHtml():
 
         self.html += "<div class='exon exon_%d'" % self.gene_counter
         self.html += " style='z-index: 12; position: absolute;"
-        self.html += "left: %.2fpx;" % (start - 10)
-        self.html += "width: %.2fpx;" % (14)
-        self.html += "top: %.2fpx;" % (top)
-        self.html += "height: %dpx;" % (7)
+        self.html += "left: %.2fpx;" % (start)
+        self.html += "width: %.2fpx;" % (start + end)
+        self.html += "top: %.2fpx;" % (top + 2)
+        self.html += "height: %dpx;" % (3)
         self.html += "background-color: transparent;"
         self.html += "' "
         self.html += "data-interval-id='%d'" % self.gene_counter
