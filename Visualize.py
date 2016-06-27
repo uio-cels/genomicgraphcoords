@@ -239,7 +239,7 @@ class VisualizeHtml():
 
     def _plot_exon(self, start, end, level, interval_obj):
         self.html += "<div class='exon exon_%d'" % self.gene_counter
-        self.html += " style='z-index: 10; position: absolute;"
+        self.html += " style='z-index: 12; position: absolute;"
         self.html += "left: %.2fpx;" % start
         self.html += "width: %.2fpx;" % (20)
         self.html += "top: %.2fpx;" % (self.genes_plotted_heights[interval_obj.gene_name])
