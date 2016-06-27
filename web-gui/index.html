@@ -90,6 +90,21 @@
 				$("div[data-interval-id=" + $(this).attr("data-interval-id") + "]").css("border", "1px solid black");
 				$("#vis_explanation_" + graph_id).html("");
 			});
+			
+			$(".exon").hover(function(){
+				var graph_id = $(this).attr("data-graph-id");
+				//$(".interval_" + id).css("border", "1px solid white");
+				var id = $(this).attr("data-interval-id");
+				var gene_name = $(this).attr("data-gene-name");
+				var gene_name2 = $(this).attr("data-gene-name2");
+				$("div[data-interval-id=" + id + "]").css("border", "1px solid white");
+				$("#vis_explanation_" + graph_id).html("<p>Exon for <b>" + gene_name + "</b> (" + gene_name2 + ").");
+			}, function(){
+				var graph_id = $(this).attr("data-graph-id");
+				//$(".interval_" + id).css("border", "1px solid black");
+				$("div[data-interval-id=" + $(this).attr("data-interval-id") + "]").css("border", "1px solid black");
+				$("#vis_explanation_" + graph_id).html("");
+			});
 		}
 		
 		function run(reg_id){
