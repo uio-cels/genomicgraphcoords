@@ -184,7 +184,7 @@ class VisualizeHtml():
         """
         i = 0
         for gene in intervals:
-            if not gene.is_start_exon and not gene.is_end_exon:
+            if not gene.is_exon:
                 self.html += """
                 <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
                  <font color='black'>%s</font><br>
@@ -220,7 +220,7 @@ class VisualizeHtml():
                 if block == interval.end_block:
                     end = start + interval.end_pos * self.width_ratio
 
-                if interval.is_start_exon or interval.is_end_exon:
+                if interval.is_exon:
                     self._plot_exon(start, end, plot_info[1], interval)
                 else:
                     self._plot_interval_in_block(start, end, plot_info[1], interval)
@@ -239,9 +239,6 @@ class VisualizeHtml():
 
     def _plot_exon(self, start, end, level, interval_obj):
         image = "exon_start"
-        if interval_obj.is_end_exon:
-            image = "exon_end"
-
         top = level + 1 + 7 * self.genes_plotted_heights[interval_obj.gene_name]
 
         self.html += "<div class='exon exon_%d'" % self.gene_counter

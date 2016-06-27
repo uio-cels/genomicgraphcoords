@@ -90,8 +90,7 @@ def create_align_graph(region_name, min_length):
             genes = [gs[0] for gs in pgs1]
             break
     gene_intervals = {}
-    exon_starts = []
-    exon_ends = []
+    exons = []
     block_graph = create_block_index(graph)
     for gene in genes:
         #print "Gene %s, %s" % (gene["gname"], gene["name"])
@@ -105,27 +104,19 @@ def create_align_graph(region_name, min_length):
         #print gene ["exonEnds"]
 
         # Create one interval for each exon
+        ei = 0
+        ex_ends = gene["exonEnds"].split(",")
         for ex in gene["exonStarts"].split(","):
             if ex == "":
                 continue
-            l = LinearInterval("hg39", gene["chrom"], int(ex), int(ex) + 1, "+")
+            l = LinearInterval("hg39", gene["chrom"], int(ex), int(ex_ends[i]), "+")
             segment = linear_segment_to_graph(graph, block_graph, gene["chrom"],
-                                              int(ex), int(ex) + 1);
-            segment.name = "Start exon for " + gene["name"]
+                                              int(ex), int(ex_ends[i]))
+            segment.name = "Exon for " + gene["name"]
             segment.gene_name = gene["name"]
-            segment.is_start_exon = True
-            exon_starts.append(segment)
-
-        for ex in gene["exonEnds"].split(","):
-            if ex == "":
-                continue
-            l = LinearInterval("hg39", gene["chrom"], int(ex), int(ex) + 1, "+")
-            segment = linear_segment_to_graph(graph, block_graph, gene["chrom"],
-                                              int(ex), int(ex) + 1);
-            segment.name = "End exon for " + gene["name"]
-            segment.gene_name = gene["name"]
-            segment.is_end_exon = True
-            exon_ends.append(segment)
+            segment.is_exon = True
+            exons.append(segment)
+            i += 1
 
 
 
@@ -147,8 +138,7 @@ def create_align_graph(region_name, min_length):
 
     gene_segments = list(reversed(gene_segments[0:3])) # Limit to max three genes
 
-    gene_segments.extend(exon_starts)
-    gene_segments.extend(exon_ends)
+    gene_segments.extend(exons)
 
     return graph, orig_graph, gene_segments
 

@@ -21,8 +21,9 @@ class Interval(object):
         self.meta = ""
         self.name = ""
         self.gene_name = ""
-        self.is_start_exon = False # TODO: Should not be here
-        self.is_end_exon = False
+        self.is_exon = False
+
+
 
     def create_from_block_list(self, block_list, start_pos, end_pos):
         """
