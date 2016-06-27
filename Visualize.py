@@ -122,8 +122,8 @@ class VisualizeHtml():
         self.graph = graph
         self.color_counter = 4
         self.colors = list(six.iteritems(colors.cnames))[6:]
-        self.colors = ["#000088", "darkblue", "#880000", "black", "purple", "orange", "indigo"]
-        self.gene_colors = ["darkorange", "lightblue", "#aaaaaa", "pink"]
+        self.colors = ["#000088", "lightblue", "lighgreen", "black", "purple", "orange", "indigo"]
+        self.gene_colors = ["darkorange", "darkblue", "#aaaaaa", "pink"]
         self.gene_counter = 0
         self.genes_plotted_heights = {} # Dict of heights for genes
         self.offset_positions = {}  # Dict of offset pos for each alt loci/chrom
