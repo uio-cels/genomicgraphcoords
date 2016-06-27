@@ -184,11 +184,12 @@ class VisualizeHtml():
         """
         i = 0
         for gene in intervals:
-            self.html += """
-            <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
-             <font color='black'>%s</font><br>
-            """ % (self.gene_colors[self.gene_counter - i + 1], "Gene: " + gene.name + " (" + gene.gene_name + ")")
-            i += 1
+            if not gene.is_start_exon and not gene.is_end_exon:
+                self.html += """
+                <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
+                 <font color='black'>%s</font><br>
+                """ % (self.gene_colors[self.gene_counter - i + 1], "Gene: " + gene.name + " (" + gene.gene_name + ")")
+                i += 1
 
 
         self.html += """
