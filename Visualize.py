@@ -247,14 +247,14 @@ class VisualizeHtml():
         self.html += "width: %.2fpx;" % (start + end)
         self.html += "top: %.2fpx;" % (top + 2)
         self.html += "height: %dpx;" % (3)
-        self.html += "background-color: transparent;"
+        self.html += "background-color: black;"
         self.html += "' "
         self.html += "data-interval-id='%d'" % self.gene_counter
         self.html += "data-notation='%s'" % str(interval_obj)
         self.html += "data-gene-name='%s'" % interval_obj.name
         self.html += "data-gene-name2='%s'" % interval_obj.gene_name
         self.html += "data-graph-id='%d'>" % self.vis_id
-        self.html += "<img src='%s.png'>" % image
+        #self.html += "<img src='%s.png'>" % image
         self.html += "</div>"
 
     def _plot_interval_in_block(self, start, end, level, interval_obj):
