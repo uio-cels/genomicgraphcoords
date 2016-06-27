@@ -224,6 +224,7 @@ class VisualizeHtml():
                     break
                     self._plot_exon(start, end, plot_info[1], interval)
                 else:
+                    print " === %s == " % interval.name
                     self._plot_interval_in_block(start, end, plot_info[1], interval)
 
             self.color_counter += 1
