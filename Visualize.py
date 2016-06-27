@@ -237,6 +237,7 @@ class VisualizeHtml():
         """ % (self.gene_counter, self.gene_counter)
 
     def _plot_exon(self, start, end, level, interval_obj):
+        return
         self.html += "<div class='exon exon_%d'" % self.gene_counter
         self.html += " style='z-index: 10; position: absolute;"
         self.html += "left: %.2fpx;" % start
