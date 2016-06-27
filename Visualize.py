@@ -221,11 +221,8 @@ class VisualizeHtml():
                     end = start + interval.end_pos * self.width_ratio
 
                 if interval.is_start_exon or interval.is_end_exon:
-                    print "==============EXON %s============" % interval.name
-                    break
                     self._plot_exon(start, end, plot_info[1], interval)
                 else:
-                    print " === %s == " % interval.name
                     self._plot_interval_in_block(start, end, plot_info[1], interval)
 
             self.color_counter += 1
@@ -241,7 +238,6 @@ class VisualizeHtml():
         """ % (self.gene_counter, self.gene_counter)
 
     def _plot_exon(self, start, end, level, interval_obj):
-        return
         self.html += "<div class='exon exon_%d'" % self.gene_counter
         self.html += " style='z-index: 10; position: absolute;"
         self.html += "left: %.2fpx;" % start
