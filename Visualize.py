@@ -189,7 +189,7 @@ class VisualizeHtml():
                 <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
                  <font color='black'>%s</font><br>
                 """ % (self.gene_colors[self.gene_counter - i + 1], "Gene: " + gene.name + " (" + gene.gene_name + ")")
-                i += 1
+            i += 1
 
 
         self.html += """
@@ -228,8 +228,8 @@ class VisualizeHtml():
                     print " === %s == " % interval.name
                     self._plot_interval_in_block(start, end, plot_info[1], interval)
 
-                    self.color_counter += 1
-                    self.gene_counter += 1
+            self.color_counter += 1
+            self.gene_counter += 1
 
     def _interval_js_css(self):
         self.html += """
