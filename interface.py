@@ -60,8 +60,8 @@ elif method == "align_region":
     graph = graph.get_subgraph(LinearInterval("hg38", chrom, area_start, area_end), region)
 
     description = "Visualization of graph created around <i>" + graph.pretty_alt_loci_name(region) + "</i>"
-    if len(gene_segments) > 3:
-        gene_segments = gene_segments[0:3]
+    #if len(gene_segments) > 3:
+    #    gene_segments = gene_segments[0:3]
 
     v = Visualize(graph)
     v.show()
@@ -88,8 +88,8 @@ elif method == "align_region2" or method == "align_region_html":
     graph = graph.get_subgraph(LinearInterval("hg38", chrom, area_start, area_end), region)
 
     description = "Visualization of graph created around <i>" + graph.pretty_alt_loci_name(region) + "</i>"
-    if len(gene_segments) > 3:
-        gene_segments = gene_segments[0:3]
+    #if len(gene_segments) > 3:
+    #    gene_segments = gene_segments[0:3]
 
     """
     gene_segments2 = []
