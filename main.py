@@ -101,8 +101,8 @@ def create_align_graph(region_name, min_length):
         gene_intervals[gene["name"]] = l
         l.gene_name = gene["gname"]
 
-        print gene["exonStarts"]
-        print gene ["exonEnds"]
+        #print gene["exonStarts"]
+        #print gene ["exonEnds"]
 
         # Create one interval for each exon
         for ex in gene["exonStarts"].split(","):
