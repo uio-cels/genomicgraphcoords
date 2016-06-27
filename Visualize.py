@@ -242,7 +242,6 @@ class VisualizeHtml():
         if interval_obj.is_end_exon:
             image = "exon_end"
 
-
         top = level + 1 + 7 * self.genes_plotted_heights[interval_obj.gene_name]
 
         self.html += "<div class='exon exon_%d'" % self.gene_counter
