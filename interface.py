@@ -2,6 +2,10 @@
 Methods for interacting with the different scripts. This file is called
 via the web-server api, and prints html that is presented as results in the
 tool.
+
+run example:
+$ python interface.py align_region2 chr13_KI270843v1_alt
+
 """
 import subprocess
 import sys

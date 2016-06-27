@@ -90,7 +90,9 @@ def create_align_graph(region_name, min_length):
             genes = [gs[0] for gs in pgs1]
             break
     gene_intervals = {}
-
+    exon_starts = []
+    exon_ends = []
+    block_graph = create_block_index(graph)
     for gene in genes:
         #print "Gene %s, %s" % (gene["gname"], gene["name"])
         l = LinearInterval(
@@ -98,7 +100,28 @@ def create_align_graph(region_name, min_length):
             gene["txEnd"], gene["strand"])
         gene_intervals[gene["name"]] = l
         l.gene_name = gene["gname"]
- 
+
+        # Create one interval for each exon
+        for ex in gene["exonStarts"].split(","):
+            l = LinearInterval("hg39", gene["chrom"], int(ex), int(ex) + 1, "+")
+            l.is_start_exon = True
+            segment = linear_segment_to_graph(graph, block_graph, gene["chrom"],
+                                              int(ex), int(ex) + 1);
+            segment.name = "Start exon for " + gene["name"]
+            segment.gene_name = gene["name"]
+            exon_starts.append(segment)
+
+        for ex in gene["exonEnds"].split(","):
+            l = LinearInterval("hg39", gene["chrom"], int(ex), int(ex) + 1, "+")
+            l.is_end_exon = True
+            segment = linear_segment_to_graph(graph, block_graph, gene["chrom"],
+                                              int(ex), int(ex) + 1);
+            segment.name = "End exon for " + gene["name"]
+            segment.gene_name = gene["name"]
+            exon_ends.append(segment)
+
+
+
     for gi in gene_intervals.values():
         if DEBUG: print gi
         if DEBUG: print "###", graph.get_intersecting_blocks(gi)
@@ -107,13 +130,16 @@ def create_align_graph(region_name, min_length):
 
     for name, interval in gene_intervals.iteritems():
         segment = linear_segment_to_graph(
-                graph, create_block_index(graph),
+                graph, block_graph,
                 interval.chromosome, interval.start, interval.end)
         segment.name = name
         segment.gene_name = interval.gene_name
         if DEBUG: print segment
         segments.append(segment)
         gene_segments.append(segment)
+
+    gene_segments.extend(exon_starts)
+    gene_segments.extend(exon_ends)
 
     return graph, orig_graph, gene_segments
 

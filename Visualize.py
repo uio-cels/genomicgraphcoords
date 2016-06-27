@@ -125,7 +125,7 @@ class VisualizeHtml():
         self.colors = ["#000088", "black", "#880000", "#008800", "purple", "orange", "indigo"]
         self.gene_colors = ["darkorange", "lightblue", "#aaaaaa", "pink"]
         self.gene_counter = 0
-
+        self.genes_plotted_heights = {} # Dict of heights for genes
         self.offset_positions = {}  # Dict of offset pos for each alt loci/chrom
         self.offset_counter = 0
         self.lowest_offset = 0
@@ -219,11 +219,10 @@ class VisualizeHtml():
                 if block == interval.end_block:
                     end = start + interval.end_pos * self.width_ratio
 
-                self._plot_interval_in_block(start, end, plot_info[1], interval)
-
-
-            #self._interval_js_css()
-
+                if interval.is_start_exon or interval.is_end_exon:
+                    self._plot_exon(start, end, plot_info[1], interval)
+                else:
+                    self._plot_interval_in_block(start, end, plot_info[1], interval)
 
             self.color_counter += 1
             self.gene_counter += 1
@@ -237,18 +236,30 @@ class VisualizeHtml():
         </style>
         """ % (self.gene_counter, self.gene_counter)
 
-    def _plot_interval_in_block(self, start, end, level, interval_obj):
-        #level += 0.3 + 0.3 * (self.color_counter - 4)
-        #print "==== PLOT INTERVAL ==="
-        #print "%d, %d, %d" % (start, end, level)
-        if end - start == 0:
-            return
-
-        self.html += "<div class='interval interval_%d'" % self.gene_counter
+    def _plot_exon(self, start, end, level, interval_obj):
+        self.html += "<div class='exon exon_%d'" % self.gene_counter
         self.html += " style='z-index: 10; position: absolute;"
         self.html += "left: %.2fpx;" % start
         self.html += "width: %.2fpx;" % (end - start)
-        self.html += "top: %.2fpx;" % (level + 1 + 7 * self.gene_counter)
+        self.html += "top: %.2fpx;" % (self.genes_plotted_heights[interval_obj.gene_name])
+        self.html += "height: %dpx;" % (7)
+        self.html += "background-color: black;"
+        self.html += "' "
+        self.html += "data-interval-id='%d'" % self.gene_counter
+        self.html += "data-notation='%s'" % str(interval_obj)
+        self.html += "data-gene-name='%s'" % interval_obj.name
+        self.html += "data-gene-name2='%s'" % interval_obj.gene_name
+        self.html += "data-graph-id='%d'></div>" % self.vis_id
+
+    def _plot_interval_in_block(self, start, end, level, interval_obj):
+        #level += 0.3 + 0.3 * (self.color_counter - 4)
+        #print "=self.html += "<div class='interval interval_%d'" % self.gene_counter
+
+        top = level + 1 + 7 * self.gene_counter
+        self.html += " style='z-index: 10; position: absolute;"
+        self.html += "left: %.2fpx;" % start
+        self.html += "width: %.2fpx;" % (end - start)
+        self.html += "top: %.2fpx;" % (top)
         self.html += "height: %dpx;" % (7)
         self.html += "background-color: %s;" % self.gene_colors[self.gene_counter]
         self.html += "' "
@@ -257,6 +268,14 @@ class VisualizeHtml():
         self.html += "data-gene-name='%s'" % interval_obj.name
         self.html += "data-gene-name2='%s'" % interval_obj.gene_name
         self.html += "data-graph-id='%d'></div>" % self.vis_id
+
+        self.genes_plotted_heights[interval_obj.name] = top
+
+        #print "%d, %d, %d" % (start, end, level)
+        if end - start == 0:
+            return
+
+
         #plt.plot([start, end], [level, level],
         #            self.colors[self.color_counter],
         #            linestyle = '-',

@@ -4,10 +4,12 @@ import numpy as np
 import pickle
 
 class Gene:
-    def __init__(self, chrom_id, start, end):
+    def __init__(self, chrom_id, start, end, exon_starts, exon_ends):
         self.chrom_id = chrom_id
         self.start = start
         self.end = end
+        self.exon_starts = exon_starts
+        self.exon_ends = exon_ends
 
 
 class DbWrapper:
