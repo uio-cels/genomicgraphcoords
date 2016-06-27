@@ -243,7 +243,7 @@ class VisualizeHtml():
             image = "exon_end"
 
 
-        top = level + 1 + 7 * self.gene_counter
+        top = level + 1 + 7 * self.genes_plotted_heights[interval_obj.gene_name]
 
         self.html += "<div class='exon exon_%d'" % self.gene_counter
         self.html += " style='z-index: 12; position: absolute;"
@@ -281,7 +281,7 @@ class VisualizeHtml():
         self.html += "data-gene-name2='%s'" % interval_obj.gene_name
         self.html += "data-graph-id='%d'></div>" % self.vis_id
 
-        self.genes_plotted_heights[interval_obj.name] = top
+        self.genes_plotted_heights[interval_obj.name] = self.gene_counter
 
         #print "%d, %d, %d" % (start, end, level)
         if end - start == 0:
