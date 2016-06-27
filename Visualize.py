@@ -241,10 +241,10 @@ class VisualizeHtml():
         self.html += "<div class='exon exon_%d'" % self.gene_counter
         self.html += " style='z-index: 10; position: absolute;"
         self.html += "left: %.2fpx;" % start
-        self.html += "width: %.2fpx;" % (end - start)
+        self.html += "width: %.2fpx;" % (20)
         self.html += "top: %.2fpx;" % (self.genes_plotted_heights[interval_obj.gene_name])
         self.html += "height: %dpx;" % (7)
-        self.html += "background-color: black;"
+        self.html += "background-color: white;"
         self.html += "' "
         self.html += "data-interval-id='%d'" % self.gene_counter
         self.html += "data-notation='%s'" % str(interval_obj)
