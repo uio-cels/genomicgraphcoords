@@ -151,6 +151,7 @@ def create_align_graph(region_name, min_length):
 
 
     gene_segments = list(reversed(gene_segments[0:3])) # Limit to max three genes
+    gene_segments_orig_graph = list(reversed(gene_segments_orig_graph[0:3])) # Limit to max three genes
 
     gene_segments.extend(exons)
 
