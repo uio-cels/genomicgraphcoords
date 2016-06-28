@@ -203,12 +203,13 @@ class VisualizeHtml():
         self.html += self.html_arrows
 
         # Write js to set number of exons
-        self.html += """
-        <script>
-            $(document).ready(function(){
-                $('#exon_cnt').html('(%d)');
-            });
-        </script>""" % self.exon_cnt
+        if id == 0:
+            self.html += """
+            <script>
+                $(document).ready(function(){
+                    $('#exon_cnt').html('(%d)');
+                });
+            </script>""" % self.exon_cnt
 
         self.html += "</div></div></div>"
 
