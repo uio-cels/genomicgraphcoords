@@ -416,7 +416,7 @@ class VisualizeHtml():
             if ystart - yend >=  + self.block_height * 4:
                 arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
-            self.html_arrows += "top: %dpx;" % (ystart  + self.block_height / 2)
+            self.html_arrows += "top: %dpx;" % (ystart + self.block_height / 2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow_down_%s.png' style='" % arrow
             self.html_arrows += "height: %dpx;" % (yend-ystart)

@@ -117,9 +117,9 @@ def create_align_graph(region_name, min_length):
             segment.name = "Exon for " + gene["name"] + "(%d, %d)" % (int(ex), int(ex_ends[ei]))
             segment.gene_name = gene["name"]
             segment.is_exon = True
-            print "<p>Exon segment: <p>"
-            print segment
-            
+            #print "<p>Exon segment: <p>"
+            #print segment
+
             exons.append(segment)
             ei += 1
 
