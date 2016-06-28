@@ -408,7 +408,7 @@ class VisualizeHtml():
             self.html_arrows += "top: %dpx;" % (ystart + self.block_height / 2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow.png' style='"
-            self.html_arrows += "height: %dpx;" % (self.block_height / 2)
+            self.html_arrows += "height: %dpx;" % (self.block_height / 4)
             self.html_arrows += "width: %dpx;" % (xend - xstart)
             self.html_arrows += "'>"
         else:
