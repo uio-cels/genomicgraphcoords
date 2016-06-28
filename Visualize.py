@@ -20,6 +20,7 @@ class Visualize:
         plt.ylim(-10, 10)
         self.db = DbWrapper()
 
+
     def visualize_intervals(self, intervals):
         """
         Visualizes intervals
@@ -139,6 +140,9 @@ class VisualizeHtml():
 
         self.width_used = self.width
 
+        self.gene_height = 7
+        self.block_height = 25
+        self.exon_height = 3
 
         self.svg_lines = ""
         self.html_arrows = ""
@@ -239,14 +243,14 @@ class VisualizeHtml():
 
     def _plot_exon(self, start, end, level, interval_obj):
         image = "exon_start"
-        top = level + 1 + 7 * self.genes_plotted_heights[interval_obj.gene_name]
+        top = level + 1 + self.gene_height * self.genes_plotted_heights[interval_obj.gene_name]
 
         self.html += "<div class='exon exon_%d'" % self.gene_counter
         self.html += " style='z-index: 12; position: absolute;"
         self.html += "left: %.2fpx;" % (start)
         self.html += "width: %.2fpx;" % (end - start)
-        self.html += "top: %.2fpx;" % (top + 2)
-        self.html += "height: %dpx;" % (3)
+        self.html += "top: %.2fpx;" % (top + (self.gene_height - self.exon_height) / 2.0)
+        self.html += "height: %dpx;" % (self.exon_height)
         self.html += "background-color: black;"
         self.html += "' "
         self.html += "data-interval-id='%d'" % self.gene_counter
@@ -260,7 +264,7 @@ class VisualizeHtml():
     def _plot_interval_in_block(self, start, end, level, interval_obj):
         #level += 0.3 + 0.3 * (self.color_counter - 4)
         #print "=
-        top = level + 1 + 7 * self.gene_counter
+        top = level + 1 + self.gene_height * self.gene_counter
 
         self.html += "<div class='interval interval_%d'" % self.gene_counter
 
@@ -268,7 +272,7 @@ class VisualizeHtml():
         self.html += "left: %.2fpx;" % start
         self.html += "width: %.2fpx;" % (end - start)
         self.html += "top: %.2fpx;" % (top)
-        self.html += "height: %dpx;" % (7)
+        self.html += "height: %dpx;" % (self.gene_height)
         self.html += "background-color: %s;" % self.gene_colors[self.gene_counter]
         self.html += "' "
         self.html += "data-interval-id='%d'" % self.gene_counter
@@ -327,7 +331,7 @@ class VisualizeHtml():
 
     def _plot(self, xstart, xend, level, color, rp):
 
-        y = 50 + level * 50
+        y = self.block_height * 2 * ( level + 1)
         x = self.gap_pixels + (xstart - self.minOffset) * self.width_ratio
         width = (xend - xstart) * self.width_ratio
 
@@ -335,7 +339,7 @@ class VisualizeHtml():
         self.html += "left: %.2fpx;" % x
         self.html += "width: %.2fpx;" % width
         self.html += "top: %.2fpx;" % (y)
-        self.html += "height: %dpx;" % (25)
+        self.html += "height: %dpx;" % (self.block_height)
         self.html += "background-color: %s;" % color
         self.html += "' "
         self.html += " data-rpid='%s'" % (rp.id)
@@ -390,10 +394,10 @@ class VisualizeHtml():
 
         if yend < ystart:
             arrow = "short"
-            if ystart - yend >= 100:
+            if ystart - yend >= self.block_height * 4:
                 arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
-            self.html_arrows += "top: %dpx;" % (ystart - (ystart - yend) + 12)
+            self.html_arrows += "top: %dpx;" % (ystart - (ystart - yend) + self.block_height / 2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow_up_%s.png' style='" % arrow
             self.html_arrows += "height: %dpx;" % (ystart - yend)
@@ -401,18 +405,18 @@ class VisualizeHtml():
             self.html_arrows += "'>"
         elif yend == ystart:
             self.html_arrows += "left: %dpx;" % xstart
-            self.html_arrows += "top: %dpx;" % (ystart + 10)
+            self.html_arrows += "top: %dpx;" % (ystart + self.block_height / 2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow.png' style='"
-            self.html_arrows += "height: %dpx;" % (10)
+            self.html_arrows += "height: %dpx;" % (self.block_height / 2)
             self.html_arrows += "width: %dpx;" % (xend - xstart)
             self.html_arrows += "'>"
         else:
             arrow = "short"
-            if ystart - yend >= 100:
+            if ystart - yend >=  + self.block_height * 4:
                 arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
-            self.html_arrows += "top: %dpx;" % (ystart + 12)
+            self.html_arrows += "top: %dpx;" % (ystart  + self.block_height / 2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow_down_%s.png' style='" % arrow
             self.html_arrows += "height: %dpx;" % (yend-ystart)
