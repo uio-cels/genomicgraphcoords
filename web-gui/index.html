@@ -82,7 +82,7 @@
 				var id = $(this).attr("data-interval-id");
 				var gene_name = $(this).attr("data-gene-name");
 				var gene_name2 = $(this).attr("data-gene-name2");
-				$("div[data-interval-id=" + id + "]").css("border", "1px solid white");
+				$("div[data-interval-id=" + id + "]").css("border", "2px solid black");
 				$("#vis_explanation_" + graph_id).html("<p>Gene <b>" + gene_name + "</b> (" + gene_name2 + "). Interval notation:<br>" + $(this).attr("data-notation") + "</p>");
 			}, function(){
 				var graph_id = $(this).attr("data-graph-id");
