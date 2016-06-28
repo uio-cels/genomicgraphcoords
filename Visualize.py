@@ -147,18 +147,7 @@ class VisualizeHtml():
         self.svg_lines = ""
         self.html_arrows = ""
         self.html = """
-        <div class='row'>
-            <div class='col-md-12'>
-                <h3>%s</h3>
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col-md-12'>
-                <div class='vis_explanation' id ='vis_explanation_%d'>
-                    <div style='text-align: center; color: #555555;'>Move the mouse over the graph to see coordinates.</div>
-                </div>
-            </div>
-        </div>
+        
         """ % (description, id)
         self.html += """
         <div class='row'>
