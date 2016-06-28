@@ -230,6 +230,7 @@ class VisualizeHtml():
                 if interval.is_exon:
                     self._plot_exon(start, end, plot_info[1], interval)
                     self.exon_cnt += 1
+                    print "<p>exon cnt: %d</p>" % self.exon_cnt
                 else:
                     self._plot_interval_in_block(start, end, plot_info[1], interval)
 
