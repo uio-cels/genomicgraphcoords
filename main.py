@@ -145,7 +145,7 @@ def create_align_graph(region_name, min_length):
 
         # Segment on original graph
         segment_orig = linear_segment_to_graph(
-                orig_graph, block_graph,
+                orig_graph, block_graph_orig,
                 interval.chromosome, interval.start, interval.end)
         gene_segments_orig_graph.append(segment_orig)
 
