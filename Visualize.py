@@ -229,6 +229,7 @@ class VisualizeHtml():
 
                 if interval.is_exon:
                     self._plot_exon(start, end, plot_info[1], interval)
+                    self.exon_cnt += 1
                 else:
                     self._plot_interval_in_block(start, end, plot_info[1], interval)
 
@@ -264,7 +265,6 @@ class VisualizeHtml():
         #self.html += "<img src='%s.png'>" % image
         self.html += "</div>"
 
-        self.exon_cnt += 1
 
     def _plot_interval_in_block(self, start, end, level, interval_obj):
         #level += 0.3 + 0.3 * (self.color_counter - 4)
