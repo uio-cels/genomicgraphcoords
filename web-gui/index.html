@@ -184,6 +184,7 @@
 		.exon{
 			border: none;
 			cursor: pointer;
+			display: none;
 		}
 		.exon:hover{
 			border-right: 4px solid black;
@@ -303,10 +304,14 @@
 			
 			
 			<div class='row'>
-				<div class='col-md-12'>
+				<div class='col-md-7'>
 					<div class='vis_explanation' id ='vis_explanation_0'>
 						<div style='text-align: center; color: #555555;'>Move the mouse over the graph to see coordinates.</div>
 					</div>
+				</div>
+				<div class='col-md-5'>
+					<p><label onclick="$('.exon').toggle();"><input type='checkbox'> Show exons</label></p>
+					
 				</div>
 			</div>
 			
