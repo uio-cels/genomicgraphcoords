@@ -220,7 +220,7 @@ class VisualizeHtml():
                 if block == interval.end_block:
                     end = start + interval.end_pos * self.width_ratio
 
-                if interval.is_exon:
+                if False and interval.is_exon:
                     self._plot_exon(start, end, plot_info[1], interval)
                 else:
                     self._plot_interval_in_block(start, end, plot_info[1], interval)
