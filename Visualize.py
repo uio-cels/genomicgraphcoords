@@ -11,7 +11,7 @@ class Visualize:
         self.graph = graph
         self.color_counter = 4
         self.colors = list(six.iteritems(colors.cnames))[6:]
-        self.colors = ["#000088", "black", "#880000", "#008800", "purple", "orange", "indigo"]
+        self.colors = ["#000088", "black", "#880000", "#008800", "purple", "orange", "indigo", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black"]
         self.offset_positions = {}  # Dict of offset pos for each alt loci/chrom
         self.offset_counter = 0
         self.lowest_offset = 0
