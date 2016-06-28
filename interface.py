@@ -77,7 +77,8 @@ elif method == "align_region2" or method == "align_region_html":
     region_info = db.alt_loci_info(region)
 
     #try:
-    graph, orig_graph, gene_segments = create_align_graph(region, 0)
+    graph, orig_graph, gene_segments, gene_segments_orig = \
+                                            create_align_graph(region, 0)
     #except Exception as e:
     #    print "<div class='alert alert-warning'>" + str(e) + "</div>"
     #    exit()
@@ -98,6 +99,8 @@ elif method == "align_region2" or method == "align_region_html":
         g = db.get_gene(name)
         l = LinearInterval("hg38", g["chrom"], g["chromStart"], g["chromEnd"])
         s = Interval()
+        segment = linear_segment_to_graph(graph, orig_graph, gene["chrom"],
+                                              int(ex), int(ex_ends[ei]))
         s.create_from_block_list(graph.blocks[g["chrom"], int(g["chromStart"]), int(g["chromEnd"])])
         gene_segments2.append(s)
 
@@ -112,7 +115,7 @@ elif method == "align_region2" or method == "align_region_html":
                                 #  to the next
 
     subgraph_orig = orig_graph.get_subgraph(LinearInterval("hg38", chrom, area_start, area_end), region)
-    v2 = VisualizeHtml(subgraph_orig, area_start, area_end, 1, "Original GRCh38 graph in the same area (no merges)", total_width + 60)
+    v2 = VisualizeHtml(subgraph_orig, area_start, area_end, 1, "Original GRCh38 graph in the same area (no merges)", total_width + 60, gene_segments_orig)
     print str(v2)
 
     # Print analysis details

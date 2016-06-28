@@ -92,6 +92,7 @@ def create_align_graph(region_name, min_length):
     gene_intervals = {}
     exons = []
     block_graph = create_block_index(graph)
+    block_graph_orig = create_block_index(orig_graph)
     for gene in genes:
         #print "Gene %s, %s" % (gene["gname"], gene["name"])
         l = LinearInterval(
@@ -130,6 +131,7 @@ def create_align_graph(region_name, min_length):
         if DEBUG: print "###", graph.get_intersecting_blocks(gi)
 
     gene_segments = []
+    gene_segments_orig_graph = []
 
     for name, interval in gene_intervals.iteritems():
         segment = linear_segment_to_graph(
@@ -141,11 +143,18 @@ def create_align_graph(region_name, min_length):
         segments.append(segment)
         gene_segments.append(segment)
 
+        # Segment on original graph
+        segment_orig = linear_segment_to_graph(
+                orig_graph, block_graph,
+                interval.chromosome, interval.start, interval.end)
+        gene_segments_orig_graph.append(segment_orig)
+
+
     gene_segments = list(reversed(gene_segments[0:3])) # Limit to max three genes
 
     gene_segments.extend(exons)
 
-    return graph, orig_graph, gene_segments
+    return graph, orig_graph, gene_segments, gene_segments_orig_graph
 
 
 def is_good_loci(region_name, dbw):
