@@ -142,7 +142,7 @@ class VisualizeHtml():
 
         self.gene_height = 10
         self.block_height = 35
-        self.exon_height = 3
+        self.exon_height = 6
 
         self.svg_lines = ""
         self.html_arrows = ""
