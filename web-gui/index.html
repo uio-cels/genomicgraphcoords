@@ -106,6 +106,7 @@
 		
 		function run(reg_id){
 			$("#exon_cnt").html("");
+			$("radio").prop('checked', false);
 			$("#result_div").show();
 			$("#results").html("<div class='alert alert-success'>Creating graph and visualizing ...</div>");
 			$.get("http://46.101.93.163/test/python_runner.php?method=align_region2&params=" + reg_id, 
