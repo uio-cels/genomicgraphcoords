@@ -19,7 +19,7 @@
 			
 			var rpid = block.attr("data-rpid");
 			var rpname = block.attr("data-rpname");
-			var graph_id = block.attr("data-graph-id");
+			var graph_id = 0; //block.attr("data-graph-id");
 			//console.log("id: " + rpid);
 			
 			var coordinates = block.attr("data-coordinate").split(",");
@@ -77,7 +77,7 @@
 			});
 			*/
 			$(".interval").hover(function(){
-				var graph_id = $(this).attr("data-graph-id");
+				var graph_id = 0; //$(this).attr("data-graph-id");
 				//$(".interval_" + id).css("border", "1px solid white");
 				var id = $(this).attr("data-interval-id");
 				var gene_name = $(this).attr("data-gene-name");
@@ -85,20 +85,20 @@
 				$("div[data-interval-id=" + id + "]").css("border", "2px solid black");
 				$("#vis_explanation_" + graph_id).html("<p>Gene <b>" + gene_name + "</b> (" + gene_name2 + "). Interval notation:<br>" + $(this).attr("data-notation") + "</p>");
 			}, function(){
-				var graph_id = $(this).attr("data-graph-id");
+				var graph_id = 0; //$(this).attr("data-graph-id");
 				//$(".interval_" + id).css("border", "1px solid black");
 				$("div[data-interval-id=" + $(this).attr("data-interval-id") + "]").css("border", "1px solid black");
 				$("#vis_explanation_" + graph_id).html("");
 			});
 			
 			$(".exon").hover(function(){
-				var graph_id = $(this).attr("data-graph-id");
+				var graph_id = 0; //$(this).attr("data-graph-id");
 				var id = $(this).attr("data-interval-id");
 				var gene_name = $(this).attr("data-gene-name");
 				var gene_name2 = $(this).attr("data-gene-name2");
 				$("#vis_explanation_" + graph_id).html("<p><b>" + gene_name + "</b></p>.");
 			}, function(){
-				var graph_id = $(this).attr("data-graph-id");
+				var graph_id = 0; //$(this).attr("data-graph-id");
 				//$(".interval_" + id).css("border", "1px solid black");
 				$("#vis_explanation_" + graph_id).html("");
 			});
