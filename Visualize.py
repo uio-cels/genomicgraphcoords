@@ -140,7 +140,7 @@ class VisualizeHtml():
 
         self.width_used = self.width
 
-        self.gene_height = 7
+        self.gene_height = 12
         self.block_height = 35
         self.exon_height = 3
 
