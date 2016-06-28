@@ -110,7 +110,7 @@ def create_align_graph(region_name, min_length):
             if ex == "":
                 continue
 
-            print "<p>Ex: %d, %d</p>" % (int(ex), int(ex_ends[ei]))
+            #print "<p>Ex: %d, %d</p>" % (int(ex), int(ex_ends[ei]))
             l = LinearInterval("hg39", gene["chrom"], int(ex), int(ex_ends[ei]), "+")
             segment = linear_segment_to_graph(graph, block_graph, gene["chrom"],
                                               int(ex), int(ex_ends[ei]))
