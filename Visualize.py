@@ -272,6 +272,9 @@ class VisualizeHtml():
     def _plot_interval_in_block(self, start, end, level, interval_obj):
         #level += 0.3 + 0.3 * (self.color_counter - 4)
         #print "=
+        if end - start == 0:
+            return
+
         top = level + 1 + self.gene_height * self.gene_counter
 
         self.html += "<div class='interval interval_%d'" % self.gene_counter
@@ -292,8 +295,7 @@ class VisualizeHtml():
         self.genes_plotted_heights[interval_obj.name] = self.gene_counter
 
         #print "%d, %d, %d" % (start, end, level)
-        if end - start == 0:
-            return
+
 
 
         #plt.plot([start, end], [level, level],
