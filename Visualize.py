@@ -146,9 +146,7 @@ class VisualizeHtml():
 
         self.svg_lines = ""
         self.html_arrows = ""
-        self.html = """
         
-        """ % (description, id)
         self.html += """
         <div class='row'>
             <div class='col-md-12'>
