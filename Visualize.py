@@ -123,7 +123,7 @@ class VisualizeHtml():
         self.graph = graph
         self.color_counter = 4
         self.colors = list(six.iteritems(colors.cnames))[6:]
-        self.colors = ["#0000aa", "#D68888", "#C58E8E", "#cccccc", "purple", "orange", "indigo"]
+        self.colors = ["#0000aa", "#5F96C5", "#C58E8E", "#cccccc", "purple", "orange", "indigo"]
         self.gene_colors = ["darkorange", "#0000cc", "#aaaaaa", "pink", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black"]
         self.gene_counter = 0
         self.genes_plotted_heights = {} # Dict of heights for genes
