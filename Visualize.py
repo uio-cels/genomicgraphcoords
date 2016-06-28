@@ -144,6 +144,8 @@ class VisualizeHtml():
         self.block_height = 35
         self.exon_height = 6
 
+        self.exon_cnt = 0
+
         self.svg_lines = ""
         self.html_arrows = ""
         self.html = ""
@@ -200,6 +202,13 @@ class VisualizeHtml():
         self.visualize_intervals()
         self.html += self.html_arrows
 
+        # Write js to set number of exons
+        self.html += """
+        <script>
+            $(document).ready(function(){
+                $('#exon_cnt').html('(%d)');
+            });
+        </script>""" % self.exon_cnt
 
         self.html += "</div></div></div>"
 
@@ -254,6 +263,8 @@ class VisualizeHtml():
         self.html += "data-graph-id='%d'>" % self.vis_id
         #self.html += "<img src='%s.png'>" % image
         self.html += "</div>"
+
+        self.exon_cnt += 1
 
     def _plot_interval_in_block(self, start, end, level, interval_obj):
         #level += 0.3 + 0.3 * (self.color_counter - 4)
