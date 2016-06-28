@@ -123,7 +123,7 @@ elif method == "align_region2" or method == "align_region_html":
     print "<br><hr><br><h3>Details</h3>"
     print """
     <p>The following is a brief description of how the topmost figure was created.
-    The source code can be found <a href='https://github.com/uio-cels/gen-graph-coords'>here</a>.</p>
+    The source code can be found <a href='https://github.com/uio-cels/gen-graph-coords' target='_blank'>here</a>.</p>
     <ol>
     """
     print """<li>Information about the alternative locus (region selected in the tool)
