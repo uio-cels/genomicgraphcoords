@@ -115,7 +115,7 @@ def create_align_graph(region_name, min_length):
             l = LinearInterval("hg39", gene["chrom"], int(ex), int(ex_ends[ei]), "+")
             segment = linear_segment_to_graph(graph, block_graph, gene["chrom"],
                                               int(ex), int(ex_ends[ei]))
-            segment.name = "Exon for " + gene["name"] + "(%d, %d)" % (int(ex), int(ex_ends[ei]))
+            segment.name = "Exon for " + gene["name"]
             segment.gene_name = gene["name"]
             segment.is_exon = True
             #print "<p>Exon segment: <p>"
