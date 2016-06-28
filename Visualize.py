@@ -230,7 +230,6 @@ class VisualizeHtml():
 
                 if interval.is_exon:
                     self._plot_exon(start, end, plot_info[1], interval)
-                    self.exon_cnt += 1
                 else:
                     self._plot_interval_in_block(start, end, plot_info[1], interval)
 
@@ -265,6 +264,9 @@ class VisualizeHtml():
         self.html += "data-graph-id='%d'>" % self.vis_id
         #self.html += "<img src='%s.png'>" % image
         self.html += "</div>"
+
+        if start < 900:
+            self.exon_cnt += 1
 
 
     def _plot_interval_in_block(self, start, end, level, interval_obj):
