@@ -150,7 +150,7 @@ class VisualizeHtml():
         self.html += """
         <div class='row'>
             <div class='col-md-12'>
-                <h3>%s</h3>
+                <h4>%s</h4>
             </div>
         """ % description
 
