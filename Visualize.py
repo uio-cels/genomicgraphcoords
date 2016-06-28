@@ -150,6 +150,12 @@ class VisualizeHtml():
         self.html += """
         <div class='row'>
             <div class='col-md-12'>
+                <h3>%s</h3>
+            </div>
+        """ % description
+
+        self.html += """
+            <div class='col-md-12'>
                 <div class='visualization'>
                     <div style='position: relative;
                                 float: right;
