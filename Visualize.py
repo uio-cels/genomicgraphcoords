@@ -168,7 +168,7 @@ class VisualizeHtml():
                             <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Alternative loci</font>
                         </p>
                     </div>
-        """ % (self.colors[1], self.colors[2], self.colors[3])
+        """ % (self.colors[3], self.colors[2], self.colors[1])
 
 
         # Gene labels
