@@ -155,10 +155,8 @@ elif method == "align_region2" or method == "align_region_html":
     is before and the other after a sequence aligned previously.</li>
     <li>The alternative locus was then merged with the main path based on
      these alignments.</li>
-    <li>Genes (if any were visualized) were collected from the UCSC hg38
-    database, table: <i>knownGene</i>. Only genes that were crossing
-    'bundaries' in the graph where selected. With crossing a boundary,
-    we mean genes that had start position before a visualized edge
-    and end position after a visualized edge in the graph.</li>
+    <li>Genes were collected from the UCSC hg38
+    database, table: <i>knownGene</i>.  
+    Only genes present in multiple region paths in the part of the graph visualized were selected.</li>
     """
     print "</ol>"

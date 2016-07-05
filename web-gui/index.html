@@ -42,8 +42,8 @@
 			sOf = Math.max(0, sOf);
 			
 			var coordinates_html = "<ul>";
-			coordinates_html += "<li>Coordinate using <i>sequential</i> partitioning: &nbsp;<b>" + sID + ", " + numberWithCommas(sOf) + "</b></li>";
-			coordinates_html += "<li>Coordinate using <i>hierachical</i> partitioning: <b>" + hID + ", " + numberWithCommas(hOf) + "</b></li>";
+			coordinates_html += "<li>Coordinate using <i>sequential</i> partitioning: &nbsp;<b>" + sID + "</b>, offset <b>" + numberWithCommas(sOf) + "</b></li>";
+			coordinates_html += "<li>Coordinate using <i>hierachical</i> partitioning: <b>" + hID + "</b>, offset <b>" + numberWithCommas(hOf) + "</b></li>";
 			
 			$("#vis_explanation_" + graph_id).html(coordinates_html);
 			
