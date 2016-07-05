@@ -151,9 +151,14 @@ class VisualizeHtml():
         self.html = ""
         self.html += """
         <div class='row'>
-            <div class='col-md-12'>
+            <div class='col-md-8'>
                 <h4>%s</h4>
             </div>
+            <div class='col-md-4'>            
+				<div class='options'>
+					<p><label><input type='checkbox' onclick="$('.exon').toggle();"> Click to show exons <span id='exon_cnt'></span></label></p>
+				</div>
+			</div>
         """ % description
 
         self.html += """
