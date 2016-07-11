@@ -30,7 +30,7 @@ elif method == "get_all_regions":
     graph = OffsetBasedGraph("dummy-graph") # Only to access some methods
 
     for region in regions:
-        if region["chromEnd"] - region["chromStart"] < 4000000:
+        if region["chromEnd"] - region["chromStart"] < 400000:
             html_out += "<option value='%s'>%s (%s:%d-%d)</option>" % \
                         (region["name"],
                          graph.pretty_alt_loci_name(region["name"]),
