@@ -52,8 +52,8 @@ def get_flanking_alignments(region_name, alt_info):
     consensus_fasta = save_sequence_to_fasta(
         alt_info["chrom"], alt_info["chromStart"], alt_info["chromEnd"])
 
-    alt_seq = "".join(open(alt_fasta, "r").readlines()[1:])
-    consensus_seq = "".join(open(consensus_fasta, "r").readlines()[1:])
+    alt_seq = "".join(map(lambda x: x.strip(), open(alt_fasta, "r").readlines()[1:]))
+    consensus_seq = "".join(map(lambda x: x.strip(), open(consensus_fasta, "r").readlines()[1:]))
     start_flank_length = 0
     for i in xrange(min(len(consensus_seq), len(alt_seq))):
         if alt_seq[i] != consensus_seq[i]:
@@ -67,6 +67,8 @@ def get_flanking_alignments(region_name, alt_info):
     linRef2 = LinearInterval("hg38", region_name, 0, start_flank_length)
     start_pair = (linRef1, linRef2)
     stop_flank_length = 0
+    print consensus_seq[-100:]
+    print alt_seq[-100:]
     for i in xrange(min(len(consensus_seq), len(alt_seq))):
         if alt_seq[-i-1] != consensus_seq[-i-1]:
             stop_flank_length = i
