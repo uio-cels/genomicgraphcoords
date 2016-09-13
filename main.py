@@ -58,7 +58,7 @@ def get_flanking_alignments(region_name, alt_info):
     for i in xrange(min(len(consensus_seq), len(alt_seq))):
         if alt_seq[i] != consensus_seq[i]:
             start_flank_length = i
-            break 
+            break
     else:
         raise Exception("Main and Alt is completely equal")
 
