@@ -75,12 +75,12 @@ def get_flanking_alignments(region_name, alt_info):
             break
     else:
         raise Exception("Main and Alt is completely equal")
-
+    print stop_flank_length
     stopRef1 = LinearInterval(
-        "hg38", region_name,
+        "hg38", alt_info["chrom"],
         alt_info["chromEnd"]-stop_flank_length, alt_info["chromEnd"])
     stopRef2 = LinearInterval(
-        "hg38", alt_info["chrom"],
+        "hg38", region_name,
         alt_info["length"]-stop_flank_length, alt_info["length"])
     stop_pair = (stopRef1, stopRef2)
     return [start_pair, stop_pair]
