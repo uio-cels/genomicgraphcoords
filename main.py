@@ -43,6 +43,49 @@ def get_alignments(region_name, alt_info):
     return align_file
 
 
+def get_flanking_alignments(region_name, alt_info):
+    align_file = DATA_PATH + "alignment%s.tmp" % region_name
+    import globals
+    globals.blast_result = "alignment%s.tmp" % region_name
+    alt_fasta = save_sequence_to_fasta(
+        region_name, 0, alt_info["length"])
+    consensus_fasta = save_sequence_to_fasta(
+        alt_info["chrom"], alt_info["chromStart"], alt_info["chromEnd"])
+
+    alt_seq = "".join(open(alt_fasta, "r").readlines[1:])
+    consensus_seq = "".join(open(consensus_fasta, "r").readlines[1:])
+    start_flank_length = 0
+    for i in xrange(min(len(consensus_seq), len(alt_seq))):
+        if alt_seq[i] != consensus_seq[i]:
+            start_flank_length = i
+            break
+    else:
+        raise Exception("Main and Alt is completely equal")
+
+    linRef1 = LinearInterval("hg38", region_name, alt_info["chromStart"],
+                             alt_info["chromStart"] + start_flank_length)
+
+    linRef2 = LinearInterval("hg38", alt_info["chrom"], 0, start_flank_length)
+    start_pair = (lineRef1, linRef2)
+
+    stop_flank_length = 0
+    for i in xrange(min(len(consensus_seq), len(alt_seq))):
+        if alt_seq[-i-1] != consensus_seq[-i-1]:
+            stop_flank_length = i
+            break
+    else:
+        raise Exception("Main and Alt is completely equal")
+
+    stopRef1 = LinearInterval(
+        "hg38", region_name,
+        alt_info["chromEnd"]-stop_flank_length, alt_info["chromEnd"])
+    stopRef2 = LinearInterval(
+        "hg38", alt_info["chrom"],
+        alt_info["length"]-stop_flank_length, alt_info["length"])
+    stop_pair = (stopRef1, stopRef2)
+    return [start_pair, stop_pair]
+
+
 segments = []
 
 def create_align_graph(region_name, min_length):
@@ -60,9 +103,10 @@ def create_align_graph(region_name, min_length):
     orig_graph = copy.deepcopy(graph)
 
     alt_info = dbw.alt_loci_info(region_name)
-    align_file = get_alignments(region_name, alt_info)
 
+    align_file = get_alignments(region_name, alt_info)
     alignments = get_filtered_alignments(align_file, alt_info["chromStart"])
+
     #print "Alignments :"
     #print alignments
     if len(alignments) == 0:
