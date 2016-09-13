@@ -66,7 +66,7 @@ def get_flanking_alignments(region_name, alt_info):
                              alt_info["chromStart"] + start_flank_length)
 
     linRef2 = LinearInterval("hg38", alt_info["chrom"], 0, start_flank_length)
-    start_pair = (lineRef1, linRef2)
+    start_pair = (linRef1, linRef2)
 
     stop_flank_length = 0
     for i in xrange(min(len(consensus_seq), len(alt_seq))):
