@@ -53,12 +53,12 @@ def get_flanking_alignments(region_name, alt_info):
         alt_info["chrom"], alt_info["chromStart"], alt_info["chromEnd"])
 
     alt_seq = "".join(open(alt_fasta, "r").readlines()[1:])
-    consensus_seq = "".join(open(consensus_fasta, "r").readlines[1:])
+    consensus_seq = "".join(open(consensus_fasta, "r").readlines()[1:])
     start_flank_length = 0
     for i in xrange(min(len(consensus_seq), len(alt_seq))):
         if alt_seq[i] != consensus_seq[i]:
             start_flank_length = i
-            break
+            break 
     else:
         raise Exception("Main and Alt is completely equal")
 
