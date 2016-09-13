@@ -52,8 +52,8 @@ def get_flanking_alignments(region_name, alt_info):
     consensus_fasta = save_sequence_to_fasta(
         alt_info["chrom"], alt_info["chromStart"], alt_info["chromEnd"])
 
-    alt_seq = "".join(open(alt_fasta, "r").readlines[1:])
-    consensus_seq = "".join(open(consensus_fasta, "r").readlines[1:])
+    alt_seq = "".join(open(alt_fasta, "r").readlines()[1:])
+    consensus_seq = "".join(open(consensus_fasta, "r").readlines()[1:])
     start_flank_length = 0
     for i in xrange(min(len(consensus_seq), len(alt_seq))):
         if alt_seq[i] != consensus_seq[i]:
@@ -62,12 +62,10 @@ def get_flanking_alignments(region_name, alt_info):
     else:
         raise Exception("Main and Alt is completely equal")
 
-    linRef1 = LinearInterval("hg38", region_name, alt_info["chromStart"],
+    linRef1 = LinearInterval("hg38", alt_info["chrom"], alt_info["chromStart"],
                              alt_info["chromStart"] + start_flank_length)
-
-    linRef2 = LinearInterval("hg38", alt_info["chrom"], 0, start_flank_length)
+    linRef2 = LinearInterval("hg38", region_name, 0, start_flank_length)
     start_pair = (linRef1, linRef2)
-
     stop_flank_length = 0
     for i in xrange(min(len(consensus_seq), len(alt_seq))):
         if alt_seq[-i-1] != consensus_seq[-i-1]:
@@ -111,6 +109,8 @@ def create_align_graph(region_name, min_length):
     #align_file = get_alignments(region_name, alt_info)
     #alignments = get_filtered_alignments(align_file, alt_info["chromStart"])
     alignments = get_flanking_alignments(region_name, alt_info)
+
+
     #print "Alignments :"
     #print alignments
     if len(alignments) == 0:
