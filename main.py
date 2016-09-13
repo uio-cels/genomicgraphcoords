@@ -88,6 +88,7 @@ def get_flanking_alignments(region_name, alt_info):
 
 segments = []
 
+
 def create_align_graph(region_name, min_length):
     dbw = DbWrapper()
     chromosome_ids = ["chr%s" % n for n in range(1, 23)+["X", "Y"]]
@@ -104,9 +105,12 @@ def create_align_graph(region_name, min_length):
 
     alt_info = dbw.alt_loci_info(region_name)
 
-    align_file = get_alignments(region_name, alt_info)
-    alignments = get_filtered_alignments(align_file, alt_info["chromStart"])
 
+
+
+    #align_file = get_alignments(region_name, alt_info)
+    #alignments = get_filtered_alignments(align_file, alt_info["chromStart"])
+    alignments = get_flanking_alignments(region_name, alt_info)
     #print "Alignments :"
     #print alignments
     if len(alignments) == 0:
