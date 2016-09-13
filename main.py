@@ -52,7 +52,7 @@ def get_flanking_alignments(region_name, alt_info):
     consensus_fasta = save_sequence_to_fasta(
         alt_info["chrom"], alt_info["chromStart"], alt_info["chromEnd"])
 
-    alt_seq = "".join(open(alt_fasta, "r").readlines[1:])
+    alt_seq = "".join(open(alt_fasta, "r").readlines()[1:])
     consensus_seq = "".join(open(consensus_fasta, "r").readlines[1:])
     start_flank_length = 0
     for i in xrange(min(len(consensus_seq), len(alt_seq))):
