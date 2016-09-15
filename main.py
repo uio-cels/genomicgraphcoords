@@ -44,7 +44,6 @@ def get_alignments(region_name, alt_info):
 
 
 def get_flanking_alignments(region_name, alt_info):
-    align_file = DATA_PATH + "alignment%s.tmp" % region_name
     import globals
     globals.blast_result = "alignment%s.tmp" % region_name
     alt_fasta = save_sequence_to_fasta(
@@ -52,15 +51,18 @@ def get_flanking_alignments(region_name, alt_info):
     consensus_fasta = save_sequence_to_fasta(
         alt_info["chrom"], alt_info["chromStart"], alt_info["chromEnd"])
 
-    alt_seq = "".join(map(lambda x: x.strip(), open(alt_fasta, "r").readlines()[1:]))
-    consensus_seq = "".join(map(lambda x: x.strip(), open(consensus_fasta, "r").readlines()[1:]))
+    alt_seq = "".join(map(lambda x: x.strip(),
+                          open(alt_fasta, "r").readlines()[1:]))
+    consensus_seq = "".join(map(lambda x: x.strip(),
+                                open(consensus_fasta, "r").readlines()[1:]))
     start_flank_length = 0
     for i in xrange(min(len(consensus_seq), len(alt_seq))):
         if alt_seq[i] != consensus_seq[i]:
             start_flank_length = i
             break
     else:
-        raise Exception("Main and Alt is completely equal (%s, %s)" % (region_name, alt_info["chrom"]))
+        raise Exception("Main and Alt is completely equal (%s, %s)" %
+                        (region_name, alt_info["chrom"]))
 
     linRef1 = LinearInterval("hg38", alt_info["chrom"], alt_info["chromStart"],
                              alt_info["chromStart"] + start_flank_length)
@@ -72,7 +74,8 @@ def get_flanking_alignments(region_name, alt_info):
             stop_flank_length = i
             break
     else:
-        raise Exception("Main and Alt is completely equal (%s, %s)" % (region_name, alt_info["chrom"]))
+        raise Exception("Main and Alt is completely equal (%s, %s)" %
+                        (region_name, alt_info["chrom"]))
     stopRef1 = LinearInterval(
         "hg38", alt_info["chrom"],
         alt_info["chromEnd"]-stop_flank_length, alt_info["chromEnd"])
@@ -80,40 +83,9 @@ def get_flanking_alignments(region_name, alt_info):
         "hg38", region_name,
         alt_info["length"]-stop_flank_length, alt_info["length"])
     stop_pair = (stopRef1, stopRef2)
+
     return [start_pair, stop_pair]
 
-
-def get_flanking_lins():
-    db = DbWrapper()
-    genes = filter(lambda g: "KI270830" not in g["chrom"], db.get_alt_genes())
-    gene_intervals = [LinearInterval("hg38", g["chrom"], g["txStart"], g["txEnd"]) for g in genes]
-    for gi, g in zip(gene_intervals, genes):
-        gi.gene_name = g["name"]
-    print gene_intervals[:50]
-    #alt_loci_infos = [ali for ali in db.get_alt_loci_infos() if "KI270831" not in ali["name"]]
-    alt_loci_infos = db.get_alt_loci_infos(False)
-    names = map(lambda x: x["name"], alt_loci_infos)
-    print names
-    alignments = map(lambda x: get_flanking_alignments(x["name"], x),
-                     alt_loci_infos)
-    print alignments
-    lin_refs = map(lambda x: [y[1] for y in x], alignments)
-    print lin_refs
-    lin_ref_dict = dict(zip(names, lin_refs))
-    not_contains = filter(lambda gi: not any([y.contains(gi) for y in lin_ref_dict[gi.chromosome]]),
-                      gene_intervals)
-#     for gi in contains:
-#         print gi.gene_name
-#         print gi.chromosome, gi.start, gi.end
-#         print lin_ref_dict[gi.chromosome]
-# 
-    intersects = filter(lambda gi: any([gi.intersects(y) for y in lin_ref_dict[gi.chromosome]]),
-                     not_contains)
-    print len(intersects)
-    print len(not_contains)
-    print len(intersects)/float(len(not_contains))
-    #print intersects[:50]
-    #print sum(intersects)/float(len(intersects))
 
 segments = []
 
@@ -134,16 +106,10 @@ def create_align_graph(region_name, min_length):
 
     alt_info = dbw.alt_loci_info(region_name)
 
-
-
-
     #align_file = get_alignments(region_name, alt_info)
     #alignments = get_filtered_alignments(align_file, alt_info["chromStart"])
     alignments = get_flanking_alignments(region_name, alt_info)
 
-
-    #print "Alignments :"
-    #print alignments
     if len(alignments) == 0:
         raise Exception("There were no alignments between the alternative locus and consensus path in the the given region. Try another region.")
 
