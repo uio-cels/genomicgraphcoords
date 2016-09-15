@@ -1,9 +1,12 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import object
 import pymysql
 from config import *
 import numpy as np
 import pickle
 
-class Gene:
+class Gene(object):
     def __init__(self, chrom_id, start, end, exon_starts, exon_ends):
         self.chrom_id = chrom_id
         self.start = start
@@ -12,7 +15,7 @@ class Gene:
         self.exon_ends = exon_ends
 
 
-class DbWrapper:
+class DbWrapper(object):
     """
     Abstraction layer for collecting genomic data from the UCSC database.
     """
@@ -160,10 +163,10 @@ class DbWrapper:
         # Used to store cached queries, by hashing the query string
         import hashlib
         m = hashlib.md5()
-        m.update(string)
+        m.update(string.encode('utf-8'))
         return m.hexdigest()
 
 if __name__ == "__main__":
     db = DbWrapper()
     #res = db.alt_loci_info("chr11_KI270827v1_alt")
-    if DEBUG: print db.genes_crossing_position("chr1", 100000)
+    if DEBUG: print(db.genes_crossing_position("chr1", 100000))
