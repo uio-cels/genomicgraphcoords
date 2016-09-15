@@ -66,12 +66,7 @@ def get_flanks(alt_info):
     else:
         raise Exception("Main and Alt is completely equal (%s, %s)" %
                         (region_name, alt_info["chrom"]))
-    main_start_coord = alt_info["chromStart"] + start_flank_length
-    main_start = LinearInterval("hg38", alt_info["chrom"],
-                                alt_info["chromStart"],
-                                main_start_coord)
 
-    alt_start = LinearInterval("hg38", region_name, 0, start_flank_length)
 
     stop_flank_length = 0
     for i in range(min(len(consensus_seq), len(alt_seq))):
@@ -81,19 +76,48 @@ def get_flanks(alt_info):
     else:
         raise Exception("Main and Alt is completely equal (%s, %s)" %
                         (region_name, alt_info["chrom"]))
+
+    main_start_coord = alt_info["chromStart"] + start_flank_length
     main_end_coord = alt_info["chromEnd"] - stop_flank_length
+    alt_end_coord = alt_info["length"] - stop_flank_length
+
+    alt_coords = [0, start_flank_length, alt_end_coord, alt_info["length"]]
+    main_coords = [alt_info["chromStart"], main_start_coord, main_end_coord,
+                   alt_info["chromEnd"]]
+
+    alt_intervals = []
+    main_intervals = []
+    for start, stop in zip(alt_coords[:-1], alt_coords[1:]):
+        alt_intervals.append(
+            LinearInterval("hg38", region_name,
+                           start,
+                           stop))
+
+    for start, stop in zip(main_coords[:-1], main_coords[1:]):
+        main_intervals.append(
+            LinearInterval("hg38", alt_info["chrom"],
+                           start,
+                           stop))
+    return (main_intervals, alt_intervals)
+
+
+    main_start = LinearInterval("hg38", alt_info["chrom"],
+                                alt_info["chromStart"],
+                                main_start_coord)
+
+    alt_start = LinearInterval("hg38", region_name, 0, start_flank_length)
 
     main_end = LinearInterval(
         "hg38", alt_info["chrom"],
-        alt_info["chromEnd"]-stop_flank_length, alt_info["chromEnd"])
+        main_end_coord, alt_info["chromEnd"])
 
     alt_end = LinearInterval(
         "hg38", region_name,
-        alt_info["length"]-stop_flank_length, alt_info["length"])
+        alt_end_coord, alt_info["length"])
 
     alt_middle = LinearInterval(
         "hg38", region_name,
-        start_flank_length, alt_info["length"]-stop_flank_length)
+        start_flank_length, alt_end_coord)
 
     main_middle = LinearInterval(
         "hg38", alt_info["chrom"],

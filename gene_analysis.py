@@ -64,8 +64,9 @@ def calculate_main_spans():
 
     # Find genes that are partly in aligned regions
     intersecting_genes = [gi for gi in real_alt_genes if
-                          any([gi.intersects(interval[0]) or
-                               gi.intersects(interval[2]) for
+                          any([gi.intersects(interval[0]) +
+                               gi.intersects(interval[1]) +
+                               gi.intersects(interval[2]) > 1 for
                                interval in lin_ref_dict[gi.chromosome]])
                           ]
 
@@ -75,5 +76,6 @@ def calculate_main_spans():
     print(len(intersecting_genes)/float(len(genes)))
 
 if __name__ == "__main__":
+    get_flanking_lins()
     calculate_main_spans()
     exit(0)
