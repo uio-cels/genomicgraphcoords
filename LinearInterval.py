@@ -1,3 +1,4 @@
+from builtins import object
 class LinearInterval(object):
     """
     Class for a linear interval (region path)

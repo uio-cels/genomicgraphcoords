@@ -1,6 +1,9 @@
 """
 Various methods for converting linear coordinates to a graph
 """
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import str
 from Interval import Interval, IntervalCollection
 from config import *
 
@@ -11,8 +14,8 @@ def create_block_index(graph):
     """
 
     index = {}
-    for block_id, block in graph.blocks.iteritems():
-        for linear_reference in block.linear_references.values():
+    for block_id, block in graph.blocks.items():
+        for linear_reference in list(block.linear_references.values()):
             chr_id = linear_reference.chromosome
             if chr_id in index:
                 index[chr_id].append(block)
@@ -26,7 +29,7 @@ def linear_segment_to_graph(graph, graph_block_index, chr_id, start, end):
     """
     Takes a linear segment on hg38 and returns a ChainSegment object
     """
-    if DEBUG: print "Linear segment to graph %s, %d, %d" % (chr_id, start, end)
+    if DEBUG: print("Linear segment to graph %s, %d, %d" % (chr_id, start, end))
 
     block_list = []
     start_pos = 0
@@ -40,7 +43,7 @@ def linear_segment_to_graph(graph, graph_block_index, chr_id, start, end):
         # Follow edge to next block. If there are more than one edge, follow
         # edge to the block that is not an alternative loci
         if current_block == end_block:
-            if DEBUG: print "Current block == end block"
+            if DEBUG: print("Current block == end block")
             break
         prev_block = current_block
         edges = graph.block_edges[current_block]
@@ -48,10 +51,10 @@ def linear_segment_to_graph(graph, graph_block_index, chr_id, start, end):
         # Find next current block. Either alt of consensus
         for edge in edges:
 
-            if DEBUG: print "edge" + str(edge)
+            if DEBUG: print("edge" + str(edge))
             if "alt" in chr_id and "alt" in edge:
                 current_block = edge
-                if DEBUG: print "    GOing to alt"
+                if DEBUG: print("    GOing to alt")
                 break
             elif not "alt" in chr_id and not "alt" in edge:
                 current_block = edge
@@ -75,7 +78,7 @@ def linear_coordinate_to_graph(graph, graph_block_index, chr_id, coordinate):
     graph_block_index should be sent as a parameter, and can be obtained
     by calling create_block_index()
     """
-    if DEBUG: print "coordinate to graph. " + str(chr_id) + " " + str(coordinate)
+    if DEBUG: print("coordinate to graph. " + str(chr_id) + " " + str(coordinate))
     # Our coordinate can be in any of these blocks
     potential_blocks = graph_block_index[chr_id]
 
@@ -83,7 +86,7 @@ def linear_coordinate_to_graph(graph, graph_block_index, chr_id, coordinate):
         # Get start and end position of this block in linear genome,
         # check whether this is the correct block
         # assume always only one linear refernce, i.e. only one species
-        linear_references = potential_block.linear_references.values()
+        linear_references = list(potential_block.linear_references.values())
         for lr in linear_references:
 
             start = lr.start

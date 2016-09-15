@@ -1,3 +1,6 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import object
 import subprocess
 import os
 from config import *
@@ -6,7 +9,7 @@ from LinearInterval import LinearInterval
 BLAST_COMMAND = 'blastn -outfmt "6 qseqid sseqid qstart qend sstart send length score bitscore evalue" -query %s -subject %s -perc_identity %.2f -num_threads 100'
 
 
-class Alignment:
+class Alignment(object):
     """
     Simple class that represents one alignment between two sequences
     """
@@ -27,10 +30,10 @@ class Alignment:
 def blast_align(fasta1, fasta2, min_ratio_match, min_length,
                 out_name="alignment.tmp"):
 
-    if DEBUG: print "___ RUNNING BLAST_ALIGN _____ "
+    if DEBUG: print("___ RUNNING BLAST_ALIGN _____ ")
 
     blast_command = BLAST_COMMAND % (fasta1, fasta2, min_ratio_match)
-    if DEBUG: print "\n " + blast_command + " \n"
+    if DEBUG: print("\n " + blast_command + " \n")
     p = subprocess.Popen(blast_command, shell=True,
                          cwd=os.path.dirname(os.path.realpath(__file__)),
                          stdout=subprocess.PIPE)
@@ -147,4 +150,4 @@ def get_filtered_alignments(filename, offset=0):
 
 if __name__ == "__main__":
     a = get_alignments(DATA_PATH + "alignment.tmp")
-    if DEBUG: print a
+    if DEBUG: print(a)

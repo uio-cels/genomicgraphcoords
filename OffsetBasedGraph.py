@@ -1,3 +1,8 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import filter
+from builtins import str
+from builtins import object
 
 from LinearInterval import LinearInterval
 from RegionPath import RegionPath
@@ -5,15 +10,15 @@ from config import *
 from DbWrapper import DbWrapper
 
 
-class OffsetBasedGraph():
+class OffsetBasedGraph(object):
     """
     A simple graph structure, based on an offset-based coordinate system.
     Only region-paths are stored, not single bases.
     """
     def __str__(self):
         elements = [str(block.id) + ": " + str(block)
-                    for block in self.blocks.values()]
-        for key, val in self.block_edges.iteritems():
+                    for block in list(self.blocks.values())]
+        for key, val in self.block_edges.items():
             elements.append("%s: %s" % (str(key), str(val)))
         return "\n".join(elements)
 
@@ -25,17 +30,20 @@ class OffsetBasedGraph():
                                   # has been used
         self.db = DbWrapper()
 
+
+    def deep_copy(self, name):
+        new_graph = OffsetBasedGraph(name)
+        new_graph.blocks = self.blocks.copy()
+        new_graph.block_edges = self.block_edges.copy()
+        new_graph.cur_id = self.cur_id
+        new_graph.cur_id_counter = self.cur_id_counter.copy()
+        return new_graph
+
     def get_blocks(self, lin_ref):
-        return filter(
-            lambda block: block.contains(lin_ref),
-            self.blocks.values()
-            )
+        return [block for block in list(self.blocks.values()) if block.contains(lin_ref)]
 
     def get_intersecting_blocks(self, lin_ref):
-        return filter(
-            lambda block: block.intersects(lin_ref),
-            self.blocks.values()
-            )
+        return [block for block in list(self.blocks.values()) if block.intersects(lin_ref)]
 
     def get_block(self, lin_ref):
         filtered = self.get_blocks(lin_ref)
@@ -94,9 +102,7 @@ class OffsetBasedGraph():
         Splits a block at the given linear reference. Returns two linear
         references, one before and one after lin_ref
         """
-        current_lin_refs = filter(
-            lambda lr: lr.genome_id == lin_ref.genome_id,
-            block.linear_references.values())
+        current_lin_refs = [lr for lr in list(block.linear_references.values()) if lr.genome_id == lin_ref.genome_id]
         assert len(current_lin_refs) == 1
         current_lin_ref = current_lin_refs[0]
         splitted = []
@@ -127,17 +133,17 @@ class OffsetBasedGraph():
         if (block1 is None or block2 is None):
 
             if block2 is None:
-                if DEBUG: print "_-_____"
-                if DEBUG: print self.get_intersecting_blocks(lin_seg_2)
-                if DEBUG: print "?????????????"
+                if DEBUG: print("_-_____")
+                if DEBUG: print(self.get_intersecting_blocks(lin_seg_2))
+                if DEBUG: print("?????????????")
             if block1 is None:
-                if DEBUG: print "+++++++++++++"
-                if DEBUG: print self.get_intersecting_blocks(lin_seg_1)
-                if DEBUG: print "?????????????"
+                if DEBUG: print("+++++++++++++")
+                if DEBUG: print(self.get_intersecting_blocks(lin_seg_1))
+                if DEBUG: print("?????????????")
 
-            if DEBUG: print lin_seg_1, block1
+            if DEBUG: print(lin_seg_1, block1)
 
-            if DEBUG: print lin_seg_2, block2
+            if DEBUG: print(lin_seg_2, block2)
             return
         # The new block that is a merge of two linear segments
         mid_block = self._add_block({lin_seg_1.genome_id: lin_seg_1,
@@ -165,7 +171,7 @@ class OffsetBasedGraph():
         self.add_block_edge(pre_block2.id, mid_block.id)
         self.add_block_edge(mid_block.id, post_block1.id)
         self.add_block_edge(mid_block.id, post_block2.id)
-        if DEBUG: print "-", lin_seg_1, lin_seg_2
+        if DEBUG: print("-", lin_seg_1, lin_seg_2)
 
     def add_block_edge(self, block_id, next_block_id):
         if block_id not in self.blocks:
@@ -186,9 +192,9 @@ class OffsetBasedGraph():
         min_block = None
         max_block = None
         for block in blocks:
-            lin_seg = filter(
+            lin_seg = list(filter(
                 lambda li: li.chromosome == linear_interval.chromosome,
-                block.linear_references.values())[0]
+                list(block.linear_references.values())))[0]
             if lin_seg.start < min_C:
                 min_block = block
                 min_C = lin_seg.start
@@ -202,15 +208,15 @@ class OffsetBasedGraph():
         subgraph.blocks[cur_block.id] = cur_block
         subgraph.start_block = min_block.id
 
-        min_block.linear_references.values()[0].start = linear_interval.start
-        max_block.linear_references.values()[0].end = linear_interval.end
+        list(min_block.linear_references.values())[0].start = linear_interval.start
+        list(max_block.linear_references.values())[0].end = linear_interval.end
         if min_block == max_block:
             return subgraph
         while True:
             found = False
             for new_block in self.block_edges[cur_block.id]:
                 if any(["alt" in lr.chromosome and not lr.chromosome == correct_alt
-                        for lr in self.blocks[new_block].linear_references.values()]):
+                        for lr in list(self.blocks[new_block].linear_references.values())]):
                     continue
                 subgraph.blocks[new_block] = self.blocks[new_block]
                 if self.blocks[new_block] == max_block:
@@ -223,15 +229,13 @@ class OffsetBasedGraph():
             cur_block = self.blocks[self.block_edges[cur_block.id][0]]
 
         for block in subgraph.blocks:
-            subgraph.block_edges[block] = filter(
-                lambda b: b in subgraph.blocks,
-                self.block_edges[block])
+            subgraph.block_edges[block] = [b for b in self.block_edges[block] if b in subgraph.blocks]
 
         return subgraph
 
     def get_previous_blocks(self, block_id):
         previous_blocks = []
-        for p_block, edges in self.block_edges.iteritems():
+        for p_block, edges in self.block_edges.items():
             if block_id in edges:
                 previous_blocks.append(p_block)
         return previous_blocks
@@ -307,7 +311,7 @@ class OffsetBasedGraph():
 
         graph = cls("hg38")
 
-        for chromosome, length in chrom_sizes.iteritems():
+        for chromosome, length in chrom_sizes.items():
             graph.add_chromosome("hg38", chromosome, length)
 
         for info in alt_loci_infos:
@@ -323,7 +327,7 @@ class OffsetBasedGraph():
 
     def include_alignments(self, alignments):
         for lr1, lr2 in alignments:
-            if DEBUG: print "+", lr1, lr2
+            if DEBUG: print("+", lr1, lr2)
             self.merge_linear_segments(lr1, lr2)
 
     def pretty_alt_loci_name(self, id):

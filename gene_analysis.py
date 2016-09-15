@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 from DbWrapper import DbWrapper
 from LinearInterval import LinearInterval
 from main import get_flanking_alignments
@@ -26,19 +28,17 @@ def get_flanking_lins():
     lin_ref_dict = dict(zip(names, lin_refs))
 
     # Remove genes that are entierly inside aligned regions
-    not_contains = filter(
-        lambda gi: not any([y.contains(gi) for y in lin_ref_dict[gi.chromosome]]),
-        gene_intervals)
+    not_contains = [gi for gi in gene_intervals if not
+                    any([y.contains(gi) for y in lin_ref_dict[gi.chromosome]])]
 
     # Find genes that are partly in aligned regions
 
-    intersects = filter(
-        lambda gi: any([gi.intersects(y) for y in lin_ref_dict[gi.chromosome]]),
-        not_contains)
+    intersects = [gi for gi in not_contains if
+                  any([gi.intersects(y) for y in lin_ref_dict[gi.chromosome]])]
 
-    print len(intersects)
-    print len(not_contains)
-    print len(intersects)/float(len(not_contains))
+    print(len(intersects))
+    print(len(not_contains))
+    print(len(intersects)/float(len(not_contains)))
 
 
 if __name__ == "__main__":

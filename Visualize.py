@@ -1,3 +1,8 @@
+from __future__ import absolute_import
+from __future__ import division
+from builtins import str
+from past.utils import old_div
+from builtins import object
 import matplotlib.pyplot as plt
 import numpy as np
 import six
@@ -5,7 +10,7 @@ from matplotlib import colors
 from config import *
 from DbWrapper import DbWrapper
 
-class Visualize:
+class Visualize(object):
 
     def __init__(self, graph):
         self.graph = graph
@@ -57,7 +62,7 @@ class Visualize:
         :return:
         """
         start = self.offset_counter
-        lr = rp.linear_references.values()[0]
+        lr = list(rp.linear_references.values())[0]
         length = self._scale(lr.end - lr.start)
         #if DEBUG: print "PLotting " + str(rp.id) + "  on level %.2f, %.2f to %.2f" % (level, start, start + length)
         plt.plot([start, start + length], [level, level],
@@ -70,11 +75,11 @@ class Visualize:
     def _plot_level(self, block):
         # Finds the level. Rule: if block contains more than one linea reference
         # it is shared, else, find out whether it is alt or consensus
-        if len(block.linear_references.values()) > 1:
+        if len(list(block.linear_references.values())) > 1:
             #if DEBUG: print "MOre than one linear reference ::::::::"
             return 0
         else:
-            if "alt" in block.linear_references.values()[0].chromosome:
+            if "alt" in list(block.linear_references.values())[0].chromosome:
                 return 1
             else:
                 return -1
@@ -90,7 +95,7 @@ class Visualize:
         matplotlib
         """
         block = self.graph.blocks[self.graph.start_block]
-        self.offset_counter = self._scale(block.linear_references.values()[0].start)
+        self.offset_counter = self._scale(list(block.linear_references.values())[0].start)
         self.offset_counter = self._plot_region_path(block, -1)
 
         while True:
@@ -112,7 +117,7 @@ class Visualize:
             self.offset_counter = max(offsets)
 
 
-class VisualizeHtml():
+class VisualizeHtml(object):
     """
     Attempt to make a simple html visualization
     """
@@ -136,7 +141,7 @@ class VisualizeHtml():
         self.width = width
         self.maxOffset = maxOffset
         self.minOffset = minOffset
-        self.width_ratio = float(self.width) / (self.maxOffset - self.minOffset)
+        self.width_ratio = old_div(float(self.width), (self.maxOffset - self.minOffset))
 
         self.width_used = self.width
 
@@ -258,7 +263,7 @@ class VisualizeHtml():
         self.html += " style='z-index: 12; position: absolute;"
         self.html += "left: %.2fpx;" % (start)
         self.html += "width: %.2fpx;" % (max(2, end - start))
-        self.html += "top: %.2fpx;" % (top + (self.gene_height - self.exon_height) / 2.0)
+        self.html += "top: %.2fpx;" % (top + old_div((self.gene_height - self.exon_height), 2.0))
         self.html += "height: %dpx;" % (self.exon_height)
         self.html += "background-color: black;"
         self.html += "' "
@@ -322,23 +327,23 @@ class VisualizeHtml():
         # Hierarchical coordinates is same as sequential if this is alternative
         # block. Else, it is the same as on hg38
         if len(rp.linear_references) == 1 and \
-                not "alt" in rp.linear_references.values()[0].chromosome:
-            hierID = rp.linear_references.values()[0].chromosome
-            hierOf = rp.linear_references.values()[0].start
+                not "alt" in list(rp.linear_references.values())[0].chromosome:
+            hierID = list(rp.linear_references.values())[0].chromosome
+            hierOf = list(rp.linear_references.values())[0].start
         elif len(rp.linear_references) == 2 and \
-            "alt" in rp.linear_references.values()[0].chromosome:
-            hierID = rp.linear_references.values()[1].chromosome
-            hierOf = rp.linear_references.values()[1].start
+            "alt" in list(rp.linear_references.values())[0].chromosome:
+            hierID = list(rp.linear_references.values())[1].chromosome
+            hierOf = list(rp.linear_references.values())[1].start
         elif len(rp.linear_references) == 2 and \
-            "alt" in rp.linear_references.values()[1].chromosome:
-            hierID = rp.linear_references.values()[0].chromosome
-            hierOf = rp.linear_references.values()[0].start
+            "alt" in list(rp.linear_references.values())[1].chromosome:
+            hierID = list(rp.linear_references.values())[0].chromosome
+            hierOf = list(rp.linear_references.values())[0].start
         else:
             hierID = seqID
             hierOf = seqOf
 
         # Also get size of region path
-        size = max(l.end - l.start for l in rp.linear_references.values())
+        size = max(l.end - l.start for l in list(rp.linear_references.values()))
 
         return (self._pretty_alt_loci_name(seqID), str(seqOf),\
                 self._pretty_alt_loci_name(hierID), str(hierOf), str(size))
@@ -371,7 +376,7 @@ class VisualizeHtml():
         :return:
         """
         start = self.offset_counter
-        lr = rp.linear_references.values()[0]
+        lr = list(rp.linear_references.values())[0]
         length = self._scale(lr.end - lr.start)
         #if DEBUG: print "PLotting " + str(rp.id) + "  on level %.2f, %.2f to %.2f" % (level, start, start + length)
         xend, y, width, xstart = self._plot(start, start + length, level , self.colors[level + 1], rp)
@@ -383,11 +388,11 @@ class VisualizeHtml():
     def _plot_level(self, block):
         # Finds the level. Rule: if block contains more than one linea reference
         # it is shared, else, find out whether it is alt or consensus
-        if len(block.linear_references.values()) > 1:
+        if len(list(block.linear_references.values())) > 1:
             #if DEBUG: print "MOre than one linear reference ::::::::"
             return 1
         else:
-            if "alt" in block.linear_references.values()[0].chromosome:
+            if "alt" in list(block.linear_references.values())[0].chromosome:
                 return 0
             else:
                 return 2
@@ -412,7 +417,7 @@ class VisualizeHtml():
             if ystart - yend >= self.block_height * 4:
                 arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
-            self.html_arrows += "top: %dpx;" % (ystart - (ystart - yend) + self.block_height / 2)
+            self.html_arrows += "top: %dpx;" % (ystart - (ystart - yend) + self.block_height/2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow_up_%s.png' style='" % arrow
             self.html_arrows += "height: %dpx;" % (ystart - yend)
@@ -420,10 +425,10 @@ class VisualizeHtml():
             self.html_arrows += "'>"
         elif yend == ystart:
             self.html_arrows += "left: %dpx;" % xstart
-            self.html_arrows += "top: %dpx;" % (ystart + self.block_height / 2)
+            self.html_arrows += "top: %dpx;" % (ystart + self.block_height/2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow.png' style='"
-            self.html_arrows += "height: %dpx;" % (self.block_height / 4)
+            self.html_arrows += "height: %dpx;" % (self.block_height/4)
             self.html_arrows += "width: %dpx;" % (xend - xstart)
             self.html_arrows += "'>"
         else:
@@ -431,7 +436,7 @@ class VisualizeHtml():
             if ystart - yend >=  + self.block_height * 4:
                 arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
-            self.html_arrows += "top: %dpx;" % (ystart + self.block_height / 2)
+            self.html_arrows += "top: %dpx;" % (ystart + self.block_height/2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow_down_%s.png' style='" % arrow
             self.html_arrows += "height: %dpx;" % (yend-ystart)
@@ -443,7 +448,7 @@ class VisualizeHtml():
 
     def visualize(self):
         block = self.graph.blocks[self.graph.start_block]
-        self.offset_counter = self._scale(block.linear_references.values()[0].start)
+        self.offset_counter = self._scale(list(block.linear_references.values())[0].start)
         self.offset_counter, x_coord, y_coord, width = self._plot_region_path(block,
                                                     self._plot_level(block))
 

@@ -1,3 +1,7 @@
+from __future__ import print_function
+from builtins import str
+from builtins import range
+from builtins import object
 import numpy as np
 
 class Interval(object):
@@ -124,10 +128,10 @@ class Interval(object):
                 start = self.start_pos
             if block == self.end_block:
                 end = self.end_pos
-            print "Start" , start
-            print end
+            print("Start" , start)
+            print(end)
             ids += [block + "-" + str(i) for i \
-                    in xrange(start, end)]
+                    in range(start, end)]
 
         return ids
 

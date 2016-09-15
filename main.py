@@ -1,6 +1,11 @@
 """
 A collections of small scripts used to do various tasks by calling the classes.
 """
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import zip
+from builtins import str
+from builtins import range
 from blast import blast_align, get_filtered_alignments
 from TogowsWrapper import save_sequence_to_fasta
 from OffsetBasedGraph import OffsetBasedGraph
@@ -28,7 +33,7 @@ def get_intereseting_points_from_alignments(alignments):
 
 def get_alignments(region_name, alt_info):
     align_file = DATA_PATH + "alignment%s.tmp" % region_name
-    import globals
+    from . import globals
     globals.blast_result = "alignment%s.tmp" % region_name
     alt_fasta = save_sequence_to_fasta(
         region_name, 0, alt_info["length"])
@@ -51,12 +56,11 @@ def get_flanking_alignments(region_name, alt_info):
     consensus_fasta = save_sequence_to_fasta(
         alt_info["chrom"], alt_info["chromStart"], alt_info["chromEnd"])
 
-    alt_seq = "".join(map(lambda x: x.strip(),
-                          open(alt_fasta, "r").readlines()[1:]))
-    consensus_seq = "".join(map(lambda x: x.strip(),
-                                open(consensus_fasta, "r").readlines()[1:]))
+    alt_seq = "".join([x.strip() for x in open(alt_fasta, "r").readlines()[1:]])
+    consensus_seq = "".join([x.strip() for x in open(consensus_fasta, "r").readlines()[1:]])
+
     start_flank_length = 0
-    for i in xrange(min(len(consensus_seq), len(alt_seq))):
+    for i in range(min(len(consensus_seq), len(alt_seq))):
         if alt_seq[i] != consensus_seq[i]:
             start_flank_length = i
             break
@@ -69,7 +73,7 @@ def get_flanking_alignments(region_name, alt_info):
     linRef2 = LinearInterval("hg38", region_name, 0, start_flank_length)
     start_pair = (linRef1, linRef2)
     stop_flank_length = 0
-    for i in xrange(min(len(consensus_seq), len(alt_seq))):
+    for i in range(min(len(consensus_seq), len(alt_seq))):
         if alt_seq[-i-1] != consensus_seq[-i-1]:
             stop_flank_length = i
             break
@@ -92,9 +96,9 @@ segments = []
 
 def create_align_graph(region_name, min_length):
     dbw = DbWrapper()
-    chromosome_ids = ["chr%s" % n for n in range(1, 23)+["X", "Y"]]
+    chromosome_ids = ["chr%s" % n for n in list(range(1, 23))+["X", "Y"]]
     chromosome_sizes = [dbw.chrom_length(chr_id) for chr_id in chromosome_ids]
-    chromosome_info = dict(zip(chromosome_ids, chromosome_sizes))
+    chromosome_info = dict(list(zip(chromosome_ids, chromosome_sizes)))
 
     alt_infos = dbw.get_alt_loci_infos()
 
@@ -102,7 +106,7 @@ def create_align_graph(region_name, min_length):
         chromosome_info, alt_infos)
 
     import copy
-    orig_graph = copy.deepcopy(graph)
+    orig_graph = graph.deep_copy(graph)
 
     alt_info = dbw.alt_loci_info(region_name)
 
@@ -113,15 +117,15 @@ def create_align_graph(region_name, min_length):
     if len(alignments) == 0:
         raise Exception("There were no alignments between the alternative locus and consensus path in the the given region. Try another region.")
 
-    if DEBUG: print "ALIGNMENTS"
+    if DEBUG: print("ALIGNMENTS")
     for a in alignments:
-        if DEBUG: print a
+        if DEBUG: print(a)
     graph.include_alignments(alignments)
 
     interesting_points = get_intereseting_points_from_alignments(alignments)
     genes = []
-    values = interesting_points.keys()
-    for i in xrange(len(interesting_points[values[0]])):
+    values = list(interesting_points.keys())
+    for i in range(len(interesting_points[values[0]])):
         pgs0 = [dbw.genes_crossing_position(
             v, interesting_points[v][i][0]) for v in values]
 
@@ -151,8 +155,8 @@ def create_align_graph(region_name, min_length):
 
         # Create one interval for each exon
         ei = 0
-        ex_ends = gene["exonEnds"].split(",")
-        for ex in gene["exonStarts"].split(","):
+        ex_ends = gene["exonEnds"].decode('utf8').split(",")
+        for ex in gene["exonStarts"].decode('utf8').split(","):
             if ex == "":
                 continue
 
@@ -171,20 +175,20 @@ def create_align_graph(region_name, min_length):
 
 
 
-    for gi in gene_intervals.values():
-        if DEBUG: print gi
-        if DEBUG: print "###", graph.get_intersecting_blocks(gi)
+    for gi in list(gene_intervals.values()):
+        if DEBUG: print(gi)
+        if DEBUG: print("###", graph.get_intersecting_blocks(gi))
 
     gene_segments = []
     gene_segments_orig_graph = []
 
-    for name, interval in gene_intervals.iteritems():
+    for name, interval in gene_intervals.items():
         segment = linear_segment_to_graph(
                 graph, block_graph,
                 interval.chromosome, interval.start, interval.end)
         segment.name = name
         segment.gene_name = interval.gene_name
-        if DEBUG: print segment
+        if DEBUG: print(segment)
         segments.append(segment)
         gene_segments.append(segment)
 
@@ -212,8 +216,8 @@ def is_good_loci(region_name, dbw):
     alignments = get_filtered_alignments(align_file, alt_info["chromStart"])
     interesting_points = get_intereseting_points_from_alignments(alignments)
 
-    values = interesting_points.keys()
-    for i in xrange(len(interesting_points[values[0]])):
+    values = list(interesting_points.keys())
+    for i in range(len(interesting_points[values[0]])):
         if all([dbw.genes_crossing_position(v, interesting_points[v][i][0])
                 for v in values]):
             return True
@@ -230,7 +234,7 @@ def find_good_loci():
     names = [alt_info["name"] for alt_info in alt_infos]
     for name in names:
         if is_good_loci(name, dbw):
-            if DEBUG: print name
+            if DEBUG: print(name)
     return
 
 if __name__ == "__main__":
@@ -248,15 +252,15 @@ if __name__ == "__main__":
         "chr11_KI270927v1_alt")
 
 
-    if DEBUG: print "BLOCKS: "
+    if DEBUG: print("BLOCKS: ")
     for b in graph.blocks:
-        if DEBUG: print "BLock " + str(b) + " : " + str(graph.blocks[b])
+        if DEBUG: print("BLock " + str(b) + " : " + str(graph.blocks[b]))
 
 
 
-    if DEBUG: print "EDGES: "
-    for k, v in graph.block_edges.iteritems():
-        if DEBUG: print k,"---", v
+    if DEBUG: print("EDGES: ")
+    for k, v in graph.block_edges.items():
+        if DEBUG: print(k,"---", v)
 
     for edge in graph.block_edges:
         assert(len(graph.block_edges[edge]) <= 2)
