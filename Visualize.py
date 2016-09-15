@@ -417,7 +417,7 @@ class VisualizeHtml(object):
             if ystart - yend >= self.block_height * 4:
                 arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
-            self.html_arrows += "top: %dpx;" % (ystart - (ystart - yend) + old_div(self.block_height, 2))
+            self.html_arrows += "top: %dpx;" % (ystart - (ystart - yend) + self.block_height/2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow_up_%s.png' style='" % arrow
             self.html_arrows += "height: %dpx;" % (ystart - yend)
@@ -425,10 +425,10 @@ class VisualizeHtml(object):
             self.html_arrows += "'>"
         elif yend == ystart:
             self.html_arrows += "left: %dpx;" % xstart
-            self.html_arrows += "top: %dpx;" % (ystart + old_div(self.block_height, 2))
+            self.html_arrows += "top: %dpx;" % (ystart + self.block_height/2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow.png' style='"
-            self.html_arrows += "height: %dpx;" % (old_div(self.block_height, 4))
+            self.html_arrows += "height: %dpx;" % (self.block_height/4)
             self.html_arrows += "width: %dpx;" % (xend - xstart)
             self.html_arrows += "'>"
         else:
@@ -436,7 +436,7 @@ class VisualizeHtml(object):
             if ystart - yend >=  + self.block_height * 4:
                 arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
-            self.html_arrows += "top: %dpx;" % (ystart + old_div(self.block_height, 2))
+            self.html_arrows += "top: %dpx;" % (ystart + self.block_height/2)
             self.html_arrows += "'>"
             self.html_arrows += "<img src='arrow_down_%s.png' style='" % arrow
             self.html_arrows += "height: %dpx;" % (yend-ystart)
