@@ -7,7 +7,7 @@ from __future__ import absolute_import
 #standard_library.install_aliases()
 import urllib.request, urllib.error, urllib.parse
 from config import *
-DEBUG = True
+
 
 def get_sequence(loci_id, start=1, end=0):
     """

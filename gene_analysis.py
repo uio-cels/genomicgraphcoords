@@ -2,7 +2,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 from DbWrapper import DbWrapper
 from LinearInterval import LinearInterval
-from main import get_flanking_alignments
+from main import get_flanks
 
 
 def interval_from_gene(gene):
@@ -22,25 +22,58 @@ def get_flanking_lins():
 
     alt_loci_infos = db.get_alt_loci_infos(False)
     names = map(lambda x: x["name"], alt_loci_infos)
-    alignments = map(lambda x: get_flanking_alignments(x["name"], x),
-                     alt_loci_infos)
-    lin_refs = map(lambda x: [y[1] for y in x], alignments)
-    lin_ref_dict = dict(zip(names, lin_refs))
+    partitions = [get_flanks(ali) for ali in alt_loci_infos]
+    alt_partitions = [par[1] for par in partitions]
+    lin_ref_dict = dict(zip(names, alt_partitions))
 
-    # Remove genes that are entierly inside aligned regions
-    not_contains = [gi for gi in gene_intervals if not
-                    any([y.contains(gi) for y in lin_ref_dict[gi.chromosome]])]
+    real_alt_genes = [gi for gi in gene_intervals if
+                      lin_ref_dict[gi.chromosome][1].intersects(gi)]
 
     # Find genes that are partly in aligned regions
+    intersecting_genes = [gi for gi in real_alt_genes if
+                          gi.intersects(lin_ref_dict[gi.chromosome][0]) or
+                          gi.intersects(lin_ref_dict[gi.chromosome][2])]
 
-    intersects = [gi for gi in not_contains if
-                  any([gi.intersects(y) for y in lin_ref_dict[gi.chromosome]])]
+    print(len(intersecting_genes))
+    print(len(real_alt_genes))
+    print(len(intersecting_genes)/float(len(real_alt_genes)))
 
-    print(len(intersects))
-    print(len(not_contains))
-    print(len(intersects)/float(len(not_contains)))
 
+def calculate_main_spans():
+    db = DbWrapper()
+    genes = db.get_main_genes()
+    gene_intervals = [interval_from_gene(gene) for gene in genes]
+    alt_loci_infos = db.get_alt_loci_infos(False)
+    partitions = [get_flanks(ali) for ali in alt_loci_infos]
+    main_partitions = [par[0] for par in partitions]
+    lin_ref_dict = {}
+    for gene in gene_intervals:
+        lin_ref_dict[gene.chromosome] = []
+
+    for i, ali in enumerate(alt_loci_infos):
+        chrom = ali["chrom"]
+        if chrom not in lin_ref_dict:
+            lin_ref_dict[chrom] = []
+        lin_ref_dict[chrom].append(main_partitions[i])
+
+    print(len(genes), len(gene_intervals))
+
+    real_alt_genes = [gi for gi in gene_intervals if
+                      any([interval[1].intersects(gi) for
+                           interval in lin_ref_dict[gi.chromosome]])]
+
+    # Find genes that are partly in aligned regions
+    intersecting_genes = [gi for gi in real_alt_genes if
+                          any([gi.intersects(interval[0]) or
+                               gi.intersects(interval[2]) for
+                               interval in lin_ref_dict[gi.chromosome]])
+                          ]
+
+    print(len(intersecting_genes))
+    print(len(real_alt_genes))
+    print(len(intersecting_genes)/float(len(real_alt_genes)))
+    print(len(intersecting_genes)/float(len(genes)))
 
 if __name__ == "__main__":
-    get_flanking_lins()
+    calculate_main_spans()
     exit(0)

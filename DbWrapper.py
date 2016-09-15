@@ -6,6 +6,7 @@ from config import *
 import numpy as np
 import pickle
 
+
 class Gene(object):
     def __init__(self, chrom_id, start, end, exon_starts, exon_ends):
         self.chrom_id = chrom_id
@@ -165,6 +166,17 @@ class DbWrapper(object):
         :return: Returns a list of dicts (each element representing one gene)
         """
         query = r'SELECT name, txStart, txEnd, chrom from knownGene where chrom like "%alt%"'
+        res = self.fetch_all(query)
+        return res
+
+    def get_main_genes(self):
+        """
+        Returns all genes starting before and ending after the given position
+        :param chrom_id: alt locus or chrom id
+        :param position: offset
+        :return: Returns a list of dicts (each element representing one gene)
+        """
+        query = r'SELECT name, txStart, txEnd, chrom from knownGene where chrom not like "%\_%"'
         res = self.fetch_all(query)
         return res
 

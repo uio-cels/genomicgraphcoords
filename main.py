@@ -48,6 +48,61 @@ def get_alignments(region_name, alt_info):
     return align_file
 
 
+def get_flanks(alt_info):
+    region_name = alt_info["name"]
+    alt_fasta = save_sequence_to_fasta(
+        region_name, 0, alt_info["length"])
+    consensus_fasta = save_sequence_to_fasta(
+        alt_info["chrom"], alt_info["chromStart"], alt_info["chromEnd"])
+
+    alt_seq = "".join([line.strip() for line in open(alt_fasta, "r").readlines()[1:]])
+    consensus_seq = "".join([line.strip() for line in open(consensus_fasta, "r").readlines()[1:]])
+
+    start_flank_length = 0
+    for i in range(min(len(consensus_seq), len(alt_seq))):
+        if alt_seq[i] != consensus_seq[i]:
+            start_flank_length = i
+            break
+    else:
+        raise Exception("Main and Alt is completely equal (%s, %s)" %
+                        (region_name, alt_info["chrom"]))
+    main_start_coord = alt_info["chromStart"] + start_flank_length
+    main_start = LinearInterval("hg38", alt_info["chrom"],
+                                alt_info["chromStart"],
+                                main_start_coord)
+
+    alt_start = LinearInterval("hg38", region_name, 0, start_flank_length)
+
+    stop_flank_length = 0
+    for i in range(min(len(consensus_seq), len(alt_seq))):
+        if alt_seq[-i-1] != consensus_seq[-i-1]:
+            stop_flank_length = i
+            break
+    else:
+        raise Exception("Main and Alt is completely equal (%s, %s)" %
+                        (region_name, alt_info["chrom"]))
+    main_end_coord = alt_info["chromEnd"] - stop_flank_length
+
+    main_end = LinearInterval(
+        "hg38", alt_info["chrom"],
+        alt_info["chromEnd"]-stop_flank_length, alt_info["chromEnd"])
+
+    alt_end = LinearInterval(
+        "hg38", region_name,
+        alt_info["length"]-stop_flank_length, alt_info["length"])
+
+    alt_middle = LinearInterval(
+        "hg38", region_name,
+        start_flank_length, alt_info["length"]-stop_flank_length)
+
+    main_middle = LinearInterval(
+        "hg38", alt_info["chrom"],
+        main_start_coord, main_end_coord)
+
+    return [(main_start, main_middle, main_end),
+            (alt_start, alt_middle, alt_end)]
+
+
 def get_flanking_alignments(region_name, alt_info):
     import globals
     globals.blast_result = "alignment%s.tmp" % region_name
