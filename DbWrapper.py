@@ -75,7 +75,7 @@ class DbWrapper:
 
         return rows
 
-    def get_alt_loci_infos(self):
+    def get_alt_loci_infos(self, filter_overlapping=True):
         """
         Gets all the alternative loci
         :return: A list of dicts (all alternative loci)
@@ -86,7 +86,8 @@ class DbWrapper:
             r"SELECT alt.*, (select size from chromInfo i where i.chrom = alt.name) as length  FROM altLocations alt where name LIKE '%\_%'")
         if len(res) == 0:
             raise Exception("No results from database on alt loci")
-
+        if not filter_overlapping:
+            return res
         # Don return overlapping alt loci
 
         for alt1 in res:
@@ -150,6 +151,17 @@ class DbWrapper:
         :return: Returns a list of dicts (each element representing one gene)
         """
         query = r"SELECT k.*, r.geneSymbol as gname FROM knownGene k, kgXref r where r.kgID = k.name AND k.chrom LIKE '%s' and k.txStart < %d and k.txEnd > %d" % (chrom_id, position, position)
+        res = self.fetch_all(query)
+        return res
+
+    def get_alt_genes(self):
+        """
+        Returns all genes starting before and ending after the given position
+        :param chrom_id: alt locus or chrom id
+        :param position: offset
+        :return: Returns a list of dicts (each element representing one gene)
+        """
+        query = r'SELECT name, txStart, txEnd, chrom from knownGene where chrom like "%alt%"'
         res = self.fetch_all(query)
         return res
 

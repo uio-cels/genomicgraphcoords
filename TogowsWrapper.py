@@ -3,6 +3,7 @@ Simple methods for accessing the Togows API (http://togows.org/)
 """
 import urllib2
 from config import *
+DEBUG = True
 
 def get_sequence(loci_id, start=1, end=0):
     """
@@ -11,7 +12,11 @@ def get_sequence(loci_id, start=1, end=0):
     """
     url = "http://togows.org/api/ucsc/hg38/%s:%d-%d.fasta" % (loci_id, start, end)
     # if DEBUG: print "Fetching sequence from " + url
-    sequence = urllib2.urlopen(url).read()
+    try:
+        sequence = urllib2.urlopen(url).read()
+    except Exception as e:
+        print url
+        raise e
     return sequence
 
 
@@ -53,6 +58,7 @@ def save_sequence_to_fasta(loci_id, start, end, file_name = ""):
 
     curpath = os.path.abspath(os.curdir)
     if DEBUG: print curpath
+    seq = get_sequence(loci_id, start, end)
     f = open(file_name, "w")
-    f.write(get_sequence(loci_id, start, end))
+    f.write(seq)
     return file_name

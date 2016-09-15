@@ -60,22 +60,19 @@ def get_flanking_alignments(region_name, alt_info):
             start_flank_length = i
             break
     else:
-        raise Exception("Main and Alt is completely equal")
+        raise Exception("Main and Alt is completely equal (%s, %s)" % (region_name, alt_info["chrom"]))
 
     linRef1 = LinearInterval("hg38", alt_info["chrom"], alt_info["chromStart"],
                              alt_info["chromStart"] + start_flank_length)
     linRef2 = LinearInterval("hg38", region_name, 0, start_flank_length)
     start_pair = (linRef1, linRef2)
     stop_flank_length = 0
-    print consensus_seq[-100:]
-    print alt_seq[-100:]
     for i in xrange(min(len(consensus_seq), len(alt_seq))):
         if alt_seq[-i-1] != consensus_seq[-i-1]:
             stop_flank_length = i
             break
     else:
-        raise Exception("Main and Alt is completely equal")
-    print stop_flank_length
+        raise Exception("Main and Alt is completely equal (%s, %s)" % (region_name, alt_info["chrom"]))
     stopRef1 = LinearInterval(
         "hg38", alt_info["chrom"],
         alt_info["chromEnd"]-stop_flank_length, alt_info["chromEnd"])
@@ -85,6 +82,38 @@ def get_flanking_alignments(region_name, alt_info):
     stop_pair = (stopRef1, stopRef2)
     return [start_pair, stop_pair]
 
+
+def get_flanking_lins():
+    db = DbWrapper()
+    genes = filter(lambda g: "KI270830" not in g["chrom"], db.get_alt_genes())
+    gene_intervals = [LinearInterval("hg38", g["chrom"], g["txStart"], g["txEnd"]) for g in genes]
+    for gi, g in zip(gene_intervals, genes):
+        gi.gene_name = g["name"]
+    print gene_intervals[:50]
+    #alt_loci_infos = [ali for ali in db.get_alt_loci_infos() if "KI270831" not in ali["name"]]
+    alt_loci_infos = db.get_alt_loci_infos(False)
+    names = map(lambda x: x["name"], alt_loci_infos)
+    print names
+    alignments = map(lambda x: get_flanking_alignments(x["name"], x),
+                     alt_loci_infos)
+    print alignments
+    lin_refs = map(lambda x: [y[1] for y in x], alignments)
+    print lin_refs
+    lin_ref_dict = dict(zip(names, lin_refs))
+    not_contains = filter(lambda gi: not any([y.contains(gi) for y in lin_ref_dict[gi.chromosome]]),
+                      gene_intervals)
+#     for gi in contains:
+#         print gi.gene_name
+#         print gi.chromosome, gi.start, gi.end
+#         print lin_ref_dict[gi.chromosome]
+# 
+    intersects = filter(lambda gi: any([gi.intersects(y) for y in lin_ref_dict[gi.chromosome]]),
+                     not_contains)
+    print len(intersects)
+    print len(not_contains)
+    print len(intersects)/float(len(not_contains))
+    #print intersects[:50]
+    #print sum(intersects)/float(len(intersects))
 
 segments = []
 
@@ -239,6 +268,14 @@ def find_good_loci():
     return
 
 if __name__ == "__main__":
+#    db = DbWrapper()
+#    region_name = "chr9_KI270823v1_alt"
+#    get_flanking_alignments("chr9_KI270823v1_alt", db.alt_loci_info(region_name))
+#    exit(0)
+
+
+    get_flanking_lins()
+    exit(0)
 
     graph = create_align_graph("chr11_KI270927v1_alt", 0)
     # chr11_KI270827v1_alt", 0)
