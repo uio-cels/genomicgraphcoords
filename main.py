@@ -240,9 +240,6 @@ if __name__ == "__main__":
 #    exit(0)
 
 
-    get_flanking_lins()
-    exit(0)
-
     graph = create_align_graph("chr11_KI270927v1_alt", 0)
     # chr11_KI270827v1_alt", 0)
 

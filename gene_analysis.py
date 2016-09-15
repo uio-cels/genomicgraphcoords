@@ -39,3 +39,8 @@ def get_flanking_lins():
     print len(intersects)
     print len(not_contains)
     print len(intersects)/float(len(not_contains))
+
+
+if __name__ == "__main__":
+    get_flanking_lins()
+    exit(0)
