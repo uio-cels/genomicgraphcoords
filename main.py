@@ -10,7 +10,7 @@ from blast import blast_align, get_filtered_alignments
 from TogowsWrapper import save_sequence_to_fasta
 from OffsetBasedGraph import OffsetBasedGraph
 from DbWrapper import DbWrapper
-from LinearInterval import LinearInterval
+from offsetbasedgraph.linearinterval import LinearInterval
 from Visualize import Visualize
 from config import *
 from os.path import isfile

@@ -4,7 +4,7 @@ from builtins import filter
 from builtins import str
 from builtins import object
 
-from LinearInterval import LinearInterval
+from offsetbasedgraph.linearinterval import LinearInterval
 from RegionPath import RegionPath
 from config import *
 from DbWrapper import DbWrapper

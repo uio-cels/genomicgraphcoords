@@ -4,7 +4,7 @@ from builtins import object
 import subprocess
 import os
 from config import *
-from LinearInterval import LinearInterval
+from offsetbasedgraph.linearinterval import LinearInterval
 
 BLAST_COMMAND = 'blastn -outfmt "6 qseqid sseqid qstart qend sstart send length score bitscore evalue" -query %s -subject %s -perc_identity %.2f -num_threads 100'
 
