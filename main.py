@@ -8,7 +8,7 @@ from builtins import str
 from builtins import range
 from blast import blast_align, get_filtered_alignments
 from TogowsWrapper import save_sequence_to_fasta
-from OffsetBasedGraph import OffsetBasedGraph
+from offsetbasedgraph.offsetbasedgraph import OffsetBasedGraph
 from DbWrapper import DbWrapper
 from offsetbasedgraph.linearinterval import LinearInterval
 from Visualize import Visualize

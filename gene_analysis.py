@@ -39,7 +39,52 @@ def get_flanking_lins():
     print(len(intersecting_genes)/float(len(real_alt_genes)))
 
 
+def calculate_original_main_spans():
+    """
+    Find all genes on the main path that intersects both
+    with a flanking region and a pure main region.
+    """
+    db = DbWrapper()
+    genes = db.get_main_genes()
+    gene_intervals = [interval_from_gene(gene) for gene in genes]
+    alt_loci_infos = db.get_alt_loci_infos(False)
+    partitions = [get_flanks(ali) for ali in alt_loci_infos]
+    main_partitions = [par[0] for par in partitions]
+
+    lin_ref_dict = {}
+    for gene in gene_intervals:
+        lin_ref_dict[gene.chromosome] = []
+
+    for i, ali in enumerate(alt_loci_infos):
+        chrom = ali["chrom"]
+        if chrom not in lin_ref_dict:
+            lin_ref_dict[chrom] = []
+        lin_ref_dict[chrom].append(main_partitions[i])
+
+    intersecting_genes = [gi for gi in gene_intervals if
+                          any([(gi.intersects(interval[0]) or
+                                gi.intersects(interval[2])) and
+                               not gi.intersects(interval[2]) for
+                               interval in lin_ref_dict[gi.chromosome]])
+                          ]
+    crossing_genes = [gi for gi in intersecting_genes if
+                      any([(interval[0].intersects(gi) and not interval[0].contains(gi)) and
+                           (interval[2].intersects(gi) and not interval[2].contains(gi)) for
+                           interval in lin_ref_dict[gi.chromosome]])]
+
+    print(len(gene_intervals))
+    print(len(intersecting_genes))
+    print(len(crossing_genes))
+    for gene in crossing_genes:
+        print(gene.gene_name, gene)
+
+
 def calculate_main_spans():
+    """
+    Find all genes on main paths that overlaps with real
+    alt sequence, and find ratio of those that intersects both
+    main and real alt.
+    """
     db = DbWrapper()
     genes = db.get_main_genes()
     gene_intervals = [interval_from_gene(gene) for gene in genes]
@@ -76,6 +121,8 @@ def calculate_main_spans():
     print(len(intersecting_genes)/float(len(genes)))
 
 if __name__ == "__main__":
-    get_flanking_lins()
-    calculate_main_spans()
+
+    calculate_original_main_spans()
+    # get_flanking_lins()
+    # calculate_main_spans()
     exit(0)
