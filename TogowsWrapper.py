@@ -69,5 +69,6 @@ def save_sequence_to_fasta(loci_id, start, end, file_name=""):
         print(curpath)
     seq = get_sequence(loci_id, start, end)
     f = open(file_name, "w")
-    f.write(seq)
+    print("SEQUENCE: %s" % seq)
+    f.write(str(seq))
     return file_name

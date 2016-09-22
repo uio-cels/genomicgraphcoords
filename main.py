@@ -8,9 +8,9 @@ from builtins import str
 from builtins import range
 from blast import blast_align, get_filtered_alignments
 from TogowsWrapper import save_sequence_to_fasta
-from offsetbasedgraph.offsetbasedgraph import OffsetBasedGraph
+from offsetbasedgraph import OffsetBasedGraph
 from DbWrapper import DbWrapper
-from offsetbasedgraph.linearinterval import LinearInterval
+from offsetbasedgraph import LinearInterval
 from Visualize import Visualize
 from config import *
 from os.path import isfile
@@ -64,8 +64,8 @@ def get_flanks(alt_info):
             start_flank_length = i
             break
     else:
-        raise Exception("Main and Alt is completely equal (%s, %s)" %
-                        (region_name, alt_info["chrom"]))
+        raise Exception("Main and Alt is completely equal (%s, %s) (%d, %d) File names: (%s, %s)" %
+                        (region_name, alt_info["chrom"], len(consensus_seq), len(alt_seq), alt_fasta, consensus_fasta))
 
 
     stop_flank_length = 0

@@ -13,7 +13,8 @@ from DbWrapper import DbWrapper
 class Visualize(object):
 
     def __init__(self, graph):
-        self.graph = graph
+        graph1 = graph
+        self.graph = graph1
         self.color_counter = 4
         self.colors = list(six.iteritems(colors.cnames))[6:]
         self.colors = ["#000088", "black", "#880000", "#008800", "purple", "orange", "indigo", "black", "black"]
