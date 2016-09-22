@@ -64,8 +64,8 @@ def get_flanks(alt_info):
             start_flank_length = i
             break
     else:
-        raise Exception("Main and Alt is completely equal (%s, %s) (%d, %d)" %
-                        (region_name, alt_info["chrom"], len(consensus_seq), len(alt_seq)))
+        raise Exception("Main and Alt is completely equal (%s, %s) (%d, %d) File names: (%s, %s)" %
+                        (region_name, alt_info["chrom"], len(consensus_seq), len(alt_seq), alt_fasta, consensus_fasta))
 
 
     stop_flank_length = 0
