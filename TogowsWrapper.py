@@ -57,6 +57,10 @@ def save_sequence_to_fasta(loci_id, start, end, file_name=""):
         if DEBUG:
             print("File %s is chaced" % file_name)
         return file_name
+    else:
+        if DEBUG:
+            print("File %s is not cached" % file_name)
+
 
 #    if DEBUG: print "###########"
 #    if DEBUG: print file_name
@@ -68,8 +72,8 @@ def save_sequence_to_fasta(loci_id, start, end, file_name=""):
     if DEBUG:
         print(curpath)
     seq = get_sequence(loci_id, start, end)
-    f = open(file_name, "w")
+    f = open(file_name, "wb")
     print("Alt loci: " + loci_id)
     #print("SEQUENCE: %s, " % seq)
-    f.write(str(seq))
+    f.write(seq)
     return file_name
