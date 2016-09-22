@@ -39,6 +39,31 @@ def get_flanking_lins():
     print(len(intersecting_genes)/float(len(real_alt_genes)))
 
 
+def get_overlap_code(gene, loci_partition):
+    full_loci = sum(loci_partition)
+    codes = (
+        not gene.intersects[full_loci],
+        gene.intersects(loci_partition[0]) or gene.intersects(loci_partition[2]),
+        gene.intersects(loci_partition[1]),
+        gene.intersects(loci_partition[0]) and gene.intersects(loci_partition[2]),
+        gene.contains(full_loci))
+
+
+def find_main_genes_by_codes(gene_intervals, lin_ref_dict, code):
+    """
+    Find genes that overlap with an alt_loci in the way specified by code
+    """
+    return [gi for gi in gene_intervals if
+            any(get_overlap_code(gi, partition) == code)
+            for partition in lin_ref_dict[gi.chromosome]]
+
+
+def get_main_gene_stats():
+
+    old_spanning_codes = (True, True, False, False, False)
+    spanning_genes = find_main_genes_by_codes(
+
+
 def calculate_original_main_spans():
     """
     Find all genes on the main path that intersects both
@@ -119,6 +144,7 @@ def calculate_main_spans():
     print(len(real_alt_genes))
     print(len(intersecting_genes)/float(len(real_alt_genes)))
     print(len(intersecting_genes)/float(len(genes)))
+
 
 if __name__ == "__main__":
 
