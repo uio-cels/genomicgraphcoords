@@ -1,7 +1,7 @@
 from __future__ import print_function
 from __future__ import absolute_import
 from DbWrapper import DbWrapper
-from offsetbasedgraph.linearinterval import LinearInterval
+from offsetbasedgraph import LinearInterval
 from main import get_flanks
 
 
