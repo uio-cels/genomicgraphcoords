@@ -63,10 +63,10 @@ def get_flanks(alt_info):
     #    alt_seq += line
 
 
-    alt_seq = "".join(open(alt_fasta, "r").read().split("\\n")[1:])
-    consensus_seq = "".join(open(consensus_fasta, "r").read().split("\\n")[1:])
-    #alt_seq = "".join([line.strip() for line in open(alt_fasta, "r").readlines()[1:]])
-    #consensus_seq = "".join([line.strip() for line in open(consensus_fasta, "r").readlines()[1:]])
+    #alt_seq = "".join(open(alt_fasta, "r").read().split("\n")[1:])
+    #consensus_seq = "".join(open(consensus_fasta, "r").read().split("\\n")[1:])
+    alt_seq = "".join([line.strip() for line in open(alt_fasta, "r").readlines()[1:]])
+    consensus_seq = "".join([line.strip() for line in open(consensus_fasta, "r").readlines()[1:]])
 
 
     #print(alt_seq)
