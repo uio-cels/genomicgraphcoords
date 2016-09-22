@@ -55,8 +55,22 @@ def get_flanks(alt_info):
     consensus_fasta = save_sequence_to_fasta(
         alt_info["chrom"], alt_info["chromStart"], alt_info["chromEnd"])
 
-    alt_seq = "".join([line.strip() for line in open(alt_fasta, "r").readlines()[1:]])
-    consensus_seq = "".join([line.strip() for line in open(consensus_fasta, "r").readlines()[1:]])
+    f1 = open(alt_fasta, "r")
+    #print(f1.read())
+    #alt_seq = ""
+    #for line in open(alt_fasta, "r").readlines():
+    #    print("Line")
+    #    alt_seq += line
+
+
+    alt_seq = "".join(open(alt_fasta, "r").read().split("\\n")[1:])
+    consensus_seq = "".join(open(consensus_fasta, "r").read().split("\\n")[1:])
+    #alt_seq = "".join([line.strip() for line in open(alt_fasta, "r").readlines()[1:]])
+    #consensus_seq = "".join([line.strip() for line in open(consensus_fasta, "r").readlines()[1:]])
+
+
+    #print(alt_seq)
+    #print(consensus_seq)
 
     start_flank_length = 0
     for i in range(min(len(consensus_seq), len(alt_seq))):
