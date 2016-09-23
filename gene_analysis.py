@@ -112,23 +112,121 @@ def get_alt_gene_stats():
     print("Spanning genes", len(spanning_genes)-len(alt_genes))
 
 
+def create_lin_ref_dict(gene_intervals, alt_loci_infos,
+                        partitions, key="chrom"):
+    lin_ref_dict = {}
+    for gene in gene_intervals:
+        lin_ref_dict[gene.chromosome] = []
+
+    for i, ali in enumerate(alt_loci_infos):
+        chrom = ali[key]
+        if chrom not in lin_ref_dict:
+            lin_ref_dict[chrom] = []
+        lin_ref_dict[chrom].append(partitions[i])
+
+    return lin_ref_dict
+
+
+def is_gene_equal(main_gene, alt_gene, partition):
+    main_partition = partition[0]
+    alt_partition = partition[1]
+    if main_partition[0].intersects(main_gene):
+        # print(main_gene, "first")
+        main_start = main_gene.start-main_partition[0].start
+        main_end = main_gene.end-main_partition[0].start
+        # print(main_start, alt_gene.start)
+        # print(main_end, alt_gene.end)
+        t = main_start == alt_gene.start
+        return t and main_end == alt_gene.end
+
+    if main_partition[2].intersects(main_gene):
+        # print(main_gene, "last")
+        main_start = main_partition[2].end-main_gene.start
+        alt_start = alt_partition[2].end-alt_gene.start
+        main_end = main_partition[2].end-main_gene.end
+        alt_end = alt_partition[2].end-alt_gene.end
+        # print(main_start, alt_start)
+        # print(main_end, alt_end)
+        t = main_start == alt_start
+        return t and main_end == alt_end
+
+    return False
+
+
+def check_flanking_equality(main_genes, alt_genes, alt_loci_infos):
+    partitions = [get_flanks(ali) for ali in alt_loci_infos]
+    lin_ref_dict_alt = create_lin_ref_dict(
+        alt_genes, alt_loci_infos, [p[1] for p in partitions], "name")
+    lin_ref_dict_main = create_lin_ref_dict(
+        main_genes, alt_loci_infos, [p[0] for p in partitions])
+    flanking_code = (False, True, False, False, False)
+
+    main_flank_genes = find_main_genes_by_codes(main_genes, lin_ref_dict_main, flanking_code)
+    alt_flank_genes = find_main_genes_by_codes(alt_genes, lin_ref_dict_alt, flanking_code)
+    partition_map = {ali["name"]: partition for (ali, partition) in
+                     zip(alt_loci_infos, partitions)}
+
+    gene_pairs = []
+    solo_genes = []
+    for alt_flank_gene in alt_flank_genes:
+        partition = partition_map[alt_flank_gene.chromosome]
+        for gene in main_flank_genes:
+            if is_gene_equal(gene, alt_flank_gene, partition):
+                gene_pairs.append((alt_flank_gene, gene))
+                # print("Found equal: (%s, %s)" % (alt_flank_gene, gene))
+                break
+        else:
+            solo_genes.append(alt_flank_gene)
+
+    main_gene_pairs = []
+    main_solo_genes = []
+    for main_flank_gene in main_flank_genes:
+        partition = [p for p in partitions if
+                     p[0][0].contains(main_flank_gene) or
+                     p[0][2].contains(main_flank_gene)][0]
+        for alt_gene in alt_flank_genes:
+            if is_gene_equal(main_flank_gene, alt_gene, partition):
+                main_gene_pairs.append((main_flank_gene, alt_gene))
+                break
+        else:
+            main_solo_genes.append(main_flank_gene)
+    print(len(main_gene_pairs))
+    print(len(main_solo_genes))
+    # print("%s has no match\n %s" % (alt_flank_gene, partition[0][0]))
+    # print("\n".join([(p[0].gene_name + " " + p[1].gene_name)
+    # for p in gene_pairs]))
+    print("\n".join([s.gene_name for s in solo_genes]))
+    print("-----------------------")
+    print("\n".join([s.gene_name for s in main_solo_genes]))
+    print(len(gene_pairs))
+    print(len(solo_genes))
+
+
 def get_main_gene_stats():
     db = DbWrapper()
     genes = db.get_main_genes()
+    alt_genes = db.get_alt_genes()
     gene_intervals = [interval_from_gene(gene) for gene in genes]
+    alt_gene_intervals = [interval_from_gene(gene) for gene in alt_genes]
     alt_loci_infos = db.get_alt_loci_infos(False)
+    return check_flanking_equality(gene_intervals, alt_gene_intervals, alt_loci_infos)
+    
     partitions = [get_flanks(ali) for ali in alt_loci_infos]
     main_partitions = [par[0] for par in partitions]
+    alt_partitions = [par[1] for par in partitions]
 
     lin_ref_dict = {}
     for gene in gene_intervals:
         lin_ref_dict[gene.chromosome] = []
+
+    partition_dict = {}
 
     for i, ali in enumerate(alt_loci_infos):
         chrom = ali["chrom"]
         if chrom not in lin_ref_dict:
             lin_ref_dict[chrom] = []
         lin_ref_dict[chrom].append(main_partitions[i])
+        partition_dict[main_partitions[i]] = alt_partitions[i]
 
     old_spanning_codes = (True, True, False, False, False)
 
@@ -234,8 +332,8 @@ def calculate_main_spans():
 
 
 if __name__ == "__main__":
-    get_alt_gene_stats()
-    # get_main_gene_stats()
+    # get_alt_gene_stats()
+    get_main_gene_stats()
 
     # get_flanking_lins()
     # calculate_main_spans()
