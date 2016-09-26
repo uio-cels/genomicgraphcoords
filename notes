@@ -1,0 +1,12 @@
+
+Connected til ensembl:
+mysql -h ensembldb.ensembl.org -P 5306 -u anonymous
+use homo_sapiens_core_85_38;
+
+Ggener på alt loci:
+select g.source, g.seq_region_id, g.gene_id, s.* FROM gene g, seq_region s, coord_system c where c.name LIKE '%CHR%' and c.coord_system_id = s.coord_system_id AND  g.seq_region_id = s.seq_region_id AND s.name NOT LIKE '%PATCH' LIMIT 10;
+
+select g.biotype, g.description, g.source, g.seq_region_id, g.gene_id, s.* FROM gene g, seq_region s, coord_system c where c.name LIKE '%CHR%' and c.coord_system_id = s.coord_system_id AND  g.seq_region_id = s.seq_region_id AND s.name NOT LIKE '%PATCH' AND s.name LIKE 'CHR%';
+
+
+
