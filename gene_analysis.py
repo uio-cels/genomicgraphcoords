@@ -1,6 +1,6 @@
 from __future__ import print_function
 from __future__ import absolute_import
-from DbWrapper import DbWrapper
+from offsetbasedgraph import DbWrapper
 from offsetbasedgraph import LinearInterval
 from main import get_flanks
 
@@ -69,6 +69,69 @@ def code_equal(a, b):
     return a == b
 
 
+def get_region_stats(region_name):
+    db = DbWrapper()
+    alt_loci_infos = db.get_alt_loci_infos(False)
+    alt_loci = [ali for ali in alt_loci_infos if ali["name"] == region_name][0]
+    genes = db.get_alt_genes()
+    main_interval = LinearInterval("hg38", alt_loci["chrom"], alt_loci["chromStart"], alt_loci["chromEnd"])
+    print(main_interval)
+    main_genes = db.get_main_genes()
+    main_intervals = [interval_from_gene(gene) for gene in main_genes]
+    main_intervals = [interval for interval in main_intervals if main_interval.contains(interval)]
+    print(len(main_intervals))
+    gene_intervals = [interval_from_gene(gene) for gene in genes]
+    gene_intervals = [interval for interval in gene_intervals if interval.chromosome == alt_loci["name"]]
+    partition = get_flanks(alt_loci)
+
+    alt_partition = partition[1]
+    print(alt_partition)
+    str_reps = []
+    for gene in gene_intervals:
+        intervals = []
+        code = get_overlap_code(gene, partition[1])
+        if gene.start < alt_partition[0].end:
+            intervals.append(LinearInterval("hg38", "main0",
+                                            gene.start,
+                                            min(gene.end, alt_partition[0].end)))
+        if code[2]:
+            intervals.append(LinearInterval("hg38", "alt",
+                                            max(0,gene.start-alt_partition[1].start),
+                                            min(gene.end-alt_partition[1].start, alt_partition[1].end-alt_partition[1].start)))            
+        if gene.end > alt_partition[2].start:
+            intervals.append(LinearInterval("hg38", "main2", max(0,gene.start-alt_partition[2].start),
+                                   min(gene.end-alt_partition[2].start, alt_partition[2].end-alt_partition[2].start)))
+        str_reps.append("%s\t%s\t%s\t%s\t%s" % (gene.gene_name, intervals[0].chromosome, intervals[0].start, intervals[-1].end, " ".join([i.chromosome for i in intervals if not i.chromosome == intervals[0].chromosome])))
+#        print(gene.gene_name)
+#        for interval in intervals:
+#            print(interval)
+    print("--------------------------")
+    partition = partition[0]
+    for gene in main_intervals:
+        intervals = []
+        code = get_overlap_code(gene, partition)
+        if gene.start < partition[0].end:
+            intervals.append(
+                LinearInterval("hg38", "main0",
+                               gene.start-partition[0].start,
+                               min(gene.end-partition[0].start, partition[0].end)))
+        if code[2]:
+            intervals.append(
+                LinearInterval("hg38", "main1",
+                               max(0,gene.start-partition[1].start),
+                               min(gene.end-partition[1].start, partition[1].end)))
+        if gene.end > partition[2].start:
+            intervals.append(
+                LinearInterval("hg38", "main2",
+                               max(0, gene.start-partition[2].start),
+                               gene.end-partition[2].start))
+
+        str_reps.append("%s\t%s\t%s\t%s\t%s" % (gene.gene_name, intervals[0].chromosome, intervals[0].start, intervals[-1].end, " ".join([i.chromosome for i in intervals if not i.chromosome == intervals[0].chromosome])))
+        #for interval in intervals:
+        #print(interval)
+    for str_repr in set(["\t".join(s.split("\t")[1:]) for s in str_reps]):
+        print(str_repr)
+
 def find_main_genes_by_codes(gene_intervals, lin_ref_dict, code,
                              cmpr=code_equal):
     """
@@ -110,6 +173,12 @@ def get_alt_gene_stats():
     print("Alt genes", len(alt_genes))
     print("Flank genes", len(flank_genes))
     print("Spanning genes", len(spanning_genes)-len(alt_genes))
+    names = set([g.chromosome for g in alt_genes])
+    for name in names:
+        N = len([g for g in alt_genes if
+                 g.chromosome == name])
+        if N > 100:
+            print("%s: %s" % (name, N))
 
 
 def create_lin_ref_dict(gene_intervals, alt_loci_infos,
@@ -153,6 +222,39 @@ def is_gene_equal(main_gene, alt_gene, partition):
     return False
 
 
+def compare_genes(main_gene, alt_gene, partition):
+    main_partition = partition[0]
+    alt_partition = partition[1]
+    if main_partition[0].intersects(main_gene):
+
+        main_start = main_gene.start-main_partition[0].start
+        main_end = main_gene.end-main_partition[0].start
+
+        if abs(main_start-alt_gene.start) < 100 and abs(main_end-alt_gene.end) < 100:
+            print(main_gene, "first")
+            print(main_start, alt_gene.start)
+            print(main_end, alt_gene.end)
+
+    if main_partition[2].intersects(main_gene):
+        # print(main_gene, "last")
+        main_start = main_partition[2].end-main_gene.start
+        alt_start = alt_partition[2].end-alt_gene.start
+        main_end = main_partition[2].end-main_gene.end
+        alt_end = alt_partition[2].end-alt_gene.end
+
+        if abs(main_start-alt_start) < 100 and abs(main_end-alt_end) < 100:
+            print(main_gene, "last")
+            print(main_start, alt_start)
+            print(main_end, alt_end)
+
+        # print(main_start, alt_start)
+        # print(main_end, alt_end)
+        t = main_start == alt_start
+        return t and main_end == alt_end
+
+    return False
+
+
 def check_flanking_equality(main_genes, alt_genes, alt_loci_infos):
     partitions = [get_flanks(ali) for ali in alt_loci_infos]
     lin_ref_dict_alt = create_lin_ref_dict(
@@ -178,6 +280,19 @@ def check_flanking_equality(main_genes, alt_genes, alt_loci_infos):
         else:
             solo_genes.append(alt_flank_gene)
 
+    chromosomes = list(set([gene[0].chromosome for gene in gene_pairs]))
+    ns = [sum([gene.chromosome == chr_name for gene in alt_genes])
+          for chr_name in chromosomes]
+    ns2 = [sum([gene[0].chromosome == chr_name for gene in gene_pairs])
+           for chr_name in chromosomes]
+    for chrom, n, n2 in zip(chromosomes, ns, ns2):
+        print(chrom, n, n2)
+    for gene_pair in gene_pairs:
+        if gene_pair[0].chromosome == "chr13_KI270838v1_alt":
+            print(gene_pair[0].gene_name, gene_pair[0])
+            print(gene_pair[1].gene_name, gene_pair[1])
+    return
+
     main_gene_pairs = []
     main_solo_genes = []
     for main_flank_gene in main_flank_genes:
@@ -195,9 +310,22 @@ def check_flanking_equality(main_genes, alt_genes, alt_loci_infos):
     # print("%s has no match\n %s" % (alt_flank_gene, partition[0][0]))
     # print("\n".join([(p[0].gene_name + " " + p[1].gene_name)
     # for p in gene_pairs]))
-    print("\n".join([s.gene_name for s in solo_genes]))
+
+    print("\n".join(sorted([s.gene_name for s in solo_genes])))
     print("-----------------------")
-    print("\n".join([s.gene_name for s in main_solo_genes]))
+    print("\n".join(sorted([s.gene_name for s in main_solo_genes])))
+
+    return
+    for alt_gene in solo_genes:
+        gene_symbol = alt_gene.gene_name
+        # print("\n---------\n", gene_symbol)
+        for main_gene in main_solo_genes:
+            #if not main_gene.gene_name == gene_symbol:
+            #    continue
+            #print(main_gene.gene_name)
+            compare_genes(main_gene, alt_gene,
+                          partition_map[alt_gene.chromosome])
+
     print(len(gene_pairs))
     print(len(solo_genes))
 
@@ -219,14 +347,11 @@ def get_main_gene_stats():
     for gene in gene_intervals:
         lin_ref_dict[gene.chromosome] = []
 
-    partition_dict = {}
-
     for i, ali in enumerate(alt_loci_infos):
         chrom = ali["chrom"]
         if chrom not in lin_ref_dict:
             lin_ref_dict[chrom] = []
         lin_ref_dict[chrom].append(main_partitions[i])
-        partition_dict[main_partitions[i]] = alt_partitions[i]
 
     old_spanning_codes = (True, True, False, False, False)
 
@@ -242,6 +367,7 @@ def get_main_gene_stats():
 
     pure_flankning_genes = find_main_genes_by_codes(
         gene_intervals, lin_ref_dict, (False, True, False, False, False))
+
     print("All genes", len(gene_intervals))
     print("Pure alt_genes", len(alt_genes))
     print("Spanning alt genes", len(new_spanning_genes)-len(alt_genes))
@@ -332,8 +458,9 @@ def calculate_main_spans():
 
 
 if __name__ == "__main__":
-    # get_alt_gene_stats()
-    get_main_gene_stats()
+    get_region_stats("chr13_KI270838v1_alt")
+    #  get_alt_gene_stats()
+    # get_main_gene_stats()
 
     # get_flanking_lins()
     # calculate_main_spans()
