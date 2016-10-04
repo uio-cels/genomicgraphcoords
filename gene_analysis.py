@@ -2,6 +2,8 @@ from __future__ import print_function
 from __future__ import absolute_import
 from offsetbasedgraph import DbWrapper
 from offsetbasedgraph import LinearInterval
+import numpy as np
+import matplotlib.pyplot as plt
 from main import get_flanks
 
 
@@ -105,6 +107,9 @@ def get_region_stats(region_name):
 #        print(gene.gene_name)
 #        for interval in intervals:
 #            print(interval)
+    print(len(gene_intervals)+len(main_intervals))
+    for gene in gene_intervals+main_intervals:
+        print(gene)
     print("--------------------------")
     partition = partition[0]
     for gene in main_intervals:
@@ -131,6 +136,7 @@ def get_region_stats(region_name):
         #print(interval)
     for str_repr in set(["\t".join(s.split("\t")[1:]) for s in str_reps]):
         print(str_repr)
+
 
 def find_main_genes_by_codes(gene_intervals, lin_ref_dict, code,
                              cmpr=code_equal):
@@ -330,6 +336,26 @@ def check_flanking_equality(main_genes, alt_genes, alt_loci_infos):
     print(len(solo_genes))
 
 
+def get_flank_stat(partition):
+    alt_partition = partition[1]
+    return (alt_partition[0].length() + alt_partition[1].length() + alt_partition[2].length(),
+            alt_partition[0].length(), alt_partition[2].length())
+
+def get_flank_stats():
+    alt_loci_infos = DbWrapper().get_alt_loci_infos(False)
+    partitions = [get_flanks(ali) for ali in alt_loci_infos]
+    partition_stats = [get_flank_stat(p) for p in partitions]
+    
+    totals = np.array([s[0] for s in partition_stats])
+    starts = np.array([s[1] for s in partition_stats])
+    ends = np.array([s[2] for s in partition_stats])
+
+    print("Totals", np.mean(totals), np.std(totals))
+    print("Starts", np.mean(starts), np.std(starts), np.min(starts), np.max(starts))
+    print("Ends", np.mean(ends), np.std(ends), np.min(ends), np.max(ends))
+    print("Portion", (np.sum(starts) + np.sum(ends))/np.sum(totals), (np.mean(starts)+np.mean(ends))/2)
+
+
 def get_main_gene_stats():
     db = DbWrapper()
     genes = db.get_main_genes()
@@ -337,7 +363,7 @@ def get_main_gene_stats():
     gene_intervals = [interval_from_gene(gene) for gene in genes]
     alt_gene_intervals = [interval_from_gene(gene) for gene in alt_genes]
     alt_loci_infos = db.get_alt_loci_infos(False)
-    return check_flanking_equality(gene_intervals, alt_gene_intervals, alt_loci_infos)
+    # return check_flanking_equality(gene_intervals, alt_gene_intervals, alt_loci_infos)
     
     partitions = [get_flanks(ali) for ali in alt_loci_infos]
     main_partitions = [par[0] for par in partitions]
@@ -458,6 +484,7 @@ def calculate_main_spans():
 
 
 if __name__ == "__main__":
+    # get_flank_stats()
     get_region_stats("chr13_KI270838v1_alt")
     #  get_alt_gene_stats()
     # get_main_gene_stats()

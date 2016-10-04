@@ -4,6 +4,7 @@ from builtins import range
 from builtins import object
 import numpy as np
 
+
 class Interval(object):
     """
     Class for genomic interval on a graph-based reference genome
@@ -26,8 +27,6 @@ class Interval(object):
         self.name = ""
         self.gene_name = ""
         self.is_exon = False
-
-
 
     def create_from_block_list(self, block_list, start_pos, end_pos):
         """
@@ -201,4 +200,3 @@ class IntervalCollection(object):
         for seg in self.segments:
             ids += seg.get_ids()
         return ids
-
