@@ -85,6 +85,7 @@ def get_region_stats(region_name):
     gene_intervals = [interval_from_gene(gene) for gene in genes]
     gene_intervals = [interval for interval in gene_intervals if interval.chromosome == alt_loci["name"]]
     partition = get_flanks(alt_loci)
+    print(partition)
 
     alt_partition = partition[1]
     print(alt_partition)
@@ -134,6 +135,9 @@ def get_region_stats(region_name):
         str_reps.append("%s\t%s\t%s\t%s\t%s" % (gene.gene_name, intervals[0].chromosome, intervals[0].start, intervals[-1].end, " ".join([i.chromosome for i in intervals if not i.chromosome == intervals[0].chromosome])))
         #for interval in intervals:
         #print(interval)
+    for str_repr in str_reps:
+        print(str_repr)
+
     for str_repr in set(["\t".join(s.split("\t")[1:]) for s in str_reps]):
         print(str_repr)
 
