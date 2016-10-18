@@ -92,8 +92,7 @@ elif method == "align_region2" or method == "align_region_html":
     chrom = region_info["chrom"]
     graph = graph.get_subgraph(LinearInterval("hg38", chrom, area_start, area_end), region)
 
-    print("Subgraph: ")
-    print(graph)
+
 
     description = "Visualization of graph created around <i>" + graph.pretty_alt_loci_name(region) + "</i>"
     #if len(gene_segments) > 3:
