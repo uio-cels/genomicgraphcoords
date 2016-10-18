@@ -178,7 +178,7 @@ class VisualizeHtml(object):
                                 height: 20px; margin-top: 5px;'>
                         <p style='font-size: 0.8em;'>
                             <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Main path (GRCh38)</font><br>
-                            <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Merged </font><br>
+                            <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Flanking regions </font><br>
                             <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span> <font color='black'>Alternative locus</font>
                         </p>
                     </div>
