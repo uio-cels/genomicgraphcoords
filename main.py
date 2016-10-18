@@ -293,6 +293,7 @@ def create_align_graph(region_name, min_length):
         segment.name = name
         segment.gene_name = interval.gene_name
         if DEBUG: print(segment)
+        print("<p>CONVERTED SEGMENT TO: " + str(segment) + "</p>")
         segments.append(segment)
         gene_segments.append(segment)
 
