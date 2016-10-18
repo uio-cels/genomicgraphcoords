@@ -156,6 +156,6 @@ elif method == "align_region2" or method == "align_region_html":
     print(""" <li>The alternative locus was then merged with the main path where flanking regions were found.</li>
     <li>Genes were collected from the UCSC hg38
     database, table: <i>knownGene</i>.  
-    Only genes present in multiple region paths in the part of the graph visualized were selected.</li>
+    Only genes present in multiple region paths in the part of the graph visualized were selected.</li> 
     """)
     print("</ol>")
