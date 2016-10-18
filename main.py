@@ -252,8 +252,10 @@ def create_align_graph(region_name, min_length):
 
         # Create one interval for each exon
         ei = 0
-        ex_ends = gene["exonEnds"].decode('utf8').split(",")
-        for ex in gene["exonStarts"].decode('utf8').split(","):
+        #ex_ends = gene["exonEnds"].decode('utf8').split(",")
+        ex_ends = gene["exonEnds"].split(",")
+        #for ex in gene["exonStarts"].decode('utf8').split(","):
+        for ex in gene["exonStarts"].split(","):
             if ex == "":
                 continue
 
