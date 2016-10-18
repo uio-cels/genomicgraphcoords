@@ -1,7 +1,5 @@
 from __future__ import absolute_import
 from __future__ import division
-from builtins import str
-from builtins import object
 #import matplotlib.pyplot as plt
 import numpy as np
 import six
