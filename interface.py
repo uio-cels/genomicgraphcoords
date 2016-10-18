@@ -137,9 +137,9 @@ elif method == "align_region2" or method == "align_region_html":
     total_width = v.width_used  #  Send the width used by the first visualizer
                                 #  to the next
 
-    #subgraph_orig = orig_graph.get_subgraph(LinearInterval("hg38", chrom, area_start, area_end), region)
-    #v2 = VisualizeHtml(subgraph_orig, area_start, area_end, 1, "Original GRCh38 graph in the same area (no merges)", total_width + 60, gene_segments_orig)
-    #print(str(v2))
+    subgraph_orig = orig_graph.get_subgraph(LinearInterval("hg38", chrom, area_start, area_end), region)
+    v2 = VisualizeHtml(subgraph_orig, area_start, area_end, 1, "Original GRCh38 graph in the same area (no merges)", total_width + 60, gene_segments_orig)
+    print(str(v2))
 
     # Print analysis details
     import globals
