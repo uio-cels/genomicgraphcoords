@@ -33,7 +33,7 @@ def get_intereseting_points_from_alignments(alignments):
 
 def get_alignments(region_name, alt_info):
     align_file = DATA_PATH + "alignment%s.tmp" % region_name
-    from . import globals
+    import globals
     globals.blast_result = "alignment%s.tmp" % region_name
     alt_fasta = save_sequence_to_fasta(
         region_name, 0, alt_info["length"])
