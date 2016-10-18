@@ -196,9 +196,7 @@ class VisualizeHtml(object):
         """
         i = 0
         for gene in intervals:
-            print("<p>Visualizing gnene</p>")
-            print(gene)
-            if not gene.is_exon:
+           if not gene.is_exon:
                 self.html += """
                 <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
                  <font color='black'>%s</font><br>
@@ -239,9 +237,6 @@ class VisualizeHtml(object):
                 print(interval)
 
             for block in interval.block_list:
-
-                if not interval.is_exon:
-                    print("<p>Vis block " + str(block))
 
                 if not block in self.offset_positions:
                     if DEBUG: print("Warning. Block %s not found in offset_positions when visualizing interval" % (block))
