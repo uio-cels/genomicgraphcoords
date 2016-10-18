@@ -375,7 +375,7 @@ class VisualizeHtml(object):
         start = self.offset_counter
         lr = list(rp.linear_references.values())[0]
         length = self._scale(lr.end - lr.start)
-        #if DEBUG: print "PLotting " + str(rp.id) + "  on level %.2f, %.2f to %.2f" % (level, start, start + length)
+        if DEBUG: print("<p>PLotting " + str(rp.id) + "  on level %.2f, %.2f to %.2f</p>" % (level, start, start + length))
         xend, y, width, xstart = self._plot(start, start + length, level , self.colors[level + 1], rp)
 
         self.offset_positions[rp.id] = [xstart, y, width]
