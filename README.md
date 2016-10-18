@@ -12,11 +12,11 @@ It does so by merging flanking regions of the alt loci with the main path.
 
  To run from commandline:
  
-> python interface.py align_region chrN_GENBANKSEQACCS_alt
+> python interface.py align_region_html chrN_GENBANKSEQACCS_alt
 
 Example:
 
-> python interface.py align_region chr7_KI270808v1_alt
+> python interface.py align_region_html chr7_KI270808v1_alt
 
 Note: These scripts return html that is interpreted in web-gui/index.html.
 The current demo runs web-gui/index.html and uses the php-script web-gui/python_runner.py to
