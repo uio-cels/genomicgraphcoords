@@ -240,6 +240,9 @@ class VisualizeHtml(object):
 
             for block in interval.block_list:
 
+                if not interval.is_exon:
+                    print("<p>Vis block " + str(block))
+                    
                 if not block in self.offset_positions:
                     if DEBUG: print("Warning. Block %s not found in offset_positions when visualizing interval" % (block))
                     continue
