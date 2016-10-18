@@ -131,7 +131,7 @@ elif method == "align_region2" or method == "align_region_html":
     print("<p>GENE SEGMENTS ORIG</p>")
     print(gene_segments_orig)
 
-    
+
     print(str(v))
     print("<br><br>")
 
