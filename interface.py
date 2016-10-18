@@ -20,6 +20,8 @@ from main import *
 method = sys.argv[1]
 
 if method == "test":
+    import sys
+    print(sys.version)
     print("Test is working .. ")
 
 
