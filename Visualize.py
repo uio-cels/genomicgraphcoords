@@ -453,7 +453,7 @@ class VisualizeHtml(object):
 
         while True:
             self.gap_pixels += 20
-            if DEBUG: print "Iteration: " + str(block.id)
+            if DEBUG: print("Iteration: " + str(block.id))
             # Plot the next blocks (will never be more than two blocks)
             offsets = []
 
