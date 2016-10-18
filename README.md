@@ -1,19 +1,14 @@
-
 # Live demo
 
 For a live demo of this tool, please follow this link:  http://46.101.93.163/gen-graph-coords/
 
-
 # About
-A tool to merge segments of alternative loci with the main paht of GRCh38 and find genes that covers both merged and unmerged paths.
+This tool uses and requires the python package _offsetbasedgraph_. Install it with `pip3 install offsetbasedgraph`.
 
-class OffsetBasedGraph is a simple implementation of a sequence graph with offset based coordinates
+This repository contains a collection of scripts that uses the python package _offsetbasedgraph_ to create sample graphs from GRCh38.
+It does so by merging flanking regions of the alt loci with the main path.
 
-class LinearInterval represents intervals on linear reference genomes
-
-class Interval represents intervals on graph based reference genomes, as described in the article
-
-class RegionPath represents region paths in the graph, as described in the article
+# Run example
 
  To run from commandline:
  
@@ -22,6 +17,10 @@ class RegionPath represents region paths in the graph, as described in the artic
 Example:
 
 > python interface.py align_region chr7_KI270808v1_alt
+
+Note: These scripts return html that is interpreted in web-gui/index.html.
+The current demo runs web-gui/index.html and uses the php-script web-gui/python_runner.py to
+call the python script Interface.py.
 
 
 
