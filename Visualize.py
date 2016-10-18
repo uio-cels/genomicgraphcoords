@@ -196,7 +196,7 @@ class VisualizeHtml(object):
         """
         i = 0
         for gene in intervals:
-           if not gene.is_exon:
+            if not gene.is_exon:
                 self.html += """
                 <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
                  <font color='black'>%s</font><br>
