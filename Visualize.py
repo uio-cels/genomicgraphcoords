@@ -232,10 +232,6 @@ class VisualizeHtml(object):
         """
         for interval in self.intervals:
 
-            if not interval.is_exon:
-                print("<p><b>VISUALIZING INTERVAL</p>")
-                print(interval)
-
             for block in interval.block_list:
 
                 if not block in self.offset_positions:
