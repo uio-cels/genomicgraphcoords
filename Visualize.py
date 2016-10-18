@@ -1,12 +1,11 @@
 from __future__ import absolute_import
 from __future__ import division
 from builtins import str
-from past.utils import old_div
 from builtins import object
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 import six
-from matplotlib import colors
+#from matplotlib import colors
 from config import *
 from DbWrapper import DbWrapper
 
@@ -128,7 +127,6 @@ class VisualizeHtml(object):
         self.gap_pixels = 0  # Extra gap pixels that are added
         self.graph = graph
         self.color_counter = 4
-        self.colors = list(six.iteritems(colors.cnames))[6:]
         self.colors = ["#0000aa", "#5F96C5", "#C58E8E", "#cccccc", "purple", "orange", "indigo"]
         self.gene_colors = ["darkorange", "#D9EDF7", "#aaaaaa", "pink", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black"]
         self.gene_counter = 0
@@ -142,7 +140,7 @@ class VisualizeHtml(object):
         self.width = width
         self.maxOffset = maxOffset
         self.minOffset = minOffset
-        self.width_ratio = old_div(float(self.width), (self.maxOffset - self.minOffset))
+        self.width_ratio = float(self.width) / (self.maxOffset - self.minOffset)
 
         self.width_used = self.width
 
@@ -231,6 +229,7 @@ class VisualizeHtml(object):
         """
         for interval in self.intervals:
             for block in interval.block_list:
+                print(self.offset_positions)
                 plot_info = self.offset_positions[block]
                 start = plot_info[0]
                 end = plot_info[0] + plot_info[2]
@@ -264,7 +263,7 @@ class VisualizeHtml(object):
         self.html += " style='z-index: 12; position: absolute;"
         self.html += "left: %.2fpx;" % (start)
         self.html += "width: %.2fpx;" % (max(2, end - start))
-        self.html += "top: %.2fpx;" % (top + old_div((self.gene_height - self.exon_height), 2.0))
+        self.html += "top: %.2fpx;" % (top + (self.gene_height - self.exon_height) /  2.0)
         self.html += "height: %dpx;" % (self.exon_height)
         self.html += "background-color: black;"
         self.html += "' "
@@ -487,7 +486,7 @@ class VisualizeHtml(object):
 
             if block.id not in self.graph.block_edges:
                 return
-            if len(self.graph.block_edges[block.id]) == 0:
+            if len(list(self.graph.block_edges[block.id])) == 0:
                 return
 
 

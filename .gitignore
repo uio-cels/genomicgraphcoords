@@ -7,3 +7,4 @@ data/tmp
 *.bak
 .#*
 *~
+various.py

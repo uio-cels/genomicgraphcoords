@@ -235,6 +235,10 @@ def create_align_graph(region_name, min_length):
     exons = []
     block_graph = create_block_index(graph)
     block_graph_orig = create_block_index(orig_graph)
+
+    block_graph = graph.block_index
+    block_graph_orig = orig_graph.block_index
+
     for gene in genes:
         #print "Gene %s, %s" % (gene["gname"], gene["name"])
         l = LinearInterval(
@@ -255,6 +259,7 @@ def create_align_graph(region_name, min_length):
 
             #print "<p>Ex: %d, %d</p>" % (int(ex), int(ex_ends[ei]))
             l = LinearInterval("hg39", gene["chrom"], int(ex), int(ex_ends[ei]), "+")
+
             segment = linear_segment_to_graph(graph, block_graph, gene["chrom"],
                                               int(ex), int(ex_ends[ei]))
             segment.name = "Exon for " + gene["name"]
