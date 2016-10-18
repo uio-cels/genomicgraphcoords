@@ -198,14 +198,6 @@ def create_align_graph(region_name, min_length):
     graph = OffsetBasedGraph.create_graph(
         chromosome_info, alt_infos)
 
-    print("BLOCKS 1")
-    print("<hr>")
-    print(graph.blocks)
-    print("<hr>")
-    print("Edges 1")
-    print("<hr>")
-    print(graph.block_edges)
-    print("<hr>")
 
     import copy
     orig_graph = graph.deep_copy(graph)
@@ -361,9 +353,9 @@ if __name__ == "__main__":
         "chr11_KI270927v1_alt")
 
 
-    if DEBUG: print("BLOCKS: ")
+    if DEBUG: print("ALL BLOCK: ")
     for b in graph.blocks:
-        if DEBUG: print("BLock " + str(b) + " : " + str(graph.blocks[b]))
+        if DEBUG: print("<p>BLock " + str(b) + " : " + str(graph.blocks[b]) + "</p>")
 
 
 
