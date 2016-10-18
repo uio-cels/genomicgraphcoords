@@ -233,6 +233,10 @@ class VisualizeHtml(object):
         :param intervals: A list of intervals (of type Segment)
         """
         for interval in self.intervals:
+
+            print("<p><b>VISUALIZING INTERVAL</p>")
+            print(interval)
+
             for block in interval.block_list:
 
                 if not block in self.offset_positions:
