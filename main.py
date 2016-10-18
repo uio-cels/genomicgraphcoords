@@ -203,9 +203,9 @@ def create_align_graph(region_name, min_length):
 
     alt_info = dbw.alt_loci_info(region_name)
 
-    #align_file = get_alignments(region_name, alt_info)
-    #alignments = get_filtered_alignments(align_file, alt_info["chromStart"])
-    alignments = get_flanking_alignments(region_name, alt_info)
+    align_file = get_alignments(region_name, alt_info)
+    alignments = get_filtered_alignments(align_file, alt_info["chromStart"])
+    #alignments = get_flanking_alignments(region_name, alt_info)
 
     if len(alignments) == 0:
         raise Exception("There were no alignments between the alternative locus and consensus path in the the given region. Try another region.")
