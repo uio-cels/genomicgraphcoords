@@ -216,8 +216,8 @@ def create_align_graph(region_name, min_length):
         if DEBUG: print(a)
     graph.include_alignments(alignments)
 
-    print("<h2>Edges</h2>")
-    print(graph.block_edges)
+    #print("<h2>Edges</h2>")
+    #print(graph.block_edges)
 
     interesting_points = get_intereseting_points_from_alignments(alignments)
     genes = []
