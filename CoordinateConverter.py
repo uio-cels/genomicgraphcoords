@@ -80,8 +80,6 @@ def linear_coordinate_to_graph(graph, graph_block_index, chr_id, coordinate):
     """
     if DEBUG: print("coordinate to graph. " + str(chr_id) + " " + str(coordinate))
     # Our coordinate can be in any of these blocks
-    print("block index")
-    print(graph_block_index.keys())
     potential_blocks = graph_block_index[chr_id]
 
     for potential_block in potential_blocks:
