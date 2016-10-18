@@ -151,18 +151,9 @@ elif method == "align_region2" or method == "align_region_html":
 
     from blast import BLAST_COMMAND
     blast_command = BLAST_COMMAND % ("main_path_sequence.fasta", "alt_locus_sequence.fasta", 95)
-    print("""<li>These two sequences were aligned using blastn.
-    The following command was run:<br>%s.
-    <br>The result <a href='http://46.101.93.163/data/tmp/%s' target='_blank'>
-    can be seen here</a>.</li>""" % (blast_command, globals.blast_result))
-    print("""<li>For this example, only alignments in which both sequences
-    had 50 or more bp were chosen. Alignments were chosen from the top
-    of the file, excluding alignments that were either overlapping or
-    <i>crossing</i> previously selected alignments. With <i>crossing</i> we mean
-    an aligment between two sequences, where one of the two sequences
-    is before and the other after a sequence aligned previously.</li>
-    <li>The alternative locus was then merged with the main path based on
-     these alignments.</li>
+    print("""<li>The flanking regions in these two sequences were found as the sequence of base pairs at the beginning or end that were identical.</li>""")
+
+    print(""" <li>The alternative locus was then merged with the main path where flanking regions were found.</li>
     <li>Genes were collected from the UCSC hg38
     database, table: <i>knownGene</i>.  
     Only genes present in multiple region paths in the part of the graph visualized were selected.</li>
