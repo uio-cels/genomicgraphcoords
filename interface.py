@@ -9,7 +9,6 @@ $ python interface.py align_region2 chr7_KI270808v1_alt
 """
 from __future__ import print_function
 from __future__ import absolute_import
-from builtins import str
 import subprocess
 import sys
 import os

@@ -229,7 +229,6 @@ class VisualizeHtml(object):
         """
         for interval in self.intervals:
             for block in interval.block_list:
-                print(self.offset_positions)
                 plot_info = self.offset_positions[block]
                 start = plot_info[0]
                 end = plot_info[0] + plot_info[2]
