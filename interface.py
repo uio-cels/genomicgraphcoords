@@ -113,24 +113,9 @@ elif method == "align_region2" or method == "align_region_html":
     genes = db.
     """
 
-    print("BLOCKS")
-    print("<hr>")
-    print(graph.blocks)
-    print("<hr>")
-    print("Edges")
-    print("<hr>")
-    print(graph.block_edges)
-    print("<hr>")
+
 
     v = VisualizeHtml(graph, area_start, area_end, 0, description, 800, gene_segments)
-
-    print("<p>GENE SEGMENTS</p>")
-    print(gene_segments)
-
-    print("<p>GENE SEGMENTS ORIG</p>")
-    print(gene_segments_orig)
-
-
     print(str(v))
     print("<br><br>")
 
