@@ -31,6 +31,11 @@ class Visualize(object):
         """
         for interval in intervals:
             for block in interval.block_list:
+
+                if not block in self.offset_positions:
+                    if DEBUG: print("Warning. Block %s not found in offset_positions when visualizing interval" % (block))
+                    continue
+
                 plot_info = self.offset_positions[block]
                 start = plot_info[0]
                 end = plot_info[1]
