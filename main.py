@@ -263,7 +263,7 @@ def create_align_graph(region_name, min_length):
             ex_starts = gene["exonStarts"].split(",")
         else:
             ex_ends = gene["exonEnds"].decode('utf8').split(",")
-            ex_starts = gene["exonStarts"].split(",")
+            ex_starts = gene["exonStarts"].decode('utf8').split(",")
 
         #ex_ends = gene["exonEnds"].split(",")
         #for ex in gene["exonStarts"].decode('utf8').split(","):
