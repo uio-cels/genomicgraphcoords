@@ -112,6 +112,7 @@
 			$("#result_div").show();
 			$("#results").html("<div class='alert alert-success'>Creating graph and visualizing ...</div>");
 			var url = "http://46.101.93.163/gen-graph-coords/python_runner.php?method=align_region2&params=" + reg_id;
+			console.log("URL: " + url);
 			$.get(url,
 			// + "," + $("input[name=start]").val() + "," + $("input[name=end]").val(),
 				function(res){
