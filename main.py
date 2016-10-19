@@ -258,7 +258,7 @@ def create_align_graph(region_name, min_length):
         ei = 0
 
         # Hack, because exons are sometimes str, sometimes byte
-        if isinstance(gene["exonEnds"], basestring):
+        if isinstance(gene["exonEnds"], str):
             ex_ends = gene["exonEnds"].split(",")
             ex_starts = gene["exonStarts"].split(",")
         else:
