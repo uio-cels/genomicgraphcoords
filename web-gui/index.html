@@ -111,7 +111,8 @@
 			$("input[type=checkbox]").prop('checked', false);
 			$("#result_div").show();
 			$("#results").html("<div class='alert alert-success'>Creating graph and visualizing ...</div>");
-			$.get("http://46.101.93.163/gen-graph-coords/python_runner.php?method=align_region2&params=" + reg_id,
+			var url = "http://46.101.93.163/gen-graph-coords/python_runner.php?method=align_region2&params=" + reg_id;
+			$.get(url,
 			// + "," + $("input[name=start]").val() + "," + $("input[name=end]").val(),
 				function(res){
 					
