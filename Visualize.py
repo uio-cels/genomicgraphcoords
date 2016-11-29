@@ -5,7 +5,7 @@ import numpy as np
 import six
 #from matplotlib import colors
 from config import *
-from DbWrapper import DbWrapper
+from gendatafetcher.ucscdb import DbWrapper
 
 class Visualize(object):
 

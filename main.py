@@ -9,7 +9,8 @@ from builtins import range
 from blast import blast_align, get_filtered_alignments
 from TogowsWrapper import save_sequence_to_fasta
 from offsetbasedgraph import OffsetBasedGraph
-from DbWrapper import DbWrapper
+from gendatafetcher import genes as dbgenes
+from gendatafetcher.ucscdb import DbWrapper
 from offsetbasedgraph import LinearInterval
 from Visualize import Visualize
 from config import *
@@ -223,14 +224,14 @@ def create_align_graph(region_name, min_length):
     genes = []
     values = list(interesting_points.keys())
     for i in range(len(interesting_points[values[0]])):
-        pgs0 = [dbw.genes_crossing_position(
+        pgs0 = [dbgenes.genes_crossing_position(
             v, interesting_points[v][i][0]) for v in values]
 
         if all(pgs0):
             genes = [gs[0] for gs in pgs0]
             break
 
-        pgs1 = [dbw.genes_crossing_position(
+        pgs1 = [dbgenes.genes_crossing_position(
             v, interesting_points[v][i][1]) for v in values]
         if all(pgs1):
             genes = [gs[0] for gs in pgs1]
@@ -257,13 +258,9 @@ def create_align_graph(region_name, min_length):
         # Create one interval for each exon
         ei = 0
 
-        # Hack, because exons are sometimes str, sometimes byte
-        if isinstance(gene["exonEnds"], str):
-            ex_ends = gene["exonEnds"].split(",")
-            ex_starts = gene["exonStarts"].split(",")
-        else:
-            ex_ends = gene["exonEnds"].decode('utf8').split(",")
-            ex_starts = gene["exonStarts"].decode('utf8').split(",")
+
+        ex_ends = gene["exonEnds"]
+        ex_starts = gene["exonStarts"]
 
         #ex_ends = gene["exonEnds"].split(",")
         #for ex in gene["exonStarts"].decode('utf8').split(","):
@@ -331,10 +328,10 @@ def is_good_loci(region_name, dbw):
 
     values = list(interesting_points.keys())
     for i in range(len(interesting_points[values[0]])):
-        if all([dbw.genes_crossing_position(v, interesting_points[v][i][0])
+        if all([dbgenes.genes_crossing_position(v, interesting_points[v][i][0])
                 for v in values]):
             return True
-        if all([dbw.genes_crossing_position(v, interesting_points[v][i][1])
+        if all([dbgenes.genes_crossing_position(v, interesting_points[v][i][1])
                 for v in values]):
             return True
 
