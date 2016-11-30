@@ -19,6 +19,11 @@ from main import *
 
 method = sys.argv[1]
 
+import sys
+sys.path.append("/home/ivarandknut/python-projects/")
+sys.path.append("/home/ivarandknut/python-projects/OffsetBasedGraph/")
+
+
 if method == "test":
     import sys
     print(sys.version)
