@@ -7,6 +7,12 @@ run example:
 $ python interface.py align_region2 chr7_KI270808v1_alt
 
 """
+
+import sys
+sys.path.append("/home/ivarandknut/python-projects/")
+sys.path.append("/home/ivarandknut/python-projects/OffsetBasedGraph/")
+
+
 from __future__ import print_function
 from __future__ import absolute_import
 import subprocess
@@ -18,10 +24,6 @@ from Visualize import Visualize, VisualizeHtml
 from main import *
 
 method = sys.argv[1]
-
-import sys
-sys.path.append("/home/ivarandknut/python-projects/")
-sys.path.append("/home/ivarandknut/python-projects/OffsetBasedGraph/")
 
 
 if method == "test":
