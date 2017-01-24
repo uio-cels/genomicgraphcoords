@@ -1,7 +1,5 @@
 """
-Methods for interacting with the different scripts. This file is called
-via the web-server api, and prints html that is presented as results in the
-tool.
+Simple interface for interacting with
 
 run example:
 $ python interface.py align_region2 chr7_KI270808v1_alt
