@@ -23,8 +23,11 @@ if(isset($_GET["method"])){
 
 	//print_r($params);
 	if(isset($_GET["params"])){
-			if(!validate_string($_GET["params"])) exit("Error #2");
-			$arguments = str_replace(",", " ", $_GET["params"]);
+	        $p = str_replace(",", " ", $_GET["params"]);
+	        $p = str_replace("%20", " ", $p);
+
+			if(!validate_string($p)) exit("Error #2");
+			$arguments = $p; //str_replace(",", " ", $_GET["params"]);
 	}
 	else{
 			$arguments = "";
