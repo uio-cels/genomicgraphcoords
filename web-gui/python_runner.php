@@ -49,7 +49,7 @@ if(isset($_GET["method"])){
 	if($method == ""){
 			$stdout = explode("\n", $stdout);
 	}
-    $stdout .= "command: $command";
+    //$stdout .= "command: $command";
 	$out = array("stdout" => $stdout, "stderr" => $stderr);
 
 	exit(json_encode($out));

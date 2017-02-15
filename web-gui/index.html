@@ -111,7 +111,8 @@
 			$("input[type=checkbox]").prop('checked', false);
 			$("#result_div").show();
 			$("#results").html("<div class='alert alert-success'>Creating graph and visualizing ...</div>");
-			var url = "http://46.101.93.163/gen-graph-coords/python_runner.php?method=align_region2&params=" + reg_id;
+			//var url = "http://46.101.93.163/gen-graph-coords/python_runner.php?method=align_region2&params=" + reg_id;
+			var url = "http://46.101.93.163/gen-graph-coords/python_runner.php?method=visualize_alt_locus_wrapper&params=" + reg_id;
 			console.log("URL: " + url);
 			$.get(url,
 			// + "," + $("input[name=start]").val() + "," + $("input[name=end]").val(),
@@ -143,7 +144,7 @@
 		}
 		
 		$(document).ready(function(){
-		
+
 			$.get("http://46.101.93.163/gen-graph-coords/python_runner.php?method=get_all_regions", function(res){
 				$("#regionselector").html(res["stdout"]);
 				$("#run_button").show();
@@ -291,7 +292,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 			<br><br><br>
 	</div>
 
