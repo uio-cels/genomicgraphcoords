@@ -26,7 +26,7 @@ if(isset($_GET["method"])){
 	        $p = str_replace(",", " ", $_GET["params"]);
 	        $p = str_replace("%20", " ", $p);
 
-			if(!validate_string($p)) exit("Error #2");
+			if(!validate_string($p)) exit("Error #2 .. $p");
 			$arguments = $p; //str_replace(",", " ", $_GET["params"]);
 	}
 	else{
