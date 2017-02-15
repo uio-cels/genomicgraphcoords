@@ -46,8 +46,8 @@ if(isset($_GET["method"])){
 	if($method == ""){
 			$stdout = explode("\n", $stdout);
 	}
-	$out = array("stdout" => $stdout, "stderr" => $stderr); 
-    $stdout .= "$command";
+    $stdout .= "command: $command";
+	$out = array("stdout" => $stdout, "stderr" => $stderr);
 
 	exit(json_encode($out));
 }
