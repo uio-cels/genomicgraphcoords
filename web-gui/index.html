@@ -145,7 +145,7 @@
 		
 		$(document).ready(function(){
 
-			$.get("http://46.101.93.163/gen-graph-coords/python_runner.php?method=get_all_regions", function(res){
+			$.get("http://46.101.93.163/gen-graph-coords/python_runner.php?method=html_alt_loci_select", function(res){
 				$("#regionselector").html(res["stdout"]);
 				$("#run_button").show();
 			}, "json");
