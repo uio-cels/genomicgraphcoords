@@ -24,14 +24,21 @@ git clone git@github.com:uio-cels/gen-graph-coords.git
 
 # How to run the gene experiments
 
-## Experiment 1: Se relationship between genes on alt loci and main chromosomes on GRCh38
+### Experiment 1: Se relationship between genes on alt loci and main chromosomes on GRCh38
+In this experiment, we create a simple graph from GRCh38 by
+merging the "flanking regions" of the alternatice loci with the main path.
+We then represent ensembl/refseq genes on this graph.
+Follow this steps to reproduce the experiment:
+
 ```
 python3 ...
 ....
 ....
 ```
 
-# Experiment 2: Representing genes by multi-path intervals on GRCh38
+### Experiment 2: Representing genes by multi-path intervals on GRCh38
+In this experiment, we create a more complex graph by ....
+
 ```
 ...
 ..
