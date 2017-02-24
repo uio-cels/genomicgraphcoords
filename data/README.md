@@ -10,8 +10,8 @@ All coordinates are 0-based with exlusive end position.
 ### Genes (dir: genes)
 Genes are collected from the UCSC Table Browser (http://genome.ucsc.edu/cgi-bin/hgTables?command=start).
 
-For refseq genes the track _Refseq genes_ was used. For Gencode genes, the track _ALL GENCODE V24_  was used.
-This tracks were processed into one file per chromosome.
+For refseq genes the track _Refseq genes_ was used. For Gencode genes, the track _ALL GENCODE V24_ was used.
+These tracks were processed into one file per chromosome.
 
 ### grch38.chrom.sizes
 Downloaded from http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes.
