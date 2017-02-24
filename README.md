@@ -15,6 +15,12 @@ git clone git@github.com:uio-cels/gendatafetcher.git
 cd gendatafetcher
 pip3 install -e .
 ```
+## Setup
+Install the above requirements. Then clone this repo:
+
+```
+git clone git@github.com:uio-cels/gen-graph-coords.git
+```
 
 # How to run the gene experiments
 
