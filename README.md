@@ -10,9 +10,11 @@ For a demo of the interactive web tool, please follow this link:  http://46.101.
 There are two requirements:
 * The python package _offsetbasedgraph_. Install it with `pip3 install offsetbasedgraph`.
 * A small python-package for fetching genomic sequences from UCSC. Install it by cloning the repo and installing with pip:
-> git clone git@github.com:uio-cels/gendatafetcher.git
-> cd gendatafetcher
-> pip3 install -e .
+```
+git clone git@github.com:uio-cels/gendatafetcher.git
+cd gendatafetcher
+pip3 install -e .
+```
 
 # Details
 
