@@ -1,5 +1,6 @@
 from offsetbasedgraph import Graph, Translation
 from offsetbasedgraph.gene import GeneList, Gene, MultiPathGene
+import sys
 
 from offsetbasedgraph.graphutils import Gene, convert_to_numeric_graph, connect_without_flanks, \
     convert_to_text_graph, merge_flanks, connect_without_flanks, parse_genes_file, \
@@ -73,8 +74,8 @@ def merge_all_alignments(args):
     # Go through all alts in this graph
     new_graph = graph.copy()
     i = 0
-    #for b in text_graph.blocks:
-    for b in ['chr8_KI270818v1_alt']: #['chr8_KI270812v1_alt']: #text_graph.blocks: # chr6_GL000251v2_alt
+    for b in text_graph.blocks:
+    #for b in ['chr8_KI270818v1_alt']: #['chr8_KI270812v1_alt']: #text_graph.blocks: # chr6_GL000251v2_alt
 
         if "alt" in b:
             print("Merging %s" % b)
@@ -102,10 +103,10 @@ def merge_all_alignments(args):
 def visualize_alt_locus_wrapper(args):
     # Finds correct gene file etc
     chrom = args.alt_locus.split("_")[0]
-    args.genes = "genes/genes_refseq_%s.txt" % (chrom)
+    args.genes = "data/genes/genes_refseq_%s.txt" % (chrom)
 
     # Create graph only for this alt loci
-    graph = create_initial_grch38_graph("grch38.chrom.sizes")
+    graph = create_initial_grch38_graph("data/grch38.chrom.sizes")
     #graph.to_file("graph_non_connected")
     #graph = Graph.from_file("graph_non_connected")
 
@@ -115,7 +116,7 @@ def visualize_alt_locus_wrapper(args):
 
     #print("Convert without flanks")
     new_numeric_graph, numeric_translation = connect_without_flanks(
-        numeric_graph, "grch38_alt_loci.txt", name_translation, [args.alt_locus])
+        numeric_graph, "data/grch38_alt_loci.txt", name_translation, [args.alt_locus])
 
     name_graph, new_name_translation = convert_to_text_graph(
         new_numeric_graph, name_translation, numeric_translation)
@@ -125,6 +126,7 @@ def visualize_alt_locus_wrapper(args):
     #final_translation.to_file("tmp_trans")
 
     args.translation_file_name = final_translation
+    args.alt_locations_file_name = 'data/grch38_alt_loci.txt'
     #return
     visualize_alt_locus(args, True)
 
@@ -144,7 +146,7 @@ def visualize_alt_locus(args, skip_wrapping=False):
     # Find all genes on this graph
     genes = GeneList(get_gene_objects_as_intervals(args.genes)).gene_list
 
-    alt_loci_genes, gene_name_dict, main_genes = create_gene_dicts(genes)
+    alt_loci_genes, gene_name_dict, main_genes = create_gene_dicts(genes, alt_loci_fn=args.alt_locations_file_name)
 
     alt = args.alt_locus
     genes = alt_loci_genes[args.alt_locus] + main_genes[args.alt_locus]
@@ -158,7 +160,7 @@ def visualize_alt_locus(args, skip_wrapping=False):
         raise Exception("No genes in area")
 
     #subgraph, trans, start_position = graph.create_subgraph_from_intervals(trans_regions, 200000, args.alt_locus)
-    subgraph, trans, start_position = create_subgraph_around_alt_locus(graph, trans, args.alt_locus, 200000)
+    subgraph, trans, start_position = create_subgraph_around_alt_locus(graph, trans, args.alt_locus, 200000, alt_loci_fn=args.alt_locations_file_name)
 
     start_position = orig_trans.translate_position(start_position, True)[0]
     print("<p>Start position: %s</p>" % start_position)
@@ -191,7 +193,7 @@ def visualize_alt_locus(args, skip_wrapping=False):
 
     #full_trans = full_trans + trans
 
-    from offsetbasedgraph import VisualizeHtml
+    from visualizehtml import VisualizeHtml
     subgraph.start_block = start
     max_offset = sum([subgraph.blocks[b].length() for b in subgraph.blocks])
     v = VisualizeHtml(subgraph, 0, max_offset, 0, levels, "", 800, genes, start_position)
@@ -233,7 +235,7 @@ def visualize_genes(args):
 
     assert start is not None
 
-    from offsetbasedgraph import VisualizeHtml
+    from visualizehtml import VisualizeHtml
     subgraph.start_block = start
     max_offset = sum([subgraph.blocks[b].length() for b in subgraph.blocks])
     v = VisualizeHtml(subgraph, 0, max_offset, 0, levels, "", 800, genes)
@@ -332,7 +334,8 @@ def analyse_multipath_genes2(args):
     print("Reading genes")
     genes = GeneList(get_gene_objects_as_intervals(args.genes_file_name)).gene_list
 
-    alt_loci_genes, gene_name_dict, main_genes = create_gene_dicts(genes)
+    alt_loci_genes, gene_name_dict, main_genes = create_gene_dicts(genes,
+                                                                   alt_loci_fn=args.alt_locations_file_name)
 
     # alt loci genes are only genes on alt loci (nothing on main)
     # exon_dict contains only genes on main, index by offset of first exon
@@ -347,9 +350,6 @@ def analyse_multipath_genes2(args):
     equal_total = 0
     equal_exons_total = 0
     n_a = 1
-
-    t1 = Translation.from_file("tmp_name_trans_single")
-    t2 = Translation.from_file("name_trans_tmp")
 
     #assert t1 == name_trans
 
@@ -367,7 +367,7 @@ def analyse_multipath_genes2(args):
 
             n_a += 1
             genes_here = alt_loci_genes[b]
-            trans, complex_graph = merge_alt_using_cigar(graph, name_trans, b)
+            trans, complex_graph = merge_alt_using_cigar(graph, name_trans, b, ncbi_alignments_dir=args.ncbi_alignments_dir)
             full_trans = name_trans + trans
 
 
