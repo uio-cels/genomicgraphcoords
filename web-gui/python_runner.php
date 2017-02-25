@@ -37,7 +37,7 @@ if(isset($_GET["method"])){
 	//echo "<p>Arguments: " . $arguments . "</p>";
 	//$command = "python3.4 /home/ivarandknut/checkout_genomic_intervals/interface.py $method $arguments";
 	//$command = "python3 /home/ivarandknut/python-projects/OffsetBasedGraph/examples/gene_experiment.py $method $arguments";
-	$command = "python3 /home/ivarandknut/python-projects/OffsetBasedGraph/examples/gene_experiment.py $method $arguments"; 
+	$command = "python3 /home/ivarandknut/python-projects/OffsetBasedGraph/examples/gene_experiment.py $method $arguments";  
 
 	$process = proc_open($command, $descriptorspec, $pipes, dirname(__FILE__), null);
 
