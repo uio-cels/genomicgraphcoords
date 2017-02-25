@@ -31,32 +31,19 @@ interface = \
             'method': create_graph
         },
 
+    'check_duplicate_genes':
+        {
+            'help': 'Experiment: Analyse duplicate genes on graph create from GRCh38',
+            'arguments':
+                [
+                    ('translation_file_name', 'Translation file created by running create_graph'),
+                    ('genes_file_name', '')
+                ],
+            'method': check_duplicate_genes
+        },
+
 
 }
-
-# Create parser
-parser = argparse.ArgumentParser(
-    description='Interact with a graph created from GRCh38')
-subparsers = parser.add_subparsers(help='Subcommands')
-
-for command in interface:
-    subparser = subparsers.add_parser(command, help=interface[command]["help"])
-    for argument, help in interface[command]["arguments"]:
-        subparser.add_argument(argument, help=help)
-    subparser.set_defaults(func=interface[command]["method"])
-
-if len(sys.argv) == 1:
-    parser.print_help()
-    sys.exit(1)
-
-args = parser.parse_args()
-if hasattr(args, 'func'):
-    args.func(args)
-else:
-    parser.help()
-
-sys.exit()
-
 
 """
 
@@ -65,21 +52,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Interact with a graph created from GRCh38')
     subparsers = parser.add_subparsers(help='Subcommands')
-
-    # Subcommand for create graph
-    parser_create_graph = subparsers.add_parser(
-        'create_graph', help='Create graph')
-    parser_create_graph.add_argument(
-        'chrom_sizes_file_name',
-        help='Tabular file containing two columns, chrom/alt name and size')
-    parser_create_graph.add_argument(
-        'alt_locations_file_name',
-        help='File containing alternative loci')
-    parser_create_graph.add_argument(
-        'out_file_name',
-        help='Name of file to store graph and translation objects insize')
-
-    parser_create_graph.set_defaults(func=create_graph)
 
     # Subcommand for genes
     parser_genes = subparsers.add_parser(
@@ -203,17 +175,30 @@ if __name__ == "__main__":
         'html_alt_loci_select',
             help='Produce html for alt loci select box (only used by web tool)')
     parser_html_alt_loci.set_defaults(func=html_alt_loci_select)
-
-
-    if len(sys.argv) == 1:
-        parser.print_help()
-        sys.exit(1)
-
-    args = parser.parse_args()
-    if hasattr(args, 'func'):
-        args.func(args)
-    else:
-        parser.help()
-
-    sys.exit()
 """
+
+# Create parser
+parser = argparse.ArgumentParser(
+    description='Interact with a graph created from GRCh38')
+subparsers = parser.add_subparsers(help='Subcommands')
+
+for command in interface:
+    subparser = subparsers.add_parser(command, help=interface[command]["help"])
+    for argument, help in interface[command]["arguments"]:
+        subparser.add_argument(argument, help=help)
+    subparser.set_defaults(func=interface[command]["method"])
+
+if len(sys.argv) == 1:
+    parser.print_help()
+    sys.exit(1)
+
+args = parser.parse_args()
+if hasattr(args, 'func'):
+    args.func(args)
+else:
+    parser.help()
+
+
+
+
+sys.exit()
