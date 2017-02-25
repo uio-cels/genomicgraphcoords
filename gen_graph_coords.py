@@ -16,6 +16,50 @@ import argparse
 
 from methods import *
 
+# Dict struct for holding all arguments taken by the interface
+interface = \
+{
+    'create_graph':
+        {
+            'help': 'Create graph',
+            'arguments':
+                [
+                    ('chrom_sizes_file_name', 'Tabular file containing two columns, chrom/alt name and size'),
+                    ('alt_locations_file_name', 'File containing alternative loci'),
+                    ('out_file_name', 'Name of file to store graph and translation objects insize')
+                ],
+            'method': create_graph
+        },
+
+
+}
+
+# Create parser
+parser = argparse.ArgumentParser(
+    description='Interact with a graph created from GRCh38')
+subparsers = parser.add_subparsers(help='Subcommands')
+
+for command in interface:
+    subparser = subparsers.add_parser(command, help=interface[command]["help"])
+    for argument, help in interface[command]["arguments"]:
+        subparser.add_argument(argument, help=help)
+    subparser.set_defaults(func=interface[command]["method"])
+
+if len(sys.argv) == 1:
+    parser.print_help()
+    sys.exit(1)
+
+args = parser.parse_args()
+if hasattr(args, 'func'):
+    args.func(args)
+else:
+    parser.help()
+
+sys.exit()
+
+
+"""
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
@@ -172,3 +216,4 @@ if __name__ == "__main__":
         parser.help()
 
     sys.exit()
+"""
