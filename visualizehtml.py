@@ -137,7 +137,7 @@ class VisualizeHtml(object):
             interval = gene.transcription_region
             self._plot_interval(interval, gene.name)
             for exon in gene.exons:
-                self._plot_interval(exon, gene.name, True)
+                self._plot_exon_interval(exon, interval)
 
 
             self.color_counter += 1
@@ -174,6 +174,24 @@ class VisualizeHtml(object):
 
         if start < 900:
             self.exon_cnt += 1
+
+    def _plot_exon_interval(self, interval, parent_interval):
+        self.exon_cnt += 1
+        block = interval.region_paths[0]
+        print(interval)
+        if block not in self.graph.blocks:
+            return
+        
+        assert(block in self.graph.blocks)
+        # Find parent interval start in this
+        parent_start = 0
+        if parent_interval.start_position.region_path_id == block:
+            parent_start = parent_interval.start_position.offset
+
+        start = (interval.start_position.offset - parent_start) * self.width_ratio
+        end = interval.end_position.offset * self.width_ratio
+
+        self._plot_interval_in_block(start, end, 0, interval, block, 0, "Exon", True)
 
     def _plot_interval(self, interval, name, is_exon = False):
 
@@ -239,6 +257,11 @@ class VisualizeHtml(object):
         margin_left = start
         margin_right = parent_width - end
 
+        if is_exon:
+            margin_right = 0
+
+
+
         html = ""
         html += "<div class='%s %s'" % (classname, classname2)
 
@@ -265,6 +288,8 @@ class VisualizeHtml(object):
         if not is_exon:
             self.html_intervals[block][self.gene_counter] = html
         else:
+            print(self.gene_counter)
+            print(self.html_exons[block])
             self.html_exons[block][self.gene_counter] += html + "</div>"
 
 
