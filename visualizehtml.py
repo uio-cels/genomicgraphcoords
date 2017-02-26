@@ -114,7 +114,6 @@ class VisualizeHtml(object):
                 });
             </script>""" % self.exon_cnt
 
-        self.html += "</div></div></div>"
 
     def _plot_interval(self, interval, name, is_exon = False):
 
@@ -407,8 +406,10 @@ class VisualizeHtml(object):
             html += block_html
             html += "</div>"
 
+
+        html += "</div></div></div>"
         return html
-    
+
     def get_wrapped_html(self):
         # Html wrapped with js includes etc
         html = """
