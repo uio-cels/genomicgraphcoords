@@ -76,7 +76,7 @@
 				});
 			});
 			*/
-			$(".interval").hover(function(){
+			$(".interval").hover(function(event){
 
     			event.stopPropagation();
 				var graph_id = 0; //$(this).attr("data-graph-id");
@@ -87,7 +87,8 @@
 				var gene_name2 = $(this).attr("data-gene-name2");
 				$("div[data-interval-id=" + id + "]").css("border", "2px solid black");
 				$("#vis_explanation_" + graph_id).html("<p>Gene <b>" + gene_name + "</b> (" + gene_name2 + "). Interval notation:<br>" + $(this).attr("data-notation") + "</p>");
-			}, function(){
+			}, function(event){
+    			event.stopPropagation();
 				var graph_id = 0; //$(this).attr("data-graph-id");
 				//$(".interval_" + id).css("border", "1px solid black");
 				$("div[data-interval-id=" + $(this).attr("data-interval-id") + "]").css("border", "1px solid black");
