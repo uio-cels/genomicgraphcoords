@@ -265,7 +265,7 @@ class VisualizeHtml(object):
         html = ""
         html += "<div class='%s %s'" % (classname, classname2)
 
-        html += " style='z-index: 10; position: absolute;"
+        html += " style='z-index: 10;"
         #html += "left: %.2fpx;" % start
         html += "left: %.2fpx;" % start
         html += "margin-right: %.2fpx;" % margin_right
@@ -278,7 +278,7 @@ class VisualizeHtml(object):
         html += "position: relative;"
         if not is_exon:
             html += "display: block;"
-            
+
         html += "' "
         html += "data-parent-width='%d'" % parent_width
         html += "data-interval-id='%d'" % self.gene_counter
