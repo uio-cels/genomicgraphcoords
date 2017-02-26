@@ -277,7 +277,7 @@ class VisualizeHtml(object):
         html += "background-color: %s;" % color
         html += "position: relative;"
         if not is_exon:
-            html += "display: block;"
+            html += "display: block; asdf: test;"
 
         html += "' "
         html += "data-parent-width='%d'" % parent_width
