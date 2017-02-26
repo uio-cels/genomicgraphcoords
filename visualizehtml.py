@@ -51,20 +51,24 @@ class VisualizeHtml(object):
 
 
         # Produce gene selection html
-        html_gene_selection = "<p><b>Check the genes that should be displayed (maximum 3)</b> <span style='margin-left: 20px;' id='gene_selector_message'></span></p>"
-        for i, gene in enumerate(self.genes):
-            checked_status = ""
-            if i <= 2:
-                checked_status = "checked"
-            html_gene_selection += """
 
-            <span style='display: inline-block; padding: 3px;'>
-            <label style='font-weight: 100;'>
-                <input type='checkbox' id='checkbox_%d' onclick='show_gene(%d);' %s> %s
-            </label>
-            </span>
-            """ % (i, i, checked_status, gene.name)
+        if len(genes) > 0:
+            html_gene_selection = "<p><b>Check the genes that should be displayed (maximum 3)</b> <span style='margin-left: 20px;' id='gene_selector_message'></span></p>"
 
+            for i, gene in enumerate(self.genes):
+                checked_status = ""
+                if i <= 2:
+                    checked_status = "checked"
+                html_gene_selection += """
+
+                <span style='display: inline-block; padding: 3px;'>
+                <label style='font-weight: 100;'>
+                    <input type='checkbox' id='checkbox_%d' onclick='show_gene(%d);' %s> %s
+                </label>
+                </span>
+                """ % (i, i, checked_status, gene.name)
+        else:
+            html_gene_selection = "<p>No genes in this area</p>"
 
         self.html += """
         <div class='row'>
