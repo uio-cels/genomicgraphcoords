@@ -181,7 +181,8 @@ class VisualizeHtml(object):
             pos = self.block_positions[block]
             start = pos[0]
             #print("<p>Start pos is %d</p>" % start)
-            end = pos[0] + pos[2]
+            #end = pos[0] + pos[2]
+            end = pos[2]
             if block == interval.region_paths[0]:
                 #start += interval.start_position.offset * self.width_ratio
                 start = interval.start_position.offset * self.width_ratio
