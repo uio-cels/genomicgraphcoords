@@ -73,6 +73,9 @@ class VisualizeHtml(object):
                     </div>
         """ % (self.colors[3], self.colors[2], self.colors[1])
 
+        self.html_blocks = {}
+
+
 
         # Gene labels
         self.html += """
@@ -133,6 +136,7 @@ class VisualizeHtml(object):
                 start += interval.start_position.offset * self.width_ratio
             if block == interval.end_position.region_path_id:
                 end = pos[0] + interval.end_position.offset * self.width_ratio
+
             if is_exon:
                 self._plot_interval_in_block(start, end, pos[1], interval, name, True)
             else:
@@ -256,41 +260,27 @@ class VisualizeHtml(object):
 
     def _plot(self, xstart, xend, level, color, rp_id):
 
+        html = ""
+
         y = self.block_height * 2 * ( level + 1)
         x = self.gap_pixels + (xstart - self.minOffset) * self.width_ratio
         width = (xend - xstart) * self.width_ratio
 
-        self.html += "<div class='block' style='position: absolute;"
-        self.html += "left: %.2fpx;" % x
-        self.html += "width: %.2fpx;" % width
-        self.html += "top: %.2fpx;" % (y)
-        self.html += "height: %dpx;" % (self.block_height)
-        self.html += "background-color: %s;" % color
-        self.html += "' "
-        self.html += " data-rpid='%s'" % (rp_id)
-        self.html += " data-rpname='%s'" % (self._pretty_alt_loci_name(rp_id))
-        self.html += " data-graph-id='%d'" % (self.vis_id)
-        self.html += " data-coordinate='%s'" % ','.join(self._coordinate(rp_id))
-        self.html += ">"
-        self.html += "<font color='white'>%s</font></div>" % ""
+        html += "<div class='block' style='position: absolute;"
+        html += "left: %.2fpx;" % x
+        html += "width: %.2fpx;" % width
+        html += "top: %.2fpx;" % (y)
+        html += "height: %dpx;" % (self.block_height)
+        html += "background-color: %s;" % color
+        html += "' "
+        html += " data-rpid='%s'" % (rp_id)
+        html += " data-rpname='%s'" % (self._pretty_alt_loci_name(rp_id))
+        html += " data-graph-id='%d'" % (self.vis_id)
+        html += " data-coordinate='%s'" % ','.join(self._coordinate(rp_id))
+        html += ">"
 
-        return x + width, y, width, x
+        return x + width, y, width, x, html
 
-    def _plot_region_path(self, rp_id, level=0):
-        """
-        :return:
-        """
-        rp = self.graph.blocks[rp_id]
-        start = self.offset_counter
-        #lr = list(rp.linear_references.values())[0]
-        #length = self._scale(lr.end - lr.start)
-        length = rp.length()
-        if DEBUG: print("<p>PLotting " + str(rp_id) + "  on level %.2f, %.2f to %.2f</p>" % (level, start, start + length))
-        xend, y, width, xstart = self._plot(start, start + length, level , self.colors[level + 1], rp_id)
-
-        self.offset_positions[rp_id] = [xstart, y, width]
-
-        return start + length, xend , y, width
 
     def _plot_level(self, block):
         # Finds the level. Rule: if block contains more than one linea reference
@@ -390,7 +380,8 @@ class VisualizeHtml(object):
             end = start + self._scale(self.graph.blocks[b].length())
 
             # Plot rp
-            xend, y, width, xstart = self._plot(start, end, self.levels[b], self.colors[self.levels[b] + 1], b)
+            xend, y, width, xstart, html = self._plot(start, end, self.levels[b], self.colors[self.levels[b] + 1], b)
+            self.html_blocks[b] = html
 
             self.block_positions[b] = (xstart, y, width)
             #print("<p>PLotted %s at %d,%d with width %d, ending at %d</p>" % (b, xstart, y, width, xend))
@@ -411,6 +402,10 @@ class VisualizeHtml(object):
         return
 
     def __str__(self):
+        html = self.html
+        for block, block_html in self.html_blocks.items():
+            html += block_html
+            html += "</div>"
         return self.html
 
     def get_wrapped_html(self):
