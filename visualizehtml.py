@@ -115,7 +115,7 @@ class VisualizeHtml(object):
                 self.html += """
                 <script>
                 $(document).ready(function(){
-                    $('#interval_%s').hide();
+                    $('.interval_%s').hide();
                 });
                 </script>
                 """ % (i)
