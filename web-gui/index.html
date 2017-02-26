@@ -77,6 +77,8 @@
 			});
 			*/
 			$(".interval").hover(function(){
+
+    			event.stopPropagation();
 				var graph_id = 0; //$(this).attr("data-graph-id");
 				//$(".interval_" + id).css("border", "1px solid white");
 				var id = $(this).attr("data-interval-id");
@@ -130,10 +132,11 @@
 					$("#results").html(res["stdout"]);
 					
 					$(".block").mousemove(function(event){
-						if($(this).hasClass("block")){
-							console.log("has class block");
-							block_move($(this), event);
-						}
+
+    					event.stopPropagation();
+						console.log("has class block");
+						block_move($(this), event);
+
 					});
 					//$(".block").mouseout(function(event){ $(".vis_explanation").html(""); });
 					
