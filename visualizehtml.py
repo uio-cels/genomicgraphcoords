@@ -367,7 +367,7 @@ class VisualizeHtml(object):
             self.html_arrows += "'>"
         else:
             arrow = "short"
-            if ystart - yend >=  + self.block_height * 3:
+            if ystart - yend >=  self.block_height * 3:
                 arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
             self.html_arrows += "top: %dpx;" % (ystart + self.block_height/2)
