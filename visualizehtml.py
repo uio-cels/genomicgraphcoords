@@ -250,7 +250,8 @@ class VisualizeHtml(object):
         html += "data-gene-name2='%s'" % name
         html += "data-graph-id='%d'></div>" % self.vis_id
 
-        self.html_blocks[block] += html
+        if not is_exon:
+            self.html_blocks[block][self.gene_counter] = html
 
         self.genes_plotted_heights[name] = self.gene_counter
 
@@ -419,8 +420,9 @@ class VisualizeHtml(object):
 
     def __str__(self):
         html = self.html
-        for block, block_html in self.html_blocks.items():
-            html += block_html
+        for block, intervals in self.html_blocks.items():
+            for block_html in interavls:
+                html += block_html
             html += "</div>"
 
 
