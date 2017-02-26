@@ -270,11 +270,15 @@ class VisualizeHtml(object):
         html += "left: %.2fpx;" % start
         html += "margin-right: %.2fpx;" % margin_right
         html += "width: %.2fpx;" % (end - start)
-        #html += "top: %.2fpx;" % (top)
+        if is_exon:
+            html += "top: %.2fpx;" % (top)
+
         html += "height: %dpx;" % (height)
         html += "background-color: %s;" % color
         html += "position: relative;"
-        html += "display: block;"
+        if not is_exon:
+            html += "display: block;"
+            
         html += "' "
         html += "data-parent-width='%d'" % parent_width
         html += "data-interval-id='%d'" % self.gene_counter
