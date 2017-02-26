@@ -55,7 +55,7 @@ class VisualizeHtml(object):
                 <input type='checkbox' id='chekbox_%d' onclick='show_gene(%d);'> %s
             </label>
             </span>
-            """ % (i, gene.name, i)
+            """ % (i, i, gene.name)
 
 
         self.html += """
