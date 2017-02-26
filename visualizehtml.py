@@ -51,7 +51,7 @@ class VisualizeHtml(object):
         for i, gene in enumerate(self.genes):
             html_gene_selection += """
             <label>
-                <input type='checkbox' onclick='show_gene(i);'> %s
+                <input type='checkbox' onclick='show_gene(%d);'> %s
             </label>
             """ % (i, gene.name)
 
