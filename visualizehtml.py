@@ -190,7 +190,7 @@ class VisualizeHtml(object):
                 #end = pos[0] + interval.end_position.offset * self.width_ratio
                 end = interval.end_position.offset * self.width_ratio
 
-            parent_width = pos[2] * self.width_ratio
+            parent_width = pos[2]
 
             if is_exon:
                 continue
