@@ -265,7 +265,7 @@ class VisualizeHtml(object):
         if not is_exon:
             self.html_intervals[block][self.gene_counter] = html
         else:
-            continue
+            return
             self.html_exons[block][self.gene_counter] += html + "</div>"
 
 
