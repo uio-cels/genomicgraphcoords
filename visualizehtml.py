@@ -218,6 +218,7 @@ class VisualizeHtml(object):
         classname = "interval"
         classname2 = "interval_%d" % self.gene_counter
         margin_right = parent_width - end
+        position = "relative"
 
         if is_exon:
             classname = "exon"
@@ -226,6 +227,7 @@ class VisualizeHtml(object):
             color = "black"
             top = 1 #(top + (self.gene_height - self.exon_height) /  2.0)
             margin_right = 0
+            position = "absolute"
 
 
         html = ""
@@ -241,7 +243,7 @@ class VisualizeHtml(object):
 
         html += "height: %dpx;" % (height)
         html += "background-color: %s;" % color
-        html += "position: relative;"
+        html += "position: %s;" position
         if not is_exon:
             html += "display: block;"
         else:
