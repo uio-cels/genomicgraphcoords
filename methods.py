@@ -158,8 +158,8 @@ def visualize_alt_locus(args, skip_wrapping=False):
     genes = [g.translate(trans) for g in genes]
     trans_regions = [g.transcription_region for g in genes]
 
-    if len(trans_regions) == 0:
-        raise Exception("No genes in area")
+    #if len(trans_regions) == 0:
+    #    raise Exception("No genes in area")
 
     #subgraph, trans, start_position = graph.create_subgraph_from_intervals(trans_regions, 200000, args.alt_locus)
     subgraph, trans, start_position = create_subgraph_around_alt_locus(graph, trans, args.alt_locus, 200000, alt_loci_fn=args.alt_locations_file_name)
