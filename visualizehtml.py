@@ -243,7 +243,7 @@ class VisualizeHtml(object):
 
         html += "height: %dpx;" % (height)
         html += "background-color: %s;" % color
-        html += "position: %s;" position
+        html += "position: %s;" % position
         if not is_exon:
             html += "display: block;"
         else:
