@@ -348,8 +348,8 @@ class VisualizeHtml(object):
 
         if yend < ystart:
             arrow = "short"
-            if ystart - yend >= self.block_height * 4:
-                arrow = "long"
+            #if ystart - yend >= self.block_height * 4:
+            #    arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
             self.html_arrows += "top: %dpx;" % (ystart - (ystart - yend) + self.block_height/2)
             self.html_arrows += "'>"
@@ -367,8 +367,8 @@ class VisualizeHtml(object):
             self.html_arrows += "'>"
         else:
             arrow = "short"
-            if ystart - yend >=  + self.block_height * 4:
-                arrow = "long"
+            #if ystart - yend >=  + self.block_height * 4:
+            #    arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
             self.html_arrows += "top: %dpx;" % (ystart + self.block_height/2)
             self.html_arrows += "'>"
