@@ -98,14 +98,32 @@ class VisualizeHtml(object):
         i = 0
 
         for gene in genes:
+
+            display = "None"
+            if i < 3:
+                display = "block"
+
             self.html += """
-                <div id='label_%d' style='display: block; font-size: 0.8em;'>
+                <div id='label_%d' class='interval-label' style='display: %s; font-size: 0.8em;'>
                 <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
                  <font color='black'>%s</font><br>
                  </div>
-                """ % (i, self.gene_colors[i%len(self.gene_colors)], "Gene: " + gene.name + " (" + gene.name + ")")
+                """ % (i, display, self.gene_colors[i%len(self.gene_colors)], "Gene: " + gene.name + " (" + gene.name + ")")
+
+            if i > 3:
+                # Print javascript for hiding interval
+                self.html += """
+                <script>
+                $(document).ready(function(){
+                    $('#interval_%s').hide();
+                });
+                </script>
+                """ % (i)
+
 
             i += 1
+
+
 
         self.html += """
 

@@ -174,9 +174,9 @@ def visualize_alt_locus(args, skip_wrapping=False):
     genes = [g for g in genes if not g.multiple_alt_loci()]
 
 
-    if len(genes) > 3:
+    if len(genes) > 10:
         #genes.sort(key=lambda g: g.length(), reverse=True)
-        genes = genes[0:3]
+        genes = genes[0:10]
 
 
     levels = Graph.level_dict(subgraph.blocks)
