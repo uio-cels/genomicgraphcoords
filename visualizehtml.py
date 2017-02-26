@@ -99,7 +99,7 @@ class VisualizeHtml(object):
 
         for gene in genes:
             self.html += """
-                <div id='label_%d' style='display: inline-block; font-size: 0.8em;'>
+                <div id='label_%d' style='display: block; font-size: 0.8em;'>
                 <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
                  <font color='black'>%s</font><br>
                  </div>
