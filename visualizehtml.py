@@ -241,7 +241,7 @@ class VisualizeHtml(object):
         html += "height: %dpx;" % (height)
         html += "background-color: %s;" % color
         html += "position: relative;"
-        html += "display: inline-block;"
+        html += "display: block;"
         html += "' "
         html += "data-parent-width='%d'" % parent_width
         html += "data-interval-id='%d'" % self.gene_counter
