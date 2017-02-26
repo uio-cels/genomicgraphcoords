@@ -227,7 +227,7 @@ class VisualizeHtml(object):
             classname2 = "interval_%d" % self.gene_counter
 
         margin_left = start
-        margin_right = parent_width - end - start
+        margin_right = parent_width - end
 
         html = ""
         html += "<div class='%s %s'" % (classname, classname2)
