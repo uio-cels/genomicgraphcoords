@@ -115,32 +115,6 @@ class VisualizeHtml(object):
             </script>""" % self.exon_cnt
 
 
-    def _plot_interval(self, interval, name, is_exon = False):
-
-        if is_exon:
-            self.exon_cnt += 1
-            #print("<p><b>Plotting exon: %s</b></p>" % interval)
-
-        for block in interval.region_paths:
-            if not block in self.block_positions:
-                if DEBUG: print("Warning. Block %s not found in offset_positions when visualizing interval" % (block))
-                continue
-
-            #plot_info = self.offset_positions[block]
-            pos = self.block_positions[block]
-            start = pos[0]
-            #print("<p>Start pos is %d</p>" % start)
-            end = pos[0] + pos[2]
-            if block == interval.region_paths[0]:
-                start += interval.start_position.offset * self.width_ratio
-            if block == interval.end_position.region_path_id:
-                end = pos[0] + interval.end_position.offset * self.width_ratio
-
-            if is_exon:
-                self._plot_interval_in_block(start, end, pos[1], interval, name, True)
-            else:
-                self._plot_interval_in_block(start, end, pos[1], interval, name)
-
 
     def visualize_genes(self):
         """
@@ -192,8 +166,33 @@ class VisualizeHtml(object):
         if start < 900:
             self.exon_cnt += 1
 
+    def _plot_interval(self, interval, name, is_exon = False):
 
-    def _plot_interval_in_block(self, start, end, level, interval_obj, name = "", is_exon = False):
+        if is_exon:
+            self.exon_cnt += 1
+            #print("<p><b>Plotting exon: %s</b></p>" % interval)
+
+        for block in interval.region_paths:
+            if not block in self.block_positions:
+                if DEBUG: print("Warning. Block %s not found in offset_positions when visualizing interval" % (block))
+                continue
+
+            #plot_info = self.offset_positions[block]
+            pos = self.block_positions[block]
+            start = pos[0]
+            #print("<p>Start pos is %d</p>" % start)
+            end = pos[0] + pos[2]
+            if block == interval.region_paths[0]:
+                start += interval.start_position.offset * self.width_ratio
+            if block == interval.end_position.region_path_id:
+                end = pos[0] + interval.end_position.offset * self.width_ratio
+
+            if is_exon:
+                self._plot_interval_in_block(start, end, pos[1], interval, block, name, True)
+            else:
+                self._plot_interval_in_block(start, end, pos[1], interval, block, name)
+
+    def _plot_interval_in_block(self, start, end, level, interval_obj, block, name = "", is_exon = False):
         #level += 0.3 + 0.3 * (self.color_counter - 4)
         #print "=
         if end - start == 0:
@@ -219,21 +218,23 @@ class VisualizeHtml(object):
             classname = "exon"
             classname2 = "interval_%d" % self.gene_counter
 
+        html = ""
+        html += "<div class='%s %s'" % (classname, classname2)
 
-        self.html += "<div class='%s %s'" % (classname, classname2)
+        html += " style='z-index: 10; position: absolute;"
+        html += "left: %.2fpx;" % start
+        html += "width: %.2fpx;" % (end - start)
+        html += "top: %.2fpx;" % (top)
+        html += "height: %dpx;" % (height)
+        html += "background-color: %s;" % color
+        html += "' "
+        html += "data-interval-id='%d'" % self.gene_counter
+        html += "data-notation='%s'" % interval_obj.notation()
+        html += "data-gene-name='%s'" % name
+        html += "data-gene-name2='%s'" % name
+        html += "data-graph-id='%d'></div>" % self.vis_id
 
-        self.html += " style='z-index: 10; position: absolute;"
-        self.html += "left: %.2fpx;" % start
-        self.html += "width: %.2fpx;" % (end - start)
-        self.html += "top: %.2fpx;" % (top)
-        self.html += "height: %dpx;" % (height)
-        self.html += "background-color: %s;" % color
-        self.html += "' "
-        self.html += "data-interval-id='%d'" % self.gene_counter
-        self.html += "data-notation='%s'" % interval_obj.notation()
-        self.html += "data-gene-name='%s'" % name
-        self.html += "data-gene-name2='%s'" % name
-        self.html += "data-graph-id='%d'></div>" % self.vis_id
+        self.html_blocks[block] += html
 
         self.genes_plotted_heights[name] = self.gene_counter
 
