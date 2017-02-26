@@ -47,7 +47,7 @@ class VisualizeHtml(object):
         self.html = ""
 
         # Produce gene selection html
-        html_gene_selection = "<p>Check the genes that should be displayed (maximum 3)</p>"
+        html_gene_selection = "<p><b>Check the genes that should be displayed (maximum 3)</b></p>"
         for i, gene in enumerate(self.genes):
             html_gene_selection += """
             <span style='display: inline-block; padding: 3px;'>
