@@ -99,13 +99,15 @@ class VisualizeHtml(object):
 
         for gene in genes:
             self.html += """
+                <div id='label_%d' style='display: inline-block'>
                 <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
                  <font color='black'>%s</font><br>
-                """ % (self.gene_colors[i%len(self.gene_colors)], "Gene: " + gene.name + " (" + gene.name + ")")
+                """ % (i, self.gene_colors[i%len(self.gene_colors)], "Gene: " + gene.name + " (" + gene.name + ")")
 
             i += 1
 
         self.html += """
+            </div>
             </p>
         </div>
         """
