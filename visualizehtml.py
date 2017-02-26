@@ -57,7 +57,7 @@ class VisualizeHtml(object):
             html_gene_selection += """
 
             <span style='display: inline-block; padding: 3px;'>
-            <label style='font-weight: none;'>
+            <label style='font-weight: 100;'>
                 <input type='checkbox' id='checkbox_%d' onclick='show_gene(%d);' %s> %s
             </label>
             </span>
