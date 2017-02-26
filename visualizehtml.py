@@ -49,7 +49,7 @@ class VisualizeHtml(object):
 
 
         # Produce gene selection html
-        html_gene_selection = "<p><b>Check the genes that should be displayed (maximum 3)</b> <span id='gene_selector_message'></span></p>"
+        html_gene_selection = "<p><b>Check the genes that should be displayed (maximum 3)</b> <span style='margin-left: 20px;' id='gene_selector_message'></span></p>"
         for i, gene in enumerate(self.genes):
             checked_status = ""
             if i <= 2:
