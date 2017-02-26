@@ -47,13 +47,15 @@ class VisualizeHtml(object):
         self.html = ""
 
         # Produce gene selection html
-        html_gene_selection = ""
+        html_gene_selection = "<p>Check the genes that should be displayed (maximum 3)</p>"
         for i, gene in enumerate(self.genes):
             html_gene_selection += """
+            <span style='display: inline-block; padding: 3px;'>
             <label>
-                <input type='checkbox' onclick='show_gene(%d);'> %s
+                <input type='checkbox' id='chekbox_%d' onclick='show_gene(%d);'> %s
             </label>
-            """ % (i, gene.name)
+            </span>
+            """ % (i, gene.name, i)
 
 
         self.html += """
