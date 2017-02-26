@@ -52,7 +52,7 @@ class VisualizeHtml(object):
             html_gene_selection += """
             <span style='display: inline-block; padding: 3px;'>
             <label>
-                <input type='checkbox' id='chekbox_%d' onclick='show_gene(%d);'> %s
+                <input type='checkbox' id='checkbox_%d' onclick='show_gene(%d);'> %s
             </label>
             </span>
             """ % (i, i, gene.name)
