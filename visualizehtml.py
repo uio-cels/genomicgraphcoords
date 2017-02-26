@@ -152,28 +152,6 @@ class VisualizeHtml(object):
         </style>
         """ % (self.gene_counter, self.gene_counter)
 
-    def _plot_exon(self, start, end, level, interval_obj, gene_name):
-        image = "exon_start"
-        top = level + 1 + self.gene_height * self.genes_plotted_heights[gene_name]
-
-        self.html += "<div class='exon exon_%d'" % self.gene_counter
-        self.html += " style='z-index: 12; position: absolute;"
-        self.html += "left: %.2fpx;" % (start)
-        self.html += "width: %.2fpx;" % (max(2, end - start))
-        self.html += "top: %.2fpx;" % (top + (self.gene_height - self.exon_height) /  2.0)
-        self.html += "height: %dpx;" % (self.exon_height)
-        self.html += "background-color: black;"
-        self.html += "' "
-        self.html += "data-interval-id='%d'" % self.gene_counter
-        self.html += "data-notation='%s'" % interval_obj.notation()
-        self.html += "data-gene-name='%s'" % gene_name
-        self.html += "data-gene-name2='%s'" % gene_name
-        self.html += "data-graph-id='%d'>" % self.vis_id
-        #self.html += "<img src='%s.png'>" % image
-        self.html += "</div>"
-
-        if start < 900:
-            self.exon_cnt += 1
 
     def _plot_exon_interval(self, interval, parent_interval):
         self.exon_cnt += 1
@@ -242,7 +220,7 @@ class VisualizeHtml(object):
 
         if is_exon:
             classname = "exon"
-            classname2 = "interval_%d" % self.gene_counter
+            classname2 = "exon_%d" % self.gene_counter
             height = self.exon_height
             color = "black"
             top = 1 #(top + (self.gene_height - self.exon_height) /  2.0)
