@@ -179,7 +179,7 @@ class VisualizeHtml(object):
 
             #plot_info = self.offset_positions[block]
             pos = self.block_positions[block]
-            start = pos[0]
+            start = 0 #pos[0]
             #print("<p>Start pos is %d</p>" % start)
             #end = pos[0] + pos[2]
             end = pos[2]
