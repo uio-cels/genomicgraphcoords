@@ -189,7 +189,7 @@ class VisualizeHtml(object):
             parent_start = parent_interval.start_position.offset
 
         start = (interval.start_position.offset - parent_start) * self.width_ratio
-        end = interval.end_position.offset * self.width_ratio
+        end = (interval.end_position.offset - parent_start) * self.width_ratio
 
         self._plot_interval_in_block(start, end, 0, interval, block, 0, "Exon", True)
 
