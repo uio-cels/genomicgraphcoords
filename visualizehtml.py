@@ -224,21 +224,21 @@ class VisualizeHtml(object):
             classname2 = "interval_%d" % self.gene_counter
 
         margin_left = start
-        margin_right = parent_width - end
+        margin_right = parent_width - end - start
 
         html = ""
         html += "<div class='%s %s'" % (classname, classname2)
 
         html += " style='z-index: 10; position: absolute;"
         #html += "left: %.2fpx;" % start
-        html += "margin-left: %.2fpx;" % margin_left
+        html += "left: %.2fpx;" % start
         html += "margin-right: %.2fpx;" % margin_right
         html += "width: %.2fpx;" % (end - start)
         #html += "top: %.2fpx;" % (top)
         html += "height: %dpx;" % (height)
         html += "background-color: %s;" % color
-        html += "position: absolute;"
-        html += "display: table-row;"
+        html += "position: relative;"
+        html += "display: inline-block;"
         html += "' "
         html += "data-interval-id='%d'" % self.gene_counter
         html += "data-notation='%s'" % interval_obj.notation()
