@@ -165,7 +165,6 @@ def visualize_alt_locus(args, skip_wrapping=False):
     subgraph, trans, start_position = create_subgraph_around_alt_locus(graph, trans, args.alt_locus, 200000, alt_loci_fn=args.alt_locations_file_name)
 
     start_position = orig_trans.translate_position(start_position, True)[0]
-    print("<p>Start position: %s</p>" % start_position)
     #trans.graph1 = full_trans.graph2
 
     #full_trans = full_trans + trans
