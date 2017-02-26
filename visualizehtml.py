@@ -435,7 +435,7 @@ class VisualizeHtml(object):
         html = self.html
         for block, block_html in self.html_blocks.items():
             html += block_html
-            for interval, interval_html in self.html_intervals[block]:
+            for interval, interval_html in self.html_intervals[block].items():
                 html += interval_html
                 exon_html = self.html_exons[block][interval]
                 html += exon_html
