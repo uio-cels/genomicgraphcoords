@@ -65,6 +65,7 @@ def merge_alignment(args):
     full_trans.to_file(args.out_file_name)
     print("Saved trans to file %s" % args.out_file_name)
 
+
 def merge_all_alignments(args):
     from offsetbasedgraph.graphutils import merge_alt_using_cigar, grch38_graph_to_numeric
     # Text ids (chrom names and alt names)
@@ -204,100 +205,6 @@ def visualize_alt_locus(args, skip_wrapping=False):
         print(v.get_wrapped_html())
 
 
-def visualize_genes(args):
-    trans = Translation.from_file(args.translation_file_name)
-    graph = trans.graph2
-
-    # Find blocks that genes cover, create subgraph using them
-    from offsetbasedgraph.graphutils import GeneList
-    genes = GeneList.from_file(args.genes_file_name).gene_list
-
-    trans_regions = [g.transcription_region for g in genes]
-    subgraph, trans = graph.create_subgraph_from_intervals(trans_regions, 20)
-
-    # Translate genes using trans
-    for g in genes:
-        g.transcription_region = trans.translate(g.transcription_region)
-        for exon in g.exons:
-            exon = trans.translate(exon)
-
-    levels = Graph.level_dict(subgraph.blocks)
-
-    # Find start block by choosing a block having no edges in
-    start = None
-    for b in subgraph.blocks:
-        if len(subgraph.reverse_adj_list[b]) == 0:
-            start = b
-            break
-
-    print("== Subgraph ==")
-    print(subgraph)
-
-    assert start is not None
-
-    from visualizehtml import VisualizeHtml
-    subgraph.start_block = start
-    max_offset = sum([subgraph.blocks[b].length() for b in subgraph.blocks])
-    v = VisualizeHtml(subgraph, 0, max_offset, 0, levels, "", 800, genes)
-    print(v.get_wrapped_html())
-
-
-def translate_genes_to_aligned_graph(args):
-    trans = Translation.from_file(args.merged_graph_file_name)
-
-    # Creat critical path multipath intervals of genes by translating
-    # to complex graph.
-    # Represent by txStart, txEnd as start,end and exons as critical intervals
-    from offsetbasedgraph.graphutils import GeneList, translate_single_gene_to_aligned_graph
-    genes = GeneList(get_gene_objects_as_intervals(args.genes, trans.graph1))
-    gene_name = args.gene_name
-    mpgenes = []
-    mpgene_objects = []
-    spgenes = []  # Also store single path for debugging
-    n = 1
-    for gene in genes.gene_list:
-        n += 1
-        if gene.name != gene_name:
-            continue
-
-        print("Found gene %s" % gene.name)
-        print(gene)
-
-        mpgene = translate_single_gene_to_aligned_graph(gene, trans)
-        mpgene_objects.append(mpgene)
-        #mpgenes.append(mpinterval)
-        #mpgene_objects = MultiPathGene(gene.name, mpinterval)
-
-        #spgenes.append(Gene(gene.name,
-        #                    trans.translate(gene.transcription_region),
-        #                    critical_intervals
-        #                    )
-        #               )
-
-
-    import pickle
-
-    mpgenes_list = GeneList(mpgene_objects)
-    mpgenes_list.to_file(args.out_file_name)
-    """
-    with open("%s" % args.out_file_name, "wb") as f:
-        pickle.dump(mpgenes, f)
-    """
-
-    for gene in spgenes:
-        print("--------------")
-        for exon in gene.exons:
-            print(exon)
-
-    gene_list = GeneList(spgenes)
-    gene_list.to_file("%s_gene_list" % args.out_file_name)
-
-    print(spgenes[0])
-    print(spgenes[1])
-
-    print("Genes written")
-
-
 def _analyse_multipath_genes_on_graph(genes_list, genes_against, graph):
     # Takes a list of mp genes and a graph
     # Returns number of equal exons and equal genes
@@ -326,6 +233,7 @@ def _analyse_multipath_genes_on_graph(genes_list, genes_against, graph):
                 equal_exons += 1
 
     return equal, equal_exons
+
 
 def analyse_multipath_genes2(args):
     import pickle
@@ -418,70 +326,6 @@ def analyse_multipath_genes2(args):
     print("RESULTS:")
     print(" Number of genes originating from alt loci identical to a gene originaing from main chromosome: %d" % equal_total)
     print(" Number of genes with only identical exones (not start and end position): %d" % equal_exons_total)
-
-
-def analyse_multipath_genes(args):
-
-    import pickle
-    with open("%s" % args.multipath_genes_file_name, "rb") as f:
-        genes = pickle.loads(f.read())
-
-    # Create a simple dict index to speed up duplicate search
-    genes_index = {}
-    for g in genes:
-        if g.start_pos.offset in genes_index:
-            genes_index[g.start_pos.offset].append(g)
-        else:
-            genes_index[g.start_pos.offset] = [g]
-
-    print(genes)
-
-    # Exon index
-    print("Creating exon index")
-    exon_index = {}
-    for g in genes:
-        first_exon = g.critical_intervals[0]
-        index = "%s,%s" % (first_exon.region_paths[0], first_exon.start_position.offset)
-        if index in exon_index:
-            exon_index[index].append(g)
-        else:
-            exon_index[index] = [g]
-
-    print("Created exon index")
-
-
-    equal = 0
-    equal_exons = 0
-    n = 1
-    for g in genes:
-        if n % 1000 == 0:
-            print("Checked %d genes" % n)
-        n += 1
-        #if g.start_pos.region_path_id != g.end_pos.region_path_id:
-        #    print(g)
-
-        #for g2 in genes_index[g.start_pos.offset]:
-
-        first_exon = g.critical_intervals[0]
-        index = "%s,%s" % (first_exon.region_paths[0], first_exon.start_position.offset)
-        for g2 in exon_index[index]:#genes_index[g.start_pos.offset]:
-            if g is g2:
-                continue
-
-            if g == g2:
-                #print("=== Equal ==")
-                #print(g)
-                #print(g2)
-                equal += 1
-
-            if g.faster_equal_critical_intervals(g2):
-                #print("== Equal critical intervals ==")
-                #print(g)
-                #print(g2)
-                equal_exons += 1
-
-    print("Equal: %d" % (equal / 2))
-    print("Equal exons: %d" % (equal_exons / 2))
 
 
 def html_alt_loci_select(args):
