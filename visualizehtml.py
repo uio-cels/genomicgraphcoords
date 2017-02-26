@@ -258,7 +258,7 @@ class VisualizeHtml(object):
         html += "data-notation='%s'" % interval_obj.notation()
         html += "data-gene-name='%s'" % name
         html += "data-gene-name2='%s'" % name
-        html += "data-graph-id='%d'></div>" % self.vis_id
+        html += "data-graph-id='%d'>" % self.vis_id
 
         self.genes_plotted_heights[name] = self.gene_counter
 
