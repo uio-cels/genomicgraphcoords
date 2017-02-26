@@ -47,8 +47,9 @@ class VisualizeHtml(object):
         self.html = ""
 
         # Produce gene selection html
+        html_gene_selection = ""
         for i, gene in enumerate(self.genes):
-            print """
+            html_gene_selection += """
             <label>
                 <input type='checkbox' onclick='show_gene(i);'> %s
             </label>
@@ -70,6 +71,11 @@ class VisualizeHtml(object):
 
         self.html += """
             <div class='col-md-12'>
+        """
+
+        self.html += html_gene_selection
+
+        self.html += """
                 <div class='visualization'>
                     <div style='position: relative;
                                 float: right;
