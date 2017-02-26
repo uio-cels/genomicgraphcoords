@@ -234,7 +234,7 @@ class VisualizeHtml(object):
         #html += "left: %.2fpx;" % start
         html += "left: %.2fpx;" % start
         html += "margin-right: %.2fpx;" % margin_right
-        html += "width: %.2fpx;" % (end - start)
+        html += "width: %.2fpx;" % (min(1, end - start))
         if is_exon:
             html += "top: %.2fpx;" % (top)
 
