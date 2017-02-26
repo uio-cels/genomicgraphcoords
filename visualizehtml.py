@@ -131,12 +131,9 @@ class VisualizeHtml(object):
             end = pos[0] + pos[2]
             if block == interval.region_paths[0]:
                 start += interval.start_position.offset * self.width_ratio
-                #print("<p>Setting exon start to %d after adding %d</p>" % (start, interval.start_position.offset * self.width_ratio))
             if block == interval.end_position.region_path_id:
                 end = pos[0] + interval.end_position.offset * self.width_ratio
-                #print("<p>Fixing exon end: %d (offset: %d)</p>" % (end, interval.end_position.offset))
             if is_exon:
-                #self._plot_exon(start, end, pos[1], interval, name)
                 self._plot_interval_in_block(start, end, pos[1], interval, name, True)
             else:
                 self._plot_interval_in_block(start, end, pos[1], interval, name)
@@ -156,35 +153,6 @@ class VisualizeHtml(object):
             for exon in gene.exons:
                 self._plot_interval(exon, gene.name, True)
 
-
-            self.color_counter += 1
-            self.gene_counter += 1
-
-    def visualize_intervals(self):
-        """
-        Visualizes intervals
-        :param intervals: A list of intervals (of type Segment)
-        """
-        for interval in self.intervals:
-
-            for block in interval.region_paths:
-
-                if not block in self.offset_positions:
-                    if DEBUG: print("Warning. Block %s not found in offset_positions when visualizing interval" % (block))
-                    continue
-
-                plot_info = self.offset_positions[block]
-                start = plot_info[0]
-                end = plot_info[0] + plot_info[2]
-                if block == interval.start_block:
-                    start += interval.start_pos * self.width_ratio
-                if block == interval.end_block:
-                    end = plot_info[0] + interval.end_pos * self.width_ratio
-
-                if interval.is_exon:
-                    self._plot_exon(start, end, plot_info[1], interval)
-                else:
-                    self._plot_interval_in_block(start, end, plot_info[1], interval)
 
             self.color_counter += 1
             self.gene_counter += 1
