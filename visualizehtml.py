@@ -243,6 +243,7 @@ class VisualizeHtml(object):
         html += "position: relative;"
         html += "display: inline-block;"
         html += "' "
+        html += "data-parent-width='%d'" % parent_width
         html += "data-interval-id='%d'" % self.gene_counter
         html += "data-notation='%s'" % interval_obj.notation()
         html += "data-gene-name='%s'" % name
