@@ -234,9 +234,10 @@ class VisualizeHtml(object):
         html += "margin-left: %.2fpx;" % margin_left
         html += "margin-right: %.2fpx;" % margin_right
         html += "width: %.2fpx;" % (end - start)
-        html += "top: %.2fpx;" % (top)
+        #html += "top: %.2fpx;" % (top)
         html += "height: %dpx;" % (height)
         html += "background-color: %s;" % color
+        html += "display: table-row;"
         html += "' "
         html += "data-interval-id='%d'" % self.gene_counter
         html += "data-notation='%s'" % interval_obj.notation()
