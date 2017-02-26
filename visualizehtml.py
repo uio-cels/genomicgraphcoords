@@ -406,8 +406,9 @@ class VisualizeHtml(object):
         for block, block_html in self.html_blocks.items():
             html += block_html
             html += "</div>"
-        return self.html
 
+        return html
+    
     def get_wrapped_html(self):
         # Html wrapped with js includes etc
         html = """
