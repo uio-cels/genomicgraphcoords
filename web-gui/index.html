@@ -129,7 +129,11 @@
 					
 					$("#results").html(res["stdout"]);
 					
-					$(".block").mousemove(function(event){ block_move($(this), event); });
+					$(".block").mousemove(function(event){
+						if($(this).hasClass("block")){
+							block_move($(this), event);
+						}
+					});
 					//$(".block").mouseout(function(event){ $(".vis_explanation").html(""); });
 					
 					add_mouse_listeners();
