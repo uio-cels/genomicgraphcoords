@@ -178,10 +178,10 @@ class VisualizeHtml(object):
     def _plot_exon_interval(self, interval, parent_interval):
         self.exon_cnt += 1
         block = interval.region_paths[0]
-        print(interval)
+        #print(interval)
         if block not in self.graph.blocks:
             return
-        
+
         assert(block in self.graph.blocks)
         # Find parent interval start in this
         parent_start = 0
@@ -288,8 +288,8 @@ class VisualizeHtml(object):
         if not is_exon:
             self.html_intervals[block][self.gene_counter] = html
         else:
-            print(self.gene_counter)
-            print(self.html_exons[block])
+            #print(self.gene_counter)
+            #print(self.html_exons[block])
             self.html_exons[block][self.gene_counter] += html + "</div>"
 
 
