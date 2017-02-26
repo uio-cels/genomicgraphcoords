@@ -93,7 +93,7 @@ class VisualizeHtml(object):
                     width: 400px;
                     background-color: white;
                     height: 20px; margin-top: 5px; margin-left: 10px'>
-            <p style='font-size: 0.8em;'>
+
         """
         i = 0
 
@@ -108,7 +108,7 @@ class VisualizeHtml(object):
 
         self.html += """
             </div>
-            </p>
+            
         </div>
         """
 
