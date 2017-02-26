@@ -237,6 +237,7 @@ class VisualizeHtml(object):
         #html += "top: %.2fpx;" % (top)
         html += "height: %dpx;" % (height)
         html += "background-color: %s;" % color
+        html += "position: absolute;"
         html += "display: table-row;"
         html += "' "
         html += "data-interval-id='%d'" % self.gene_counter
