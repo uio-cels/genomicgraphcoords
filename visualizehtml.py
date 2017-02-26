@@ -233,33 +233,20 @@ class VisualizeHtml(object):
         if end - start == 0:
             return
 
-        #top = level + 1 + self.gene_height * self.gene_counter
         top = 1 + self.gene_height * self.gene_counter
-
-        if is_exon:
-            top = (top + (self.gene_height - self.exon_height) /  2.0)
-
-        if not is_exon:
-            color = self.gene_colors[self.gene_counter]
-        else:
-            color = "black"
-
+        color = self.gene_colors[self.gene_counter]
         height = self.gene_height
-        if is_exon:
-            height = self.exon_height
-
         classname = "interval"
         classname2 = "interval_%d" % self.gene_counter
-        if is_exon:
-            classname = "exon"
-            classname2 = "interval_%d" % self.gene_counter
-
-        margin_left = start
         margin_right = parent_width - end
 
         if is_exon:
+            classname = "exon"
+            classname2 = "interval_%d" % self.gene_counter
+            height = self.exon_height
+            color = "black"
+            top = 1 #(top + (self.gene_height - self.exon_height) /  2.0)
             margin_right = 0
-
 
 
         html = ""
