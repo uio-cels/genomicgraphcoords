@@ -45,6 +45,16 @@ class VisualizeHtml(object):
         self.svg_lines = ""
         self.html_arrows = ""
         self.html = ""
+
+        # Produce gene selection html
+        for i, gene in enumerate(self.genes):
+            print """
+            <label>
+                <input type='checkbox' onclick='show_gene(i);'> %s
+            </label>
+            """ % (i, gene.name)
+
+
         self.html += """
         <div class='row'>
             <div class='col-md-8'>
