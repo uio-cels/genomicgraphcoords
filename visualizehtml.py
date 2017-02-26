@@ -110,7 +110,7 @@ class VisualizeHtml(object):
                  </div>
                 """ % (i, display, self.gene_colors[i%len(self.gene_colors)], "Gene: " + gene.name + " (" + gene.name + ")")
 
-            if i > 3:
+            if i >= 3:
                 # Print javascript for hiding interval
                 self.html += """
                 <script>
