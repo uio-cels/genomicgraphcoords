@@ -8,6 +8,7 @@ from offsetbasedgraph.graphutils import Gene, convert_to_numeric_graph, connect_
     create_initial_grch38_graph, blast_test, convert_cigar_graph_to_text, analyze_genes_on_merged_graph, \
     merge_alt_using_cigar, grch38_graph_to_numeric, create_subgraph_around_alt_locus
 
+
 def create_graph(args):
     graph = create_initial_grch38_graph(args.chrom_sizes_file_name)
     n_starts = len([b for b in graph.blocks if not graph.reverse_adj_list[b]])
@@ -173,10 +174,11 @@ def visualize_alt_locus(args, skip_wrapping=False):
 
     genes = [g for g in genes if not g.multiple_alt_loci()]
 
-
+    """
     if len(genes) > 3:
         #genes.sort(key=lambda g: g.length(), reverse=True)
         genes = genes[0:3]
+    """
 
     levels = Graph.level_dict(subgraph.blocks)
 
