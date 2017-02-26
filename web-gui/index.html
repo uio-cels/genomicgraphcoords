@@ -76,6 +76,11 @@
 				});
 			});
 			*/
+			$(".interval").mousemove(function(event){
+    			event.stopPropagation();
+			})
+
+
 			$(".interval").hover(function(event){
 
     			event.stopPropagation();
@@ -134,7 +139,6 @@
 					
 					$(".block").mousemove(function(event){
 
-    					event.stopPropagation();
 						console.log("has class block");
 						block_move($(this), event);
 
