@@ -16,8 +16,10 @@ class VisualizeHtml(object):
         self.gap_pixels = 0  # Extra gap pixels that are added
         self.graph = graph
         self.color_counter = 4
-        self.colors = ["#0000aa", "#5F96C5", "#C58E8E", "#cccccc", "purple", "orange", "indigo"]
-        self.gene_colors = ["darkorange", "#D9EDF7", "#aaaaaa", "pink", "purple", "orange", "indigo", "#444444", "#f5f5f5", "cyan", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black"]
+        self.colors = ["#0000aa", "#5F96C5", "#C58E8E", "#cccccc", "lipurple", "orange", "indigo"]
+        self.gene_colors = ["darkorange", "#D9EDF7", "#aaaaaa", "pink", "lightpurple",
+                            "orange", "lightindigo", "cyan", "#99ffcc", "black",
+                            "#ffff00", "#999966", "black", "black", "black", "black", "black", "black", "black", "black", "black", "black"]
         self.gene_counter = 0
         self.genes_plotted_heights = {} # Dict of heights for genes
         self.offset_positions = {}  # Dict of offset pos for each alt loci/chrom
