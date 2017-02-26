@@ -183,9 +183,11 @@ class VisualizeHtml(object):
             #print("<p>Start pos is %d</p>" % start)
             end = pos[0] + pos[2]
             if block == interval.region_paths[0]:
-                start += interval.start_position.offset * self.width_ratio
+                #start += interval.start_position.offset * self.width_ratio
+                start = interval.start_position.offset * self.width_ratio
             if block == interval.end_position.region_path_id:
-                end = pos[0] + interval.end_position.offset * self.width_ratio
+                #end = pos[0] + interval.end_position.offset * self.width_ratio
+                end = interval.end_position.offset * self.width_ratio
 
             if is_exon:
                 self._plot_interval_in_block(start, end, pos[1], interval, block, name, True)
@@ -193,12 +195,14 @@ class VisualizeHtml(object):
                 self._plot_interval_in_block(start, end, pos[1], interval, block, name)
 
     def _plot_interval_in_block(self, start, end, level, interval_obj, block, name = "", is_exon = False):
+
         #level += 0.3 + 0.3 * (self.color_counter - 4)
         #print "=
         if end - start == 0:
             return
 
-        top = level + 1 + self.gene_height * self.gene_counter
+        #top = level + 1 + self.gene_height * self.gene_counter
+        top = 1 + self.gene_height * self.gene_counter
 
         if is_exon:
             top = (top + (self.gene_height - self.exon_height) /  2.0)
