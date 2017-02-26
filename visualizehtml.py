@@ -73,8 +73,16 @@ class VisualizeHtml(object):
                     </div>
         """ % (self.colors[3], self.colors[2], self.colors[1])
 
-        self.html_blocks = {}
+        self.html_blocks = {}  # Dict with blocks as keys. Includes only html for block
+        self.html_intervals = {}  # Html for all genes. Key is blocks and interval number
+        self.html_exons = {}   # Neste dict, key is block and interval
+        for b in self.graph.blocks:
+            self.html_intervals[b] = {}
+            self.html_exons[b] = {}
 
+            for i, gene in enumerate(genes):
+                self.html_exons[b][i] = ""
+                self.html_exons[b][i] = ""
 
 
         # Gene labels
@@ -93,6 +101,7 @@ class VisualizeHtml(object):
                 <span style='background-color: %s; width: 30px; height: 12px; display: inline-block'></span>
                  <font color='black'>%s</font><br>
                 """ % (self.gene_colors[i%len(self.gene_colors)], "Gene: " + gene.name + " (" + gene.name + ")")
+
             i += 1
 
         self.html += """
@@ -193,10 +202,11 @@ class VisualizeHtml(object):
             parent_width = pos[2]
 
             if is_exon:
-                continue
                 self._plot_interval_in_block(start, end, pos[1], interval, block, parent_width, name, True)
             else:
                 self._plot_interval_in_block(start, end, pos[1], interval, block, parent_width, name)
+
+
 
     def _plot_interval_in_block(self, start, end, level, interval_obj, block, parent_width, name = "", is_exon = False):
 
@@ -250,10 +260,13 @@ class VisualizeHtml(object):
         html += "data-gene-name2='%s'" % name
         html += "data-graph-id='%d'></div>" % self.vis_id
 
-        if not is_exon:
-            self.html_blocks[block][self.gene_counter] = html
-
         self.genes_plotted_heights[name] = self.gene_counter
+
+        if not is_exon:
+            self.html_intervals[block][self.gene_counter] = html
+        else:
+            self.html_intervals[block][self.gene_counter] += html + "</div>"
+
 
     def _coordinate(self, rp):
         """
@@ -420,11 +433,15 @@ class VisualizeHtml(object):
 
     def __str__(self):
         html = self.html
-        for block, intervals in self.html_blocks.items():
-            for block_html in interavls:
-                html += block_html
-            html += "</div>"
+        for block, block_html in self.html_blocks.items():
+            html += block_html
+            for interval, interval_html in self.html_intervals[block]:
+                html += interval_html
+                exon_html = self.html_exons[block][interval]
+                html += exon_html
+                html += "</div>"
 
+            html += "</div>"
 
         html += "</div></div></div>"
         return html
