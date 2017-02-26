@@ -248,7 +248,9 @@ class VisualizeHtml(object):
 
         html += "' "
         html += "data-parent-width='%d'" % parent_width
-        html += "data-interval-id='%d'" % self.gene_counter
+        if not is_exon:
+            html += "data-interval-id='%d'" % self.gene_counter
+            
         html += "data-notation='%s'" % interval_obj.notation()
         html += "data-gene-name='%s'" % name
         html += "data-gene-name2='%s'" % name

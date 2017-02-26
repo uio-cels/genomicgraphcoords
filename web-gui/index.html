@@ -85,7 +85,7 @@
 
     			event.stopPropagation();
 				var graph_id = 0; //$(this).attr("data-graph-id");
-				//$(".interval_" + id).css("border", "1px solid white");
+				//$(".interval_" + id).not(".exon").css("border", "1px solid white");
 				var id = $(this).attr("data-interval-id");
 				console.log("Hover in interval: " + id);
 				var gene_name = $(this).attr("data-gene-name");
