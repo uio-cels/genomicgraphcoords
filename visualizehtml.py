@@ -266,15 +266,6 @@ class VisualizeHtml(object):
 
         self.genes_plotted_heights[name] = self.gene_counter
 
-        #print "%d, %d, %d" % (start, end, level)
-
-
-
-        #plt.plot([start, end], [level, level],
-        #            self.colors[self.color_counter],
-        #            linestyle = '-',
-        #            linewidth=2, solid_capstyle="butt")
-
     def _coordinate(self, rp):
         """
         Returns the hierarhcial and sequential coordinates of a region path
@@ -283,8 +274,6 @@ class VisualizeHtml(object):
         length = self.graph.blocks[rp].length()
         # Translate rp back to get GRCh38 hier. coordinates
         from offsetbasedgraph import Interval, Graph
-        #rp_interval = Interval(0, length, [rp], self.graph)
-        #orig_intervals = self.trans.translate_interval(rp_interval, True)
 
         hier_id = str(rp)
         hier_of = 0
@@ -295,50 +284,7 @@ class VisualizeHtml(object):
             hier_id = self.start_position.region_path_id
             hier_of = dist_back + self.start_position.offset
 
-        """
-        # If any non-alt intervals in original, get hier coordinates
-        for interval in orig_intervals.get_single_path_intervals():
-            print("<p>translated to %s</p>" % interval)
-            if len(interval.region_paths) == 1 and \
-                Graph.block_origin(interval.region_paths[0]) == "main":
-                hier_id = interval.region_paths[0]
-                hier_of = interval.start_position.offset
-        """
-
         return (str(rp), "0", str(hier_id), str(hier_of), str(length))
-
-        # Sequential coordinates are always id and the first offset is 0
-        seqID = rp
-        seqOf = 0
-        # Hierarchical coordinates is same as sequential if this is alternative
-        # block. Else, it is the same as on hg38
-
-        #origin = Graph.block_origin(rp)
-        #if origin == "main":
-
-
-        if len(rp.linear_references) == 1 and \
-                not "alt" in list(rp.linear_references.values())[0].chromosome:
-            hierID = list(rp.linear_references.values())[0].chromosome
-            hierOf = list(rp.linear_references.values())[0].start
-        elif len(rp.linear_references) == 2 and \
-            "alt" in list(rp.linear_references.values())[0].chromosome:
-            hierID = list(rp.linear_references.values())[1].chromosome
-            hierOf = list(rp.linear_references.values())[1].start
-        elif len(rp.linear_references) == 2 and \
-            "alt" in list(rp.linear_references.values())[1].chromosome:
-            hierID = list(rp.linear_references.values())[0].chromosome
-            hierOf = list(rp.linear_references.values())[0].start
-        else:
-            hierID = seqID
-            hierOf = seqOf
-
-        # Also get size of region path
-        size = max(l.end - l.start for l in list(rp.linear_references.values()))
-
-        return (self._pretty_alt_loci_name(seqID), str(seqOf),\
-                self._pretty_alt_loci_name(hierID), str(hierOf), str(size))
-
 
     def _plot(self, xstart, xend, level, color, rp_id):
 
@@ -495,100 +441,6 @@ class VisualizeHtml(object):
 
 
         return
-        self.offset_counter, x_coord, y_coord, width = self._plot_region_path(self.graph.start_block,
-                                                    self._plot_level(self.graph.start_block))
-
-        prevEnds = [(x_coord, y_coord, width)]
-
-        while True:
-            self.gap_pixels += 20
-            if DEBUG: print("<p>Iteration: " + str(block.id) + "</p>")
-            # Plot the next blocks (will never be more than two blocks)
-            offsets = []
-
-            ends = []
-
-            for next in self.graph.adj_list[block]:
-                level = self._plot_level(next)
-                #next_block = self.graph.blocks[next]
-                o, x, y, width = self._plot_region_path(next, level)
-                block = next
-                offsets.append(o)
-                ends.append((x, y, width))
-                self.width_used = max(self.width_used, y + width)
-
-            # Hack
-            # if width < 1:
-            #    continue
-
-            # PLot arrows from previous end positions (there are 1 or 2),
-            # to these end positions (there are 1 or 2)
-            for end1 in prevEnds:
-                for end2 in ends:
-                    self._plot_arrow(end1[0], end1[1], \
-                        end2[0]-end2[2], end2[1])
-
-            prevEnds = ends
-
-            if block not in self.graph.adj_list:
-                return
-            if len(list(self.graph.adj_list[block])) == 0:
-                return
-
-
-
-
-            self.offset_counter = max(offsets)
-
-    def visualize(self):
-        block = self.graph.start_block #self.graph.blocks[self.graph.start_block]
-        #self.offset_counter = self._scale(list(block.linear_references.values())[0].start)
-        self.offset_counter = self._scale(0)
-        self.offset_counter, x_coord, y_coord, width = self._plot_region_path(self.graph.start_block,
-                                                    self._plot_level(self.graph.start_block))
-
-        prevEnds = [(x_coord, y_coord, width)]
-
-        while True:
-            self.gap_pixels += 20
-            if DEBUG: print("<p>Iteration: " + str(block.id) + "</p>")
-            # Plot the next blocks (will never be more than two blocks)
-            offsets = []
-
-            ends = []
-
-            for next in self.graph.adj_list[block]:
-                level = self._plot_level(next)
-                #next_block = self.graph.blocks[next]
-                o, x, y, width = self._plot_region_path(next, level)
-                block = next
-                offsets.append(o)
-                ends.append((x, y, width))
-                self.width_used = max(self.width_used, y + width)
-
-            # Hack
-            if width < 1:
-                continue
-
-            # PLot arrows from previous end positions (there are 1 or 2),
-            # to these end positions (there are 1 or 2)
-            for end1 in prevEnds:
-                for end2 in ends:
-                    self._plot_arrow(end1[0], end1[1], \
-                        end2[0]-end2[2], end2[1])
-
-            prevEnds = ends
-
-            if block not in self.graph.adj_list:
-                return
-            if len(list(self.graph.adj_list[block])) == 0:
-                return
-
-
-
-
-            self.offset_counter = max(offsets)
-
 
     def __str__(self):
         return self.html
