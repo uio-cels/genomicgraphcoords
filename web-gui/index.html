@@ -160,16 +160,19 @@
 				if(n_shown >= 3){
 					console.log("maximum already shown");
 					$("#checkbox_" + i).prop('checked', false);
+					$("#gene_selector_message").html("<font color='darkgreen'>Maximum 3 genes. De-select a gene first.</font>");
 				}
 				else{
 					$(".interval_" + i).show();
 					$("#label_" + i).show();
+					$("#gene_selector_message").html("<font color='darkgreen'>Gene added to figure</font>");
 				}
 			}
 			else{
 				console.log("de-checking");
 				$("#label_" + i).fadeOut();
 				$(".interval_" + i).fadeOut();
+				$("#gene_selector_message").html("<font color='darkgreen'>Gene removed from figure</font>");
 			}
 
 		}
