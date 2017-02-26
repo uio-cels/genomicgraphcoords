@@ -191,11 +191,11 @@ class VisualizeHtml(object):
                 end = interval.end_position.offset * self.width_ratio
 
             if is_exon:
-                self._plot_interval_in_block(start, end, pos[1], interval, block, name, True)
+                self._plot_interval_in_block(start, end, pos[1], interval, block, pos[2], name, True)
             else:
-                self._plot_interval_in_block(start, end, pos[1], interval, block, name)
+                self._plot_interval_in_block(start, end, pos[1], interval, block, pos[2], name)
 
-    def _plot_interval_in_block(self, start, end, level, interval_obj, block, name = "", is_exon = False):
+    def _plot_interval_in_block(self, start, end, level, interval_obj, block, parent_width, name = "", is_exon = False):
 
         #level += 0.3 + 0.3 * (self.color_counter - 4)
         #print "=
@@ -223,11 +223,16 @@ class VisualizeHtml(object):
             classname = "exon"
             classname2 = "interval_%d" % self.gene_counter
 
+        margin_left = start
+        margin_right = parent_width - end
+
         html = ""
         html += "<div class='%s %s'" % (classname, classname2)
 
         html += " style='z-index: 10; position: absolute;"
-        html += "left: %.2fpx;" % start
+        #html += "left: %.2fpx;" % start
+        html += "margin-left: %.2fpx;" % margin_left
+        html += "margin-right: %.2fpx;" % margin_right
         html += "width: %.2fpx;" % (end - start)
         html += "top: %.2fpx;" % (top)
         html += "height: %dpx;" % (height)
