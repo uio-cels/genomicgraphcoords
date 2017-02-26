@@ -191,6 +191,7 @@ class VisualizeHtml(object):
                 end = interval.end_position.offset * self.width_ratio
 
             if is_exon:
+                continue
                 self._plot_interval_in_block(start, end, pos[1], interval, block, pos[2], name, True)
             else:
                 self._plot_interval_in_block(start, end, pos[1], interval, block, pos[2], name)
