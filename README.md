@@ -31,9 +31,10 @@ We then represent ensembl/refseq genes on this graph.
 Follow this steps to reproduce the experiment:
 
 ```
-python3 ...
-....
-....
+# Create grch38 graph with translation object.
+python3 gen_graph_coords.py create_graph data/grch38.chrom.sizes data/grch38_alt_loci.txt grch38.graph
+# Analyse genes
+python3 gen_graph_coords.py check_duplicate_genes grch38.graph data/genes/genes_refseq.txt
 ```
 
 ### Experiment 2: Representing genes by multi-path intervals on GRCh38
