@@ -7,14 +7,8 @@ See the section "How to run the gene experiments" for information about how to r
 For a demo of the interactive web tool, please follow this link:  http://46.101.93.163/gen-graph-coords/
 
 ## Requirements
-There are two requirements:
+There is one requirement:
 * The python package _offsetbasedgraph_. Install it with `pip3 install offsetbasedgraph`.
-* A small python-package for fetching genomic sequences from UCSC. Install it by cloning the repo and installing with pip:
-```
-git clone git@github.com:uio-cels/gendatafetcher.git
-cd gendatafetcher
-pip3 install -e .
-```
 ## Setup
 Install the above requirements. Then clone this repo:
 
