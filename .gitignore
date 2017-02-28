@@ -8,3 +8,4 @@ data/tmp
 .#*
 *~
 various.py
+tests/data/tmp/*

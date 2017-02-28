@@ -1,0 +1,8 @@
+#bin	name	chrom	strand	txStart	txEnd	cdsStart	cdsEnd	exonCount	exonStarts	exonEnds	score	name2	cdsStartStat	cdsEndStat
+0	gene1	chr1	+	10	20	12	18	3	14,16,	15,17,	0	gene1_	cmpl	cmpl	0,0,0
+0	gene1	chr1_KI270762v1_alt	+	10	20	12	18	3	14,16,	15,17,	0	gene1_	cmpl	cmpl	0,0,0
+0	gene2	chr1_KI270762v1_alt	+	30	40	12	18	3	34,36,	35,37,	0	gene1_	cmpl	cmpl	0,0,0
+0	gene2	chr1	+	30	50	12	18	3	34,36,	35,37,	0	gene1_	cmpl	cmpl	0,0,0
+0	gene3	chr1_GL383518v1_alt	+	30	40	12	18	3	34,36,	35,37,	0	gene1_	cmpl	cmpl	0,0,0
+0	gene3	chr1	+	130	150	12	18	3	34,36,	35,37,	0	gene1_	cmpl	cmpl	0,0,0
+
