@@ -2,11 +2,7 @@ from offsetbasedgraph import Graph, Translation
 from offsetbasedgraph.gene import GeneList, Gene, MultiPathGene
 import sys
 
-from offsetbasedgraph.graphutils import Gene, convert_to_numeric_graph, connect_without_flanks, \
-    convert_to_text_graph, merge_flanks, connect_without_flanks, parse_genes_file, \
-    get_genes_as_intervals, get_gene_objects_as_intervals, find_exon_duplicates, \
-    create_initial_grch38_graph, blast_test, convert_cigar_graph_to_text, analyze_genes_on_merged_graph, \
-    merge_alt_using_cigar, grch38_graph_to_numeric, create_subgraph_around_alt_locus
+from offsetbasedgraph.graphutils import *
 
 
 def create_graph(args):
@@ -236,15 +232,25 @@ def _analyse_multipath_genes_on_graph(genes_list, genes_against, graph):
     return equal, equal_exons
 
 
+def analyze_fuzzy_genes(args):
+    genes = get_gene_objects_as_intervals(args.genes_file_name)
+    text_graph = create_initial_grch38_graph(args.chrom_sizes_file_name)
+    return fuzzy_gene_analysis(genes, text_graph, args.ncbi_alignments_dir,
+                               args.alt_locations_file_name)
+
+
 def analyse_multipath_genes2(args):
-    import pickle
-
-    from offsetbasedgraph.graphutils import create_gene_dicts, translate_single_gene_to_aligned_graph
+    if args.interval_type == "fuzzy":
+        return analyze_fuzzy_genes(args)
+    assert args.interval_type == "critical"
+    from offsetbasedgraph.graphutils import create_gene_dicts, \
+        translate_single_gene_to_aligned_graph
     print("Reading genes")
-    genes = GeneList(get_gene_objects_as_intervals(args.genes_file_name)).gene_list
+    genes = get_gene_objects_as_intervals(args.genes_file_name)
 
-    alt_loci_genes, gene_name_dict, main_genes = create_gene_dicts(genes,
-                                                                   alt_loci_fn=args.alt_locations_file_name)
+    alt_loci_genes, gene_name_dict, main_genes = create_gene_dicts(
+        genes,
+        alt_loci_fn=args.alt_locations_file_name)
 
     # alt loci genes are only genes on alt loci (nothing on main)
     # exon_dict contains only genes on main, index by offset of first exon

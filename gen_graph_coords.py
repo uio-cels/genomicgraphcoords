@@ -9,11 +9,8 @@ python3 gen_graph_coords.py grch38.chrom.sizes-small grch38_alt_loci_small.txt g
 
 """
 
-from collections import defaultdict
 import sys
 import argparse
-
-
 from methods import *
 
 # Dict struct for holding all arguments taken by the interface
@@ -70,6 +67,7 @@ interface = \
                     ('alt_locations_file_name', 'File containing alternative loci info (e.g. data/grch38_alt_loci.txt)'),
                     ('ncbi_alignments_dir', 'Directory containing NCBI alignment files (e.g. data/alt_alignments)'),
                     ('genes_file_name', 'Name of gene file (e.g. data/genes/genes_refseq.txt)'),
+                    ('interval_type', 'Type of multipath interval (critical/fuzzy)'),
                 ],
             'method': analyse_multipath_genes2
         },
@@ -103,8 +101,6 @@ interface = \
                 [],
             'method': html_alt_loci_select
         }
-
-
 }
 
 # Create parser
