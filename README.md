@@ -7,14 +7,16 @@ See the section "How to run the gene experiments" for information about how to r
 For a demo of the interactive web tool, please follow this link:  http://46.101.93.163/gen-graph-coords/
 
 ## Requirements
-There is one requirement:
-* The python package _offsetbasedgraph_. Install it with `pip3 install offsetbasedgraph`.
+The module requires [Python3](https://www.python.org/downloads/) and pip3 (which should be included with Python) in order to install dependencies.
+
+There is one dependency:
+* The python package [_offsetbasedgraph_](https://github.com/uio-cels/OffsetBasedGraph). Install it with `pip3 install offsetbasedgraph`.
 
 ## Setup
 Install the above requirements. Then clone this repo:
 
 ```
-git clone git@github.com:uio-cels/gen-graph-coords.git
+git clone git@github.com:uio-cels/genomicgraphcoords.git
 ```
 
 # How to run the gene experiments
