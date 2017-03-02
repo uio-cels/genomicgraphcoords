@@ -121,11 +121,16 @@ interface = \
                     ('translation_file_name', 'File name of translation from '
                                               'original grch38 graph to graph '
                                               'that genes should be represented on'),
+                    ('alt_locations_file_name', 'Alt locations file name '
+                                                '(e.g. data/grch38_alt_loci.txt'),
                     ('alt_locus', ALT_LOCUS_DESCRIPTION),
                     ('genes', 'Name of gene file containing genes '
                               'that will be printed (e.g. data/genes/genes_refseq.txt). '
                               'Note: Only genes within the alt locus area will be printed.'),
                 ],
+            'example_run': 'python3 gen_graph_coords.py print_gene_notations '
+                           'g data/grch38_alt_loci.txt chr2_KI270774v1_alt '
+                           'data/genes/genes_refseq.txt',
             'method': print_gene_notations
         }
 }
@@ -136,7 +141,12 @@ parser = argparse.ArgumentParser(
 subparsers = parser.add_subparsers(help='Subcommands')
 
 for command in interface:
-    subparser = subparsers.add_parser(command, help=interface[command]["help"])
+    example = ""
+    if "example_run" in interface[command]:
+        example = "\nExample: " + interface[command]["example_run"]
+
+    subparser = subparsers.add_parser(command,
+                            help=interface[command]["help"] + example)
     for argument, help in interface[command]["arguments"]:
         subparser.add_argument(argument, help=help)
     subparser.set_defaults(func=interface[command]["method"])

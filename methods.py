@@ -289,4 +289,20 @@ def html_alt_loci_select(args):
 
 
 def print_gene_notations(args):
-    print("Gene notations")
+    print("Processing genes")
+    genes_file_name = args.genes
+    trans = Translation.from_file(args.translation_file_name)
+
+
+    genes = get_gene_objects_as_intervals(genes_file_name, trans.graph1)
+    alt_loci_genes, gene_name_dict, main_genes = create_gene_dicts(genes, alt_loci_fn=args.alt_locations_file_name)
+    genes = main_genes[args.alt_locus]
+
+    print("Original genes on GRCh38")
+    print("----------------------------")
+    for g in genes:
+        print("%s: %s" % (g.name, g.transcription_region.notation()))
+
+    print("Genes on graph")
+
+    genes = [g.translate(trans) for g in genes]
