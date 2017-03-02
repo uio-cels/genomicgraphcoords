@@ -85,6 +85,10 @@ def merge_all_alignments(args):
 
 
 def visualize_alt_locus_wrapper(args, quiet=False):
+
+    if not quiet:
+        print("<div style='display: none'>")
+
     # Finds correct gene file etc
     chrom = args.alt_locus.split("_")[0]
     args.genes = "data/genes/genes_refseq_%s.txt" % (chrom)
@@ -111,6 +115,9 @@ def visualize_alt_locus_wrapper(args, quiet=False):
 
     args.translation_file_name = final_translation
     args.alt_locations_file_name = 'data/grch38_alt_loci.txt'
+
+    if not quiet:
+        print("</div>")
     #return
     visualize_alt_locus(args, True, quiet)
 
