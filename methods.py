@@ -84,7 +84,7 @@ def merge_all_alignments(args):
     full_trans.to_file(args.out_file_name)
 
 
-def visualize_alt_locus_wrapper(args):
+def visualize_alt_locus_wrapper(args, quiet=False):
     # Finds correct gene file etc
     chrom = args.alt_locus.split("_")[0]
     args.genes = "data/genes/genes_refseq_%s.txt" % (chrom)
@@ -112,10 +112,10 @@ def visualize_alt_locus_wrapper(args):
     args.translation_file_name = final_translation
     args.alt_locations_file_name = 'data/grch38_alt_loci.txt'
     #return
-    visualize_alt_locus(args, True)
+    visualize_alt_locus(args, True, quiet)
 
 
-def visualize_alt_locus(args, skip_wrapping=False):
+def visualize_alt_locus(args, skip_wrapping=False, quiet=False):
     from offsetbasedgraph.graphutils import GeneList, \
         create_gene_dicts, create_subgraph_around_alt_locus
 
@@ -156,6 +156,9 @@ def visualize_alt_locus(args, skip_wrapping=False):
     subgraph.start_block = start
     max_offset = sum([subgraph.blocks[b].length() for b in subgraph.blocks])
     v = VisualizeHtml(subgraph, 0, max_offset, 0, levels, "", 800, genes, start_position)
+
+    if quiet:
+        return
 
     if skip_wrapping:
         print(str(v))

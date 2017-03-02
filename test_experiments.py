@@ -11,8 +11,8 @@ from offsetbasedgraph.graphutils import create_gene_dicts, \
 class TestExperiments(unittest.TestCase):
 
     def test_overlapping_alt_loci(self):
-        chrom_file = "../data/chrom.sizes.test"
-        alt_loci = "../data/alt_loci_test"
+        chrom_file = "data/chrom.sizes.test"
+        alt_loci = "data/alt_loci_test"
 
         graph = create_initial_grch38_graph(chrom_file)
 
@@ -276,10 +276,10 @@ class TestExperiments(unittest.TestCase):
 
     def test_create_gene_dicts(self):
 
-        genes_file_name = "../data/genes_test.txt"
+        genes_file_name = "data/genes_test.txt"
         genes = get_gene_objects_as_intervals(genes_file_name)
         alt_loci_genes, gene_name_dict, main_genes = create_gene_dicts(
-            genes, "../data/grch38_alt_loci.txt")
+            genes, "data/grch38_alt_loci.txt")
 
         print(alt_loci_genes)
         print("-------------")
@@ -298,7 +298,7 @@ class TestExperiments(unittest.TestCase):
                  g.transcription_region.start_position.region_path_id]))
 
     def test_parse_genes_from_file_and_translate_to_multipath(self):
-        genes_file_name = "../data/genes_test.txt"
+        genes_file_name = "data/genes_test.txt"
         genes = get_gene_objects_as_intervals(genes_file_name)
         mpintervals = []
         for g in genes:
@@ -319,6 +319,18 @@ class TestExperiments(unittest.TestCase):
 
         for g in mpintervals:
             self.assertEqual(len(g.critical_intervals), 2)
+
+    def test_visualization_not_crashes(self):
+        # Only a simple test to check that
+        # the visualization does not crash
+        # TODO: better tests for visualization than this
+
+        args = lambda: None
+        args.alt_locus = "chr1_KI270762v1_alt"
+        from methods import visualize_alt_locus_wrapper
+        visualize_alt_locus_wrapper(args, True)
+        self.assertTrue(True)
+
 
 if __name__ == "__main__":
     unittest.main()
