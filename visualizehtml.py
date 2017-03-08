@@ -436,10 +436,8 @@ class VisualizeHtml(object):
                 g.blocks[g.reverse_adj_list[back_block][1]].length() > \
                 g.blocks[g.reverse_adj_list[back_block][0]].length():
             back_block = g.reverse_adj_list[back_block][1]
-            print("<p>Chose other</p>")
         else:
             back_block = g.reverse_adj_list[back_block][0]
-            print("<p>Chose back %s</p>" % (back_block))
 
         return back_block
 
@@ -449,7 +447,6 @@ class VisualizeHtml(object):
 
         if b == g.start_block:
             return 0
-        print("<p><b>Finding back from %s</b></p>" % (b))
         back_block = self._get_longest_previous_block(b)
         #print("Finding back for %s" % b)
         distance = 0
@@ -460,7 +457,6 @@ class VisualizeHtml(object):
                 break
 
             # Choose longest path back
-            print("<p>n back from %s: %d</p>" % (back_block, len(g.reverse_adj_list[back_block])))
             back_block = self._get_longest_previous_block(back_block)
 
         return distance
