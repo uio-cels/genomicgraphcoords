@@ -452,6 +452,7 @@ class VisualizeHtml(object):
                 back_block = g.reverse_adj_list[back_block][1]
             else:
                 back_block = g.reverse_adj_list[back_block][0]
+                print("<p>Chose back %s</p>" % (back_block))
 
         return distance
 
