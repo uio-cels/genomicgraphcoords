@@ -283,6 +283,8 @@ def html_alt_loci_select(args):
     from offsetbasedgraph.graphutils import get_alt_loci_positions
     loci = get_alt_loci_positions("data/grch38_alt_loci.txt")
 
+    loci = OrderedDict(loci)
+
     for locus in loci:
         region = loci[locus]
         if region["end"] - region["start"] < 40000000000:
