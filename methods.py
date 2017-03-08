@@ -136,14 +136,16 @@ def visualize_alt_locus(args, skip_wrapping=False, quiet=False):
 
     # Find all genes on this graph
     genes = GeneList(get_gene_objects_as_intervals(args.genes)).gene_list
+
     alt_loci_genes, gene_name_dict, main_genes = create_gene_dicts(genes, alt_loci_fn=args.alt_locations_file_name)
-    genes = main_genes[args.alt_locus]
+    genes = main_genes[args.alt_locus] + alt_loci_genes[args.alt_locus]
     genes = [g.translate(trans) for g in genes]
     subgraph, trans, start_position = create_subgraph_around_alt_locus(graph, trans, args.alt_locus, 200000, alt_loci_fn=args.alt_locations_file_name)
 
     start_position = orig_trans.translate_position(start_position, True)[0]
 
     genes = [g for g in genes if not g.multiple_alt_loci() and g.transcription_region.length() > 100]
+
 
     if len(genes) > 40:
         genes = genes[0:40]
