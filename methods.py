@@ -281,7 +281,7 @@ def html_alt_loci_select(args):
     html_out = """<select name='region'
                class='form-control' style='width: 320px;'>"""
     from offsetbasedgraph.graphutils import get_alt_loci_positions
-    loci = get_alt_loci_positions()
+    loci = get_alt_loci_positions("data/grch38_alt_loci.txt")
 
     for locus in loci:
         region = loci[locus]
