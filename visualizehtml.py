@@ -393,7 +393,7 @@ class VisualizeHtml(object):
     def _plot_arrow(self, xstart, ystart, xend, yend):
         """ Plots and arrow
         """
-        print("Plotting arrow  from %d,%d to %d,%d" % (xstart, ystart, xend, yend))
+        #print("Plotting arrow  from %d,%d to %d,%d" % (xstart, ystart, xend, yend))
         self.html_arrows += "<div style='position: absolute;"
 
         if yend < ystart:
