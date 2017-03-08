@@ -132,6 +132,17 @@ interface = \
                            'g data/grch38_alt_loci.txt chr2_KI270774v1_alt '
                            'data/genes/genes_refseq.txt',
             'method': print_gene_notations
+        },
+    'compute_average_flank_length':
+        {
+            'help': "Prints the average flank length of GRCh38 as a number",
+            'arguments':
+                [
+                    ('alt_locations_file_name', 'Alt locations file name '
+                                                '(e.g. data/grch38_alt_loci.txt'),
+                ],
+            'example_run': 'python3 gen_grah_coords.py compute_average_flank_length',
+            'method': compute_average_flank_length
         }
 }
 

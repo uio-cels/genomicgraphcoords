@@ -313,3 +313,16 @@ def print_gene_notations(args):
     print("Genes on graph")
 
     genes = [g.translate(trans) for g in genes]
+
+def compute_average_flank_length(args):
+    from offsetbasedgraph.GRCH38 import AltLoci
+    import numpy as np
+
+    alts = AltLoci.from_file(args.alt_locations_file_name)
+    lengths = []
+    for alt in alts.alt_loci:
+        lengths.append(alt.start_flank.length())
+        lengths.append(alt.end_flank.length())
+
+    print(np.mean(lengths))
+
