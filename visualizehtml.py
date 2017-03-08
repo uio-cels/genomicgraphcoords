@@ -278,7 +278,7 @@ class VisualizeHtml(object):
             classname = "exon"
             classname2 = "exon_%d" % self.gene_counter
             height = self.exon_height
-            color = "darkgray"
+            color = "black"
             top = 1 #(top + (self.gene_height - self.exon_height) /  2.0)
             margin_right = 0
             position = "absolute"
