@@ -282,7 +282,7 @@ def html_alt_loci_select(args):
                class='form-control' style='width: 320px;'>"""
     from offsetbasedgraph.graphutils import get_alt_loci_positions
     loci = get_alt_loci_positions("data/grch38_alt_loci.txt")
-
+    from collections import OrderedDict
     loci = OrderedDict(loci)
 
     for locus in loci:
