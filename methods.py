@@ -285,7 +285,7 @@ def html_alt_loci_select(args):
 
     for locus in loci:
         region = loci[locus]
-        if region["end"] - region["start"] < 4000000:
+        if region["end"] - region["start"] < 40000000000:
             html_out += "<option value='%s'>%s (%s:%d-%d)</option>" % \
                         (locus,
                          locus,
