@@ -429,6 +429,19 @@ class VisualizeHtml(object):
 
         self.html_arrows += "</div>"
 
+    def _get_longest_previous_block(self, block):
+        back_block = block
+        if len(g.reverse_adj_list[back_block]) > 1 and \
+                g.blocks[g.reverse_adj_list[back_block][1]].length() > \
+                g.blocks[g.reverse_adj_list[back_block][0]].length():
+            back_block = g.reverse_adj_list[back_block][1]
+            print("<p>Chose other</p>")
+        else:
+            back_block = g.reverse_adj_list[back_block][0]
+            print("<p>Chose back %s</p>" % (back_block))
+
+        return back_block
+
     def _distance_to_start(self, b):
         # Find distance back to start
         g = self.graph
@@ -436,7 +449,7 @@ class VisualizeHtml(object):
         if b == g.start_block:
             return 0
         print("<p><b>Finding back from %s</b></p>" % (b))
-        back_block = g.reverse_adj_list[b][0]
+        back_block = self._get_longest_previous_block(b)
         #print("Finding back for %s" % b)
         distance = 0
         while True:
@@ -447,14 +460,7 @@ class VisualizeHtml(object):
 
             # Choose longest path back
             print("<p>n back from %s: %d</p>" % (back_block, len(g.reverse_adj_list[back_block])))
-            if len(g.reverse_adj_list[back_block]) > 1 and \
-                    g.blocks[g.reverse_adj_list[back_block][1]].length() > \
-                    g.blocks[g.reverse_adj_list[back_block][0]].length():
-                back_block = g.reverse_adj_list[back_block][1]
-                print("<p>Chose other</p>")
-            else:
-                back_block = g.reverse_adj_list[back_block][0]
-                print("<p>Chose back %s</p>" % (back_block))
+            back_block = self._get_longest_previous_block(back_block)
 
         return distance
 
