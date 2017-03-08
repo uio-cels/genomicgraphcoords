@@ -444,7 +444,15 @@ class VisualizeHtml(object):
             distance += self.padding / self.width_ratio + block_size
             if back_block == g.start_block:
                 break
-            back_block = g.reverse_adj_list[back_block][0]
+
+            # Choose longest path back
+            if len(g.reverse_adj_list[back_block]) > 1 and \
+                    g.blocks[g.reverse_adj_list[back_block][1]].length() > \
+                    g.blocks[g.reverse_adj_list[back_block][0]].length():
+                back_block = g.reverse_adj_list[back_block][1]
+            else:
+                back_block = g.reverse_adj_list[back_block][0]
+
         return distance
 
     def visualize_v2(self):

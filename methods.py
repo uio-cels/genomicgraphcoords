@@ -143,7 +143,7 @@ def visualize_alt_locus(args, skip_wrapping=False, quiet=False):
 
     start_position = orig_trans.translate_position(start_position, True)[0]
 
-    genes = [g for g in genes if not g.multiple_alt_loci()]
+    genes = [g for g in genes if not g.multiple_alt_loci() and g.transcription_region.length() > 100]
 
     if len(genes) > 40:
         genes = genes[0:40]
