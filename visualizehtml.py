@@ -435,7 +435,7 @@ class VisualizeHtml(object):
 
         if b == g.start_block:
             return 0
-
+        print("<p><b>Finding back from %s</b></p>" % (b))
         back_block = g.reverse_adj_list[b][0]
         #print("Finding back for %s" % b)
         distance = 0
