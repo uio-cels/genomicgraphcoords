@@ -450,6 +450,7 @@ class VisualizeHtml(object):
                     g.blocks[g.reverse_adj_list[back_block][1]].length() > \
                     g.blocks[g.reverse_adj_list[back_block][0]].length():
                 back_block = g.reverse_adj_list[back_block][1]
+                print("<p>Chose other</p>")
             else:
                 back_block = g.reverse_adj_list[back_block][0]
                 print("<p>Chose back %s</p>" % (back_block))
