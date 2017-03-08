@@ -18,11 +18,11 @@ class VisualizeHtml(object):
         self.color_counter = 4
         self.colors = ["#0000aa", "#5F96C5", "#C58E8E", "#cccccc", "#6699ff", "orange", "indigo"]
         self.gene_colors = ["darkorange", "#D9EDF7", "#aaaaaa", "pink", "#6699ff",
-                            "orange", "#00ffff", "#99ffcc", "black",
+                            "orange", "#00ffff", "#99ffcc", "darkgray",
                             "#ffff00", "#999966",
-                            "black", "black", "black", "black", "black", "black", "black", "black", "black", "black",
-                            "black", "black", "black", "black", "black", "black", "black", "black", "black", "black",
-                            "black", "black", "black", "black", "black", "black", "black", "black", "black", "black"
+                            "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray",
+                            "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray",
+                            "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray", "darkgray"
                             ]
         self.gene_counter = 0
         self.genes_plotted_heights = {} # Dict of heights for genes
@@ -278,7 +278,7 @@ class VisualizeHtml(object):
             classname = "exon"
             classname2 = "exon_%d" % self.gene_counter
             height = self.exon_height
-            color = "black"
+            color = "darkgray"
             top = 1 #(top + (self.gene_height - self.exon_height) /  2.0)
             margin_right = 0
             position = "absolute"
