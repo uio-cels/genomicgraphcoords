@@ -419,6 +419,8 @@ class VisualizeHtml(object):
             arrow = "short"
             if yend - ystart >=  self.block_height * 1:
                 arrow = "long"
+            if xend - xstart > 100:
+                arrow = "wide"
             self.html_arrows += "left: %dpx;" % xstart
             self.html_arrows += "top: %dpx;" % (ystart + self.block_height/2)
             self.html_arrows += "'>"
