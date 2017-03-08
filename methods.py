@@ -283,7 +283,7 @@ def html_alt_loci_select(args):
     from offsetbasedgraph.graphutils import get_alt_loci_positions
     loci = get_alt_loci_positions("data/grch38_alt_loci.txt")
     from collections import OrderedDict
-    loci = OrderedDict(loci)
+    loci = OrderedDict(sorted(loci.items(), key=lambda t: t[0]))
 
     for locus in loci:
         region = loci[locus]
