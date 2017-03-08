@@ -431,6 +431,7 @@ class VisualizeHtml(object):
 
     def _get_longest_previous_block(self, block):
         back_block = block
+        g = self.graph
         if len(g.reverse_adj_list[back_block]) > 1 and \
                 g.blocks[g.reverse_adj_list[back_block][1]].length() > \
                 g.blocks[g.reverse_adj_list[back_block][0]].length():
