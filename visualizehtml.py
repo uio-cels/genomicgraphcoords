@@ -393,7 +393,7 @@ class VisualizeHtml(object):
     def _plot_arrow(self, xstart, ystart, xend, yend):
         """ Plots and arrow
         """
-        #print "Plot from %d,%d to %d,%d" % (xstart, ystart, xend, yend)
+        print("Plotting arrow  from %d,%d to %d,%d" % (xstart, ystart, xend, yend))
         self.html_arrows += "<div style='position: absolute;"
 
         if yend < ystart:
@@ -417,7 +417,7 @@ class VisualizeHtml(object):
             self.html_arrows += "'>"
         else:
             arrow = "short"
-            if ystart - yend >=  self.block_height * 1:
+            if yend - ystart >=  self.block_height * 1:
                 arrow = "long"
             self.html_arrows += "left: %dpx;" % xstart
             self.html_arrows += "top: %dpx;" % (ystart + self.block_height/2)
