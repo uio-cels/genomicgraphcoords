@@ -446,6 +446,7 @@ class VisualizeHtml(object):
                 break
 
             # Choose longest path back
+            print("<p>n back: %d</p>" % (len(g.reverse_adj_list[back_block])))
             if len(g.reverse_adj_list[back_block]) > 1 and \
                     g.blocks[g.reverse_adj_list[back_block][1]].length() > \
                     g.blocks[g.reverse_adj_list[back_block][0]].length():
