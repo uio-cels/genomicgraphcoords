@@ -10,7 +10,7 @@ for line in f.readlines():
 
 
 def create_alt_loci_file():
-    f = open("grch38_alternative_loci.txt")
+    f = open("hg38_alt_loci.bed")
     lines_out = []
     for line in f.readlines():
         if line.startswith("#"):
@@ -23,10 +23,14 @@ def create_alt_loci_file():
         chr = l[1]
         start = l[2]
         stop = l[3]
+        region = l[0]
+        counter = l[-1]
+
         id = "chr" + chr + "_" + l[5].replace(".", "v") + "_alt"
         size = sizes[id]
 
-        lines_out.append("%s    chr%s  %s  %s %d\n" % (id, chr, start, stop, size))
+        lines_out.append("%s    chr%s  %s  %s %d    %s  %s\n" %
+                         (id, chr, start, stop, size, region, counter))
 
     f.close()
     f2 = open("grch38_alt_loci.txt", "w")
@@ -161,7 +165,8 @@ def divide_gen_file(genes_fn):
         f.writelines(lines[chrom])
         f.close()
 
-divide_gen_file("genes_refseq.txt")
+#divide_gen_file("genes_refseq.txt")
+create_alt_loci_file()
 
 #curate_alignment_files()
 
