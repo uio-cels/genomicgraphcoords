@@ -16,7 +16,7 @@ There is one dependency:
 Install the above requirements. Then clone this repo:
 
 ```
-git clone git@github.com:uio-cels/genomicgraphcoords.git
+git clone https://github.com/uio-cels/genomicgraphcoords.git
 ```
 
 # How to run the gene experiments
