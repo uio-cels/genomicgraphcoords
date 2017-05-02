@@ -17,7 +17,7 @@ These tracks were processed into one file per chromosome.
 Downloaded from http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes.
 
 ### Position of alternative loci (grch38_alt_loci.txt)
-Downloaded from ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.7_GRCh37.p6/GCA_000001405.7_GRCh37.p6_assembly_regions.txt
+Downloaded from ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.32_GRCh38.p6/GCF_000001405.32_GRCh38.p6_assembly_report.txt
 
 grch38_alt_loci.txt is a preprocessed version of that file, containing the following fields:
 alt_locus_id main_chr alt_locus_start alt_locus_end alt_locus_length
